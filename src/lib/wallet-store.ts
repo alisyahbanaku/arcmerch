@@ -1,25 +1,51 @@
 /**
- * Wallet Store — in-memory for MVP
- * TODO: migrate to Supabase/Neon for production
+ * Wallet Store — persisted to JSON file
+ * Production: migrate to Supabase/Postgres
  */
 
 import { WalletData } from "./wallet";
+import fs from "fs";
+import path from "path";
 
-// In-memory store (keyed by Twitter user ID)
-const walletStore = new Map<string, WalletData>();
+const STORE_PATH = path.join(process.cwd(), ".wallet-store.json");
 
-export function storeWallet(userId: string, wallet: WalletData): void {
-  walletStore.set(userId, wallet);
+// In-memory cache (loaded from file on first access)
+let store: Map<string, WalletData> | null = null;
+
+function loadStore(): Map<string, WalletData> {
+  if (store) return store;
+  store = new Map();
+  try {
+    if (fs.existsSync(STORE_PATH)) {
+      const data = JSON.parse(fs.readFileSync(STORE_PATH, "utf-8"));
+      for (const [key, value] of Object.entries(data)) {
+        store.set(key, value as WalletData);
+      }
+    }
+  } catch {
+    // Corrupted file — start fresh
+  }
+  return store;
 }
 
-export function getWallet(userId: string): WalletData | null {
-  return walletStore.get(userId) || null;
+function persistStore(): void {
+  if (!store) return;
+  const obj: Record<string, WalletData> = {};
+  for (const [key, value] of store.entries()) {
+    obj[key] = value;
+  }
+  fs.writeFileSync(STORE_PATH, JSON.stringify(obj, null, 2));
+}
+
+export function storeWallet(userId: string, wallet: WalletData): void {
+  loadStore().set(userId, wallet);
+  persistStore();
+}
+
+export function getWallet(userId: string): WalletData | undefined {
+  return loadStore().get(userId);
 }
 
 export function hasWallet(userId: string): boolean {
-  return walletStore.has(userId);
-}
-
-export function getWalletCount(): number {
-  return walletStore.size;
+  return loadStore().has(userId);
 }

@@ -3,7 +3,7 @@
  *
  * Key Split Model:
  *   Private Key = HMAC-SHA256(userSecret, platformSecret)
- *   - userSecret: derived from user's OAuth identity (Twitter ID + session)
+ *   - userSecret: derived from user's OAuth identity (deterministic per userId)
  *   - platformSecret: from env PLATFORM_WALLET_SECRET
  *
  * Neither party alone can reconstruct the key.
@@ -13,18 +13,29 @@
 import { ethers } from "ethers";
 import crypto from "crypto";
 
-const PLATFORM_SECRET = process.env.PLATFORM_WALLET_SECRET || "arcmerch-dev-secret-change-in-prod-2026";
 const ALGORITHM = "aes-256-gcm";
+
+// ── Env Validation ─────────────────────────────────────────────
+
+function getPlatformSecret(): string {
+  const secret = process.env.PLATFORM_WALLET_SECRET;
+  if (!secret || secret.length < 16) {
+    throw new Error("PLATFORM_WALLET_SECRET env var required (min 16 chars)");
+  }
+  return secret;
+}
 
 // ── Key Derivation ──────────────────────────────────────────────
 
 /**
  * Derive user's secret from their OAuth identity.
- * This is deterministic — same user always gets same key.
+ * Deterministic: same userId ALWAYS produces same key.
+ * Does NOT depend on session token — stable across logins.
  */
-function deriveUserSecret(userId: string, sessionToken: string): string {
+function deriveUserSecret(userId: string): string {
+  const platformSecret = getPlatformSecret();
   return crypto
-    .createHmac("sha256", sessionToken)
+    .createHmac("sha256", platformSecret)
     .update(`arcmerch-user-${userId}`)
     .digest("hex");
 }
@@ -56,13 +67,13 @@ export interface WalletData {
  * Generate a new wallet for a user.
  * Returns wallet address + encrypted mnemonic (for export later).
  */
-export function generateWallet(userId: string, sessionToken: string): WalletData {
+export function generateWallet(userId: string): WalletData {
   // Generate fresh random wallet
   const wallet = ethers.Wallet.createRandom();
   const mnemonic = wallet.mnemonic?.phrase || "";
 
   // Encrypt mnemonic with key derived from user identity
-  const encKey = deriveUserSecret(userId, sessionToken).slice(0, 64);
+  const encKey = deriveUserSecret(userId).slice(0, 64);
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv(ALGORITHM, Buffer.from(encKey, "hex"), iv);
 
@@ -83,9 +94,10 @@ export function generateWallet(userId: string, sessionToken: string): WalletData
  * Reconstruct wallet signer for transaction signing.
  * Uses key split — needs both user + platform secrets.
  */
-export function getWalletSigner(userId: string, sessionToken: string): ethers.Wallet {
-  const userSecret = deriveUserSecret(userId, sessionToken);
-  const privateKey = derivePrivateKey(userSecret, PLATFORM_SECRET);
+export function getWalletSigner(userId: string): ethers.Wallet {
+  const userSecret = deriveUserSecret(userId);
+  const platformSecret = getPlatformSecret();
+  const privateKey = derivePrivateKey(userSecret, platformSecret);
   return new ethers.Wallet(privateKey);
 }
 
@@ -95,10 +107,9 @@ export function getWalletSigner(userId: string, sessionToken: string): ethers.Wa
  */
 export function decryptMnemonic(
   walletData: WalletData,
-  userId: string,
-  sessionToken: string
+  userId: string
 ): string {
-  const encKey = deriveUserSecret(userId, sessionToken).slice(0, 64);
+  const encKey = deriveUserSecret(userId).slice(0, 64);
   const decipher = crypto.createDecipheriv(
     ALGORITHM,
     Buffer.from(encKey, "hex"),

@@ -10,6 +10,16 @@ import Twitter from "next-auth/providers/twitter";
 import { generateWallet } from "../lib/wallet";
 import { storeWallet, getWallet, hasWallet } from "../lib/wallet-store";
 
+// ── Env Validation ─────────────────────────────────────────────
+
+function getAuthSecret(): string {
+  const secret = process.env.NEXTAUTH_SECRET;
+  if (!secret || secret.length < 16) {
+    throw new Error("NEXTAUTH_SECRET env var required (min 16 chars)");
+  }
+  return secret;
+}
+
 // ── Providers ───────────────────────────────────────────────────
 
 const providers = [];
@@ -60,12 +70,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.twitterHandle = user.twitterHandle || user.name;
 
         // Twitter OAuth = verified creator
-        // account.provider === "twitter" means real OAuth login
         token.verified = account?.provider === "twitter" || user.verified === true;
 
+        // Generate or retrieve wallet (deterministic — no sessionToken dependency)
         if (!hasWallet(userId)) {
-          const sessionToken = token.jti || token.sub || userId;
-          const walletData = generateWallet(userId, sessionToken);
+          const walletData = generateWallet(userId);
           storeWallet(userId, walletData);
           token.walletAddress = walletData.address;
         } else {
@@ -91,5 +100,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET || "arcmerch-dev-secret-change-in-prod",
+  secret: process.env.NEXTAUTH_SECRET || "build-placeholder-secret-min16chars",
 });

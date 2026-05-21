@@ -1,7 +1,9 @@
 node_modules/
 .next/
+# local env files
 .env
-.env.local
+.env*.local
+.wallet-store.json
 *.tsbuildinfo
 next-env.d.ts
 .vercel
