@@ -98,7 +98,6 @@ export default function MerchpaperPage() {
           <div className="flex flex-wrap gap-4 text-[12px] font-mono text-white/30">
             <span className="px-3 py-1.5 rounded border border-white/10">v1.0 · May 2026</span>
             <span className="px-3 py-1.5 rounded border border-white/10">Arc Testnet · 5042002</span>
-            <span className="px-3 py-1.5 rounded border border-[#E9A13F]/20 text-[#E9A13F]/60">Grant Application</span>
           </div>
         </div>
       </div>
