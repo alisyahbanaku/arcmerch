@@ -39,7 +39,7 @@ export default function Home() {
           </div>
 
           {/* Headline — arc.io style: light weight, uppercase, massive */}
-          <h1 className="text-[48px] md:text-[72px] lg:text-[88px] font-light uppercase tracking-[-0.03em] leading-[0.95] text-white max-w-[900px]">
+          <h1 className="text-[32px] sm:text-[40px] md:text-[72px] lg:text-[88px] font-light uppercase tracking-[-0.03em] leading-[0.95] text-white max-w-[900px]">
             AI Merch
             <br />
             <span className="text-gradient font-normal">on Chain</span>
@@ -100,7 +100,7 @@ export default function Home() {
       <section className="bg-white text-black">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
           <div className="section-label mb-3 text-black/30">{"{ FEATURED }"}</div>
-          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4 max-w-[600px]">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4 max-w-[600px]">
             Trending designs on ArcMerch
           </h2>
           <p className="text-[16px] text-black/40 mb-14 max-w-[480px]">
@@ -118,7 +118,7 @@ export default function Home() {
 
                   {/* Emoji art */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[72px] drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{d.emoji}</span>
+                    <span className="text-[48px] sm:text-[60px] md:text-[72px] drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{d.emoji}</span>
                   </div>
 
                   {/* Top badges */}
@@ -200,7 +200,7 @@ export default function Home() {
       <section className="bg-black">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ HOW IT WORKS }"}</div>
-          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
             From idea to physical product
           </h2>
 
@@ -222,7 +222,7 @@ export default function Home() {
           <div className="grid items-start gap-16 lg:grid-cols-2">
             <div>
               <div className="section-label mb-3 text-black/30">{"{ BURN-TO-REDEEM }"}</div>
-              <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-6">
+              <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-6">
                 Every burn
                 <br />
                 makes remaining
@@ -275,7 +275,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-4">
+              <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4">
                 {[
                   { emoji: "🔒", label: "Hold", desc: "Trade & collect" },
                   { emoji: "🔥", label: "Burn HD", desc: "Get HD file" },
@@ -297,7 +297,7 @@ export default function Home() {
       <section className="bg-black">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ WHY ARC }"}</div>
-          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
             Purpose-built for stablecoin commerce
           </h2>
 
@@ -322,7 +322,7 @@ export default function Home() {
       <section className="bg-black text-white border-t border-white/[0.06]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ SECURITY }"}</div>
-          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-4 max-w-[600px]">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-4 max-w-[600px]">
             Your keys. Your assets. <span className="text-amber font-normal">Your control.</span>
           </h2>
           <p className="text-[16px] text-white/40 mb-16 max-w-[520px]">
@@ -349,7 +349,7 @@ export default function Home() {
 
           {/* Auth comparison */}
           <div className="mt-16 rounded-xl border border-white/[0.06] overflow-hidden">
-            <div className="grid grid-cols-3 text-[13px] font-medium">
+            <div className="hidden sm:grid grid-cols-3 text-[13px] font-medium">
               <div className="p-5 bg-white/[0.03] text-white/60">Feature</div>
               <div className="p-5 bg-white/[0.03] text-amber flex items-center gap-2">
                 <span>Sign in with X</span>
@@ -364,7 +364,7 @@ export default function Home() {
               { feature: "NFT minting", twitter: "✅ Full access", demo: "⚠️ Test only" },
               { feature: "Use case", twitter: "Production", demo: "Development/testing" },
             ].map((row) => (
-              <div key={row.feature} className="grid grid-cols-3 text-[13px] border-t border-white/[0.06]">
+              <div key={row.feature} className="grid grid-cols-2 sm:grid-cols-3 text-[12px] sm:text-[13px] border-t border-white/[0.06]">
                 <div className="p-4 text-white/60">{row.feature}</div>
                 <div className="p-4 text-white/80">{row.twitter}</div>
                 <div className="p-4 text-white/40">{row.demo}</div>
@@ -383,7 +383,7 @@ export default function Home() {
       <section className="bg-white text-black border-t border-black/[0.06]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px] text-center">
           <div className="section-label mb-3 text-black/30">{"{ GET STARTED }"}</div>
-          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4">
+          <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4">
             Ready to create?
           </h2>
           <p className="text-[16px] text-black/40 mb-10 max-w-[420px] mx-auto">

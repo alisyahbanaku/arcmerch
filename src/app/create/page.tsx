@@ -128,7 +128,7 @@ export default function CreatePage() {
       <div className="mx-auto max-w-[720px] px-6 lg:px-10 py-16">
         {/* Header */}
         <div className="section-label mb-3">{"{ CREATE }"}</div>
-        <h1 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
+        <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           Create design
         </h1>
         <p className="text-[16px] text-white/40 mb-12">
@@ -332,7 +332,7 @@ export default function CreatePage() {
             {/* Product */}
             <div>
               <label className="text-[13px] text-white/40 mb-3 block">Product type</label>
-              <div className="grid grid-cols-5 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
                 {PRODUCTS.map((p) => (
                   <button key={p.id} onClick={() => setProduct(p.id)}
                     className={`rounded-lg border p-4 text-center transition-all duration-150 ${
@@ -385,7 +385,7 @@ export default function CreatePage() {
                   </div>
                 ) : (
                   <div className="aspect-square rounded-lg bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center">
-                    <span className="text-[80px]">⚔️</span>
+                    <span className="text-[56px] sm:text-[72px] md:text-[80px]">⚔️</span>
                   </div>
                 )}
                 <p className="text-[11px] text-white/20 text-center mt-3">

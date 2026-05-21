@@ -63,7 +63,7 @@ export default function BridgePage() {
       <div className="mx-auto max-w-[720px] px-6 lg:px-10 py-16">
         {/* Header */}
         <div className="section-label mb-3">{"{ BRIDGE }"}</div>
-        <h1 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
+        <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           Bridge USDC
         </h1>
         <p className="text-[16px] text-white/40 mb-12">

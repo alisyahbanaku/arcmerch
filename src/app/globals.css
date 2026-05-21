@@ -153,3 +153,44 @@ h1, h2, h3, h4, h5, h6 {
 .mono {
   font-family: 'Space Mono', monospace;
 }
+
+/* ── Mobile fixes ────────────────────────────────────────── */
+
+/* Prevent horizontal overflow on mobile */
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area padding for notched phones */
+@supports (padding: env(safe-area-inset-left)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Smaller stat numbers on mobile */
+@media (max-width: 640px) {
+  .stat-number {
+    font-size: 36px;
+  }
+  
+  .section-label {
+    font-size: 11px;
+  }
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Smaller padding on mobile sections */
+  .px-6 {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
