@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-provider";
 import { shortAddress } from "@/lib/wallet";
 import { LogOut, Wallet, Copy, Check, ChevronDown, User } from "lucide-react";
@@ -12,6 +12,12 @@ import { VerifiedBadge, UnverifiedBadge } from "@/components/verified-badge";
 function SignInModal({ onClose }: { onClose: () => void }) {
   const [handle, setHandle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
 
   const handleDemoLogin = async () => {
     if (!handle.trim()) return;
@@ -58,8 +64,8 @@ function SignInModal({ onClose }: { onClose: () => void }) {
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative bg-[#111] border border-white/10 rounded-xl p-8 w-full max-w-[420px] mx-4">
-        <button onClick={onClose} className="absolute top-4 right-4 text-white/40 hover:text-white text-xl">×</button>
+      <div className="relative bg-[#111] border border-white/10 rounded-xl p-6 sm:p-8 w-full max-w-[420px] mx-4 max-h-[90vh] overflow-y-auto">
+        <button onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/40 hover:text-white text-xl z-10">×</button>
 
         <div className="text-center mb-8">
           <h2 className="text-[22px] font-light text-white mb-2">Sign In to ArcMerch</h2>

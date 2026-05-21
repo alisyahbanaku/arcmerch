@@ -59,7 +59,7 @@ export function WalletButton() {
         if (injected) connect({ connector: injected });
       }}
       disabled={isPending}
-      className="arc-btn text-sm px-4 py-2"
+      className="btn-outline text-[14px] px-4 py-2"
     >
       {isPending ? "Connecting..." : "Connect Wallet"}
     </button>
