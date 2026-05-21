@@ -40,6 +40,9 @@ function Navbar() {
             <span className="text-[17px] font-medium tracking-tight text-white">
               ArcMerch
             </span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#E9A13F] bg-[#E9A13F]/10 border border-[#E9A13F]/20 rounded px-1.5 py-0.5 ml-1">
+              Testnet
+            </span>
           </Link>
 
           {/* Nav Links */}
