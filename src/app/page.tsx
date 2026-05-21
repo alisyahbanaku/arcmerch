@@ -10,12 +10,12 @@ import {
 
 // Mock data
 const FEATURED = [
-  { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, color: "#9F72FF", emoji: "⚔️" },
-  { id: 2, title: "Arc Galaxy", creator: "@builder0x", price: "30", edition: "1/50", product: "Hoodie", burned: 12, color: "#2F578C", emoji: "🌌" },
-  { id: 3, title: "USDC Waves", creator: "@stabledev", price: "15", edition: "1/100", product: "Cap", burned: 45, color: "#2A9D8F", emoji: "🌊" },
-  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", price: "20", edition: "1/25", product: "T-Shirt", burned: 8, color: "#E9A13F", emoji: "🐱" },
-  { id: 5, title: "Blockchain City", creator: "@web3painter", price: "50", edition: "1/10", product: "Poster", burned: 2, color: "#E76F51", emoji: "🏙️" },
-  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", price: "35", edition: "1/20", product: "Hoodie", burned: 7, color: "#7B68EE", emoji: "💭" },
+  { id: 1, title: "Neon Samurai", creator: "@arconomist", verified: true, price: "25", edition: "1/10", product: "T-Shirt", burned: 3, remaining: 7, color: "#9F72FF", gradient: "from-[#9F72FF] to-[#5B21B6]", emoji: "⚔️", hot: true },
+  { id: 2, title: "Arc Galaxy", creator: "@builder0x", verified: true, price: "30", edition: "1/50", product: "Hoodie", burned: 12, remaining: 38, color: "#2F578C", gradient: "from-[#2F578C] to-[#1A3551]", emoji: "🌌", hot: false },
+  { id: 3, title: "USDC Waves", creator: "@stabledev", verified: false, price: "15", edition: "1/100", product: "Cap", burned: 45, remaining: 55, color: "#2A9D8F", gradient: "from-[#2A9D8F] to-[#1A6B60]", emoji: "🌊", hot: true },
+  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", verified: true, price: "20", edition: "1/25", product: "T-Shirt", burned: 8, remaining: 17, color: "#E9A13F", gradient: "from-[#E9A13F] to-[#B87A1E]", emoji: "🐱", hot: false },
+  { id: 5, title: "Blockchain City", creator: "@web3painter", verified: false, price: "50", edition: "1/10", product: "Poster", burned: 2, remaining: 8, color: "#E76F51", gradient: "from-[#E76F51] to-[#B84A35]", emoji: "🏙️", hot: false },
+  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", verified: true, price: "35", edition: "1/20", product: "Hoodie", burned: 7, remaining: 13, color: "#7B68EE", gradient: "from-[#7B68EE] to-[#4B3FA0]", emoji: "💭", hot: true },
 ];
 
 const STEPS = [
@@ -109,47 +109,81 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURED.map((d) => (
-              <div key={d.id} className="group cursor-pointer">
-                {/* Design preview */}
-                <div
-                  className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center"
-                  style={{ backgroundColor: d.color }}
-                >
-                  <span className="text-[64px]">{d.emoji}</span>
+              <Link key={d.id} href="/marketplace" className="group cursor-pointer">
+                {/* Design card */}
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                  {/* Gradient background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${d.gradient}`} />
+                  <div className="absolute inset-0 bg-black/10" />
 
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="mono text-[11px] bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md">
-                      {d.edition}
-                    </span>
-                    <span className="text-[11px] bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md">
-                      {d.product}
-                    </span>
+                  {/* Emoji art */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-[72px] drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{d.emoji}</span>
                   </div>
 
-                  {d.burned > 0 && (
-                    <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md text-[11px]">
-                      <Flame className="h-3 w-3" />
-                      {d.burned}
+                  {/* Top badges */}
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    <span className="mono text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
+                      {d.edition}
+                    </span>
+                    <span className="text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
+                      {d.product}
+                    </span>
+                    {d.hot && (
+                      <span className="text-[11px] bg-[#E9A13F]/90 backdrop-blur-md text-black px-2.5 py-1 rounded-md font-medium">
+                        🔥 HOT
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Bottom bar — burn + remaining */}
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {d.burned > 0 && (
+                          <div className="flex items-center gap-1.5 text-[12px] text-white/70">
+                            <Flame className="h-3.5 w-3.5 text-orange-400" />
+                            <span>{d.burned} burned</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-white/50">
+                        {d.remaining} remaining
+                      </div>
                     </div>
-                  )}
+                    {/* Scarcity bar */}
+                    <div className="mt-2 h-1 rounded-full bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-1000"
+                        style={{ width: `${(d.burned / (d.burned + d.remaining)) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Info */}
                 <div className="mt-4 px-1">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-[16px] font-medium text-black group-hover:text-amber transition-colors duration-150">
+                      <h3 className="text-[16px] font-medium text-black group-hover:text-[#E9A13F] transition-colors duration-150">
                         {d.title}
                       </h3>
-                      <p className="text-[13px] text-black/40 mt-0.5">{d.creator}</p>
+                      <p className="text-[13px] text-black/40 mt-0.5 flex items-center gap-1">
+                        {d.creator}
+                        {d.verified && (
+                          <svg className="w-3.5 h-3.5 text-[#1DA1F2] fill-[#1DA1F2]" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                        )}
+                      </p>
                     </div>
-                    <span className="mono text-[15px] font-medium text-black">
-                      {d.price} USDC
-                    </span>
+                    <div className="text-right">
+                      <span className="mono text-[16px] font-medium text-black">
+                        {d.price}
+                      </span>
+                      <span className="text-[12px] text-black/30 ml-1">USDC</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
