@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -33,12 +34,7 @@ function Navbar() {
         <div className="flex h-[72px] items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="#E9A13F" strokeWidth="1.5" fill="none"/>
-                <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" fill="#E9A13F"/>
-              </svg>
-            </div>
+            <Image src="/logo.jpg" alt="ArcMerch" width={32} height={32} className="rounded-lg" />
             <span className="text-[17px] font-medium tracking-tight text-white">
               ArcMerch
             </span>
@@ -77,10 +73,7 @@ function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-5">
-              <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
-                <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="#E9A13F" strokeWidth="1.5" fill="none"/>
-                <path d="M14 8L20 11V17L14 20L8 17V11L14 8Z" fill="#E9A13F"/>
-              </svg>
+              <Image src="/logo.jpg" alt="ArcMerch" width={22} height={22} className="rounded" />
               <span className="text-[15px] font-medium text-white">ArcMerch</span>
             </div>
             <p className="text-[14px] text-white/40 leading-relaxed max-w-[400px]">
