@@ -8,6 +8,7 @@ import {
   ExternalLink, Clock, Zap, Package
 } from "lucide-react";
 import Link from "next/link";
+import { VerifiedBadge } from "@/components/verified-badge";
 
 // ── Wallet Card ─────────────────────────────────────────────────
 
@@ -256,7 +257,10 @@ export default function ProfilePage() {
     <section className="section">
       <div className="mb-10">
         <div className="section-label mb-3">{"{ PROFILE }"}</div>
-        <h1 className="h1">Welcome, {user?.twitterHandle}</h1>
+        <h1 className="h1 flex items-center gap-3">
+          Welcome, {user?.twitterHandle}
+          {user?.verified ? <VerifiedBadge size="lg" /> : null}
+        </h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-provider";
 import { shortAddress } from "@/lib/wallet";
 import { LogOut, Wallet, Copy, Check, ChevronDown, User } from "lucide-react";
 import Link from "next/link";
+import { VerifiedBadge, UnverifiedBadge } from "@/components/verified-badge";
 
 // ── Sign In Modal ───────────────────────────────────────────────
 
@@ -145,7 +146,10 @@ function WalletDropdown() {
                 </span>
               </div>
               <div>
-                <div className="text-[14px] font-medium text-white">{user.twitterHandle}</div>
+                <div className="text-[14px] font-medium text-white flex items-center gap-1.5">
+                  {user.twitterHandle}
+                  {user.verified ? <VerifiedBadge /> : <UnverifiedBadge />}
+                </div>
                 <div className="text-[12px] text-white/30 font-mono">{shortAddress(user.walletAddress)}</div>
               </div>
             </div>

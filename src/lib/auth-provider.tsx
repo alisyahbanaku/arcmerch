@@ -11,6 +11,7 @@ interface ArcMerchUser {
   twitterHandle: string;
   walletAddress: string;
   image: string | null;
+  verified: boolean;
 }
 
 interface AuthContextType {
@@ -41,6 +42,7 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
         twitterHandle: (session.user as any).twitterHandle || session.user.name || "",
         walletAddress: (session.user as any).walletAddress || "",
         image: session.user.image || null,
+        verified: (session.user as any).verified || false,
       }
     : null;
 

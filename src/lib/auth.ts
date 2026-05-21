@@ -1,6 +1,7 @@
 /**
  * NextAuth v5 configuration
  * Supports: Twitter OAuth (production) + Credentials (demo/dev)
+ * Twitter login = verified creator (✓ badge)
  */
 
 import NextAuth from "next-auth";
@@ -13,7 +14,7 @@ import { storeWallet, getWallet, hasWallet } from "../lib/wallet-store";
 
 const providers = [];
 
-// Twitter OAuth (production)
+// Twitter OAuth (production) — verified creator
 if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
   providers.push(
     Twitter({
@@ -23,7 +24,7 @@ if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
   );
 }
 
-// Demo credentials (dev/testing — no Twitter app needed)
+// Demo credentials (dev/testing — not verified)
 providers.push(
   Credentials({
     name: "Demo Login",
@@ -38,6 +39,7 @@ providers.push(
         name: handle,
         image: null,
         twitterHandle: `@${handle}`,
+        verified: false, // Demo = not verified
       } as any;
     },
   })
@@ -51,11 +53,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/",
   },
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
+    async jwt({ token, user, account }: { token: any; user?: any; account?: any }) {
       if (user) {
         const userId = user.id;
         token.userId = userId;
         token.twitterHandle = user.twitterHandle || user.name;
+
+        // Twitter OAuth = verified creator
+        // account.provider === "twitter" means real OAuth login
+        token.verified = account?.provider === "twitter" || user.verified === true;
 
         if (!hasWallet(userId)) {
           const sessionToken = token.jti || token.sub || userId;
@@ -77,6 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         image: session.user?.image || null,
         twitterHandle: token.twitterHandle,
         walletAddress: token.walletAddress,
+        verified: token.verified || false,
       };
       return session;
     },
