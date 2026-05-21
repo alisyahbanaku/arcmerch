@@ -39,6 +39,10 @@ export default function CreatePage() {
   const [style, setStyle] = useState("");
   const [edition, setEdition] = useState("10");
   const [generating, setGenerating] = useState(false);
+  const [generateProgress, setGenerateProgress] = useState(0);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [generateError, setGenerateError] = useState<string | null>(null);
+  const [generateSeed, setGenerateSeed] = useState<number>(Math.floor(Math.random() * 100000));
 
   // Upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -63,13 +67,51 @@ export default function CreatePage() {
     if (address) fetchBalances(address);
   }, [address, fetchBalances]);
 
-  const handleGenerate = () => {
+  const handleGenerate = async (regenerate = false) => {
+    if (!prompt.trim()) return;
+    
+    const seed = regenerate ? Math.floor(Math.random() * 100000) : generateSeed;
+    setGenerateSeed(seed);
     setGenerating(true);
-    setTimeout(() => {
-      setGenerating(false);
-      setMetadataUri("ipfs://QmArcMerchDemo/" + Date.now());
+    setGenerateError(null);
+    setGenerateProgress(0);
+
+    // Simulate progress while generating
+    const progressInterval = setInterval(() => {
+      setGenerateProgress((prev) => Math.min(prev + Math.random() * 15, 90));
+    }, 500);
+
+    try {
+      const params = new URLSearchParams({
+        prompt: prompt.trim(),
+        style: style,
+        product: product,
+        width: "512",
+        height: "512",
+        seed: String(seed),
+      });
+
+      const response = await fetch(`/api/generate?${params}`);
+      
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({ error: "Generation failed" }));
+        throw new Error(err.error || "Failed to generate image");
+      }
+
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      
+      setGeneratedImageUrl(imageUrl);
+      setGenerateProgress(100);
+      setMetadataUri(`ipfs://QmArcMerch/${Date.now()}`);
       setStep(2);
-    }, 2000);
+    } catch (err: any) {
+      setGenerateError(err.message || "Generation failed. Try again.");
+      console.error("AI generation error:", err);
+    } finally {
+      clearInterval(progressInterval);
+      setGenerating(false);
+    }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -358,11 +400,39 @@ export default function CreatePage() {
 
             {/* Generate / Continue */}
             {mode === "ai" ? (
-              <button onClick={handleGenerate} disabled={!prompt || generating}
-                className="w-full btn-primary justify-center py-4 text-[16px] disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                {generating ? <><Loader2 className="h-4 w-4 animate-spin" />Generating...</> : <><Sparkles className="h-4 w-4" />Generate with AI</>}
-              </button>
+              <div className="space-y-3">
+                {/* Progress bar */}
+                {generating && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-[12px]">
+                      <span className="text-white/40">Generating your design...</span>
+                      <span className="text-[#E9A13F] mono">{Math.round(generateProgress)}%</span>
+                    </div>
+                    <div className="h-1 rounded-full bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full bg-[#E9A13F] rounded-full transition-all duration-500"
+                        style={{ width: `${generateProgress}%` }}
+                      />
+                    </div>
+                    <p className="text-[11px] text-white/20">
+                      AI is creating your unique design. This takes 10-30 seconds.
+                    </p>
+                  </div>
+                )}
+
+                {/* Error */}
+                {generateError && (
+                  <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-3">
+                    <div className="text-[13px] text-red-400">{generateError}</div>
+                  </div>
+                )}
+
+                <button onClick={() => handleGenerate(false)} disabled={!prompt.trim() || generating}
+                  className="w-full btn-primary justify-center py-4 text-[16px] disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  {generating ? <><Loader2 className="h-4 w-4 animate-spin" />Generating...</> : <><Sparkles className="h-4 w-4" />Generate with AI</>}
+                </button>
+              </div>
             ) : (
               <button onClick={() => { setMetadataUri(`ipfs://QmArcMerchUpload/${Date.now()}`); setStep(2); }} disabled={!uploadedFile}
                 className="w-full btn-primary justify-center py-4 text-[16px] disabled:opacity-30 disabled:cursor-not-allowed"
@@ -383,23 +453,47 @@ export default function CreatePage() {
                   <div className="aspect-square rounded-lg overflow-hidden">
                     <img src={uploadedPreview} alt="Design preview" className="w-full h-full object-cover" />
                   </div>
+                ) : generatedImageUrl ? (
+                  <div className="space-y-3">
+                    <div className="aspect-square rounded-lg overflow-hidden bg-white/5">
+                      <img src={generatedImageUrl} alt="AI generated design" className="w-full h-full object-contain" />
+                    </div>
+                    <button
+                      onClick={() => handleGenerate(true)}
+                      disabled={generating}
+                      className="w-full btn-outline justify-center py-2.5 text-[13px] disabled:opacity-30"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" /> Regenerate
+                    </button>
+                  </div>
                 ) : (
-                  <div className="aspect-square rounded-lg bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center">
-                    <span className="text-[56px] sm:text-[72px] md:text-[80px]">⚔️</span>
+                  <div className="aspect-square rounded-lg bg-white/5 flex items-center justify-center">
+                    <div className="text-center">
+                      <Sparkles className="w-10 h-10 text-white/10 mx-auto mb-3" />
+                      <p className="text-[13px] text-white/20">No design generated</p>
+                    </div>
                   </div>
                 )}
                 <p className="text-[11px] text-white/20 text-center mt-3">
-                  {mode === "upload" ? "Your uploaded design" : "Mock preview — actual AI generates unique designs"}
+                  {mode === "upload" ? "Your uploaded design" : generatedImageUrl ? "AI-generated unique design" : "Generate a design to preview"}
                 </p>
               </div>
 
               {/* Details */}
               <div className="space-y-4">
                 {mode === "ai" ? (
-                  <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/30 mb-1">Prompt</div>
-                    <div className="text-[14px] text-white">{prompt || "Neon cyberpunk samurai"}</div>
-                  </div>
+                  <>
+                    <div className="rounded-lg border border-white/10 p-4">
+                      <div className="text-[11px] text-white/30 mb-1">Prompt</div>
+                      <div className="text-[14px] text-white">{prompt}</div>
+                    </div>
+                    {style && (
+                      <div className="rounded-lg border border-white/10 p-4">
+                        <div className="text-[11px] text-white/30 mb-1">Style</div>
+                        <div className="text-[14px] text-white">{style}</div>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="rounded-lg border border-white/10 p-4">
                     <div className="text-[11px] text-white/30 mb-1">Design</div>
