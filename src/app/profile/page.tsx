@@ -1,149 +1,276 @@
 "use client";
 
-import { Flame, Award, Layers } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/auth-provider";
+import { shortAddress } from "@/lib/wallet";
+import {
+  Wallet, Copy, Check, Download, Eye, EyeOff, Shield, AlertTriangle,
+  ExternalLink, Clock, Zap, Package
+} from "lucide-react";
+import Link from "next/link";
 
-const CREATOR = {
-  handle: "@arconomist", verified: true, wallet: "0x7f2a...3d8c",
-  bio: "Arc ecosystem analyst & designer. Building the future of merchandise on stablecoin-native chains.",
-  followers: "15.2K", totalDesigns: 47, totalSales: 234, totalEarned: "5,840",
-  reputation: 720, tier: "Pro", tierEmoji: "⭐",
-  avatar: "🧑‍💻",
-};
+// ── Wallet Card ─────────────────────────────────────────────────
 
-const MY_DESIGNS = [
-  { id: 1, title: "Neon Samurai", price: "25", edition: "1/10", burned: 3, remaining: 7, color: "#9F72FF", emoji: "⚔️" },
-  { id: 2, title: "Arc Genesis", price: "50", edition: "1/5", burned: 1, remaining: 4, color: "#2F578C", emoji: "🌟" },
-  { id: 3, title: "USDC Shield", price: "15", edition: "1/50", burned: 12, remaining: 38, color: "#2A9D8F", emoji: "🛡️" },
-];
+function WalletCard() {
+  const { user } = useAuth();
+  const [copied, setCopied] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [mnemonic, setMnemonic] = useState<string | null>(null);
+  const [showMnemonic, setShowMnemonic] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
-const HOLDINGS = [
-  { id: 101, title: "Crypto Tiger", creator: "@nftbeast", price: "45", color: "#F59E0B", emoji: "🐯" },
-  { id: 102, title: "Moon Phase", creator: "@lunartist", price: "18", color: "#6B7280", emoji: "🌙" },
-];
+  const copyAddress = () => {
+    if (user?.walletAddress) {
+      navigator.clipboard.writeText(user.walletAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
-export default function ProfilePage() {
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const res = await fetch("/api/wallet/export", { method: "POST" });
+      const data = await res.json();
+      if (data.mnemonic) {
+        setMnemonic(data.mnemonic);
+        setShowExport(true);
+      }
+    } catch (err) {
+      console.error("Export failed:", err);
+    }
+    setExporting(false);
+  };
+
+  if (!user) return null;
+
   return (
-    <div className="bg-black text-white min-h-screen">
-      <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16">
-        {/* Profile header */}
-        <div className="section-label mb-3">{"{ PROFILE }"}</div>
-        
-        <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-start mb-16">
-          {/* Avatar */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-surface border border-white/10 text-[40px]">
-            {CREATOR.avatar}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-[32px] font-light text-white">{CREATOR.handle}</h1>
-              {CREATOR.verified && (
-                <span className="mono text-[11px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">✓ Verified</span>
-              )}
-              <span className="mono text-[11px] bg-amber/10 text-amber px-2 py-0.5 rounded">
-                {CREATOR.tierEmoji} {CREATOR.tier}
-              </span>
-            </div>
-            <p className="mono text-[12px] text-white/20 mt-1">{CREATOR.wallet}</p>
-            <p className="text-[14px] text-white/40 mt-3 max-w-[480px]">{CREATOR.bio}</p>
-
-            {/* Stats row */}
-            <div className="flex flex-wrap gap-8 mt-6">
-              {[
-                { label: "Followers", value: CREATOR.followers },
-                { label: "Designs", value: String(CREATOR.totalDesigns) },
-                { label: "Sales", value: String(CREATOR.totalSales) },
-                { label: "Earned", value: `${CREATOR.totalEarned} USDC`, accent: true },
-              ].map((s) => (
-                <div key={s.label}>
-                  <div className={`text-[20px] font-light ${s.accent ? "text-amber" : "text-white"}`}>{s.value}</div>
-                  <div className="text-[12px] text-white/30">{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Reputation */}
-          <div className="rounded-xl border border-white/10 p-6 min-w-[160px] text-center">
-            <Award className="mx-auto h-5 w-5 text-amber mb-3" />
-            <div className="stat-number text-[36px]">{CREATOR.reputation}</div>
-            <div className="text-[12px] text-white/30 mb-3">Reputation</div>
-            <div className="h-1 w-full rounded-full bg-white/[0.06]">
-              <div className="h-full rounded-full bg-amber" style={{ width: `${(CREATOR.reputation / 1000) * 100}%` }} />
-            </div>
-            <div className="text-[11px] text-white/20 mt-2">{1000 - CREATOR.reputation} to Elite 🏆</div>
-          </div>
+    <div className="card p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
+          <Wallet className="w-7 h-7 text-black" />
         </div>
-
-        {/* Tabs */}
-        <div className="flex gap-6 border-b border-white/[0.06] mb-10">
-          <button className="pb-4 text-[14px] font-medium text-white border-b-2 border-amber -mb-px">
-            My Designs ({MY_DESIGNS.length})
-          </button>
-          <button className="pb-4 text-[14px] text-white/30 hover:text-white/60 transition-colors">
-            Holdings ({HOLDINGS.length})
-          </button>
-          <button className="pb-4 text-[14px] text-white/30 hover:text-white/60 transition-colors">
-            Burn History
-          </button>
-        </div>
-
-        {/* My Designs */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-16">
-          {MY_DESIGNS.map((d) => (
-            <div key={d.id} className="group cursor-pointer">
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: d.color }}>
-                <span className="text-[64px]">{d.emoji}</span>
-                <div className="absolute top-3 left-3">
-                  <span className="mono text-[11px] bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md">{d.edition}</span>
-                </div>
-                <div className="absolute bottom-3 left-3 right-3 flex justify-between">
-                  <span className="flex items-center gap-1 bg-green-500/60 backdrop-blur-sm text-white px-2 py-1 rounded-md text-[11px]">
-                    <Layers className="h-3 w-3" />{d.remaining} left
-                  </span>
-                  <span className="flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md text-[11px]">
-                    <Flame className="h-3 w-3" />{d.burned}
-                  </span>
-                </div>
-              </div>
-              <div className="mt-4 px-1 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[16px] font-medium text-white group-hover:text-amber transition-colors">{d.title}</h3>
-                </div>
-                <span className="mono text-[15px] text-white">{d.price} USDC</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Holdings */}
-        <div className="section-label mb-6">{"{ MY HOLDINGS }"}</div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {HOLDINGS.map((nft) => (
-            <div key={nft.id} className="flex items-center gap-5 rounded-xl border border-white/[0.06] p-5">
-              <div className="h-14 w-14 rounded-lg flex items-center justify-center text-[32px]" style={{ backgroundColor: nft.color }}>
-                {nft.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[15px] font-medium text-white">{nft.title}</h3>
-                <p className="text-[12px] text-white/30">by {nft.creator}</p>
-              </div>
-              <div className="text-right">
-                <div className="mono text-[15px] text-white">{nft.price} USDC</div>
-                <div className="flex gap-2 mt-2">
-                  <button className="rounded-md bg-red-500/10 text-red-400 px-2.5 py-1 text-[11px] font-medium hover:bg-red-500/20 transition-colors">
-                    🔥 Burn
-                  </button>
-                  <button className="rounded-md bg-blue-500/10 text-blue-400 px-2.5 py-1 text-[11px] font-medium hover:bg-blue-500/20 transition-colors">
-                    📦 Order
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div>
+          <h3 className="text-[18px] font-light text-white">Your Wallet</h3>
+          <p className="text-[13px] text-white/30">Hybrid custody — export anytime</p>
         </div>
       </div>
+
+      {/* Address */}
+      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
+        <div className="text-[12px] text-white/30 uppercase tracking-wider mb-2">Wallet Address</div>
+        <div className="flex items-center justify-between">
+          <code className="text-[15px] text-white font-mono">{shortAddress(user.walletAddress)}</code>
+          <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
+            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Network Info */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
+          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">Network</div>
+          <div className="text-[14px] text-white">Arc Testnet</div>
+        </div>
+        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
+          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">Chain ID</div>
+          <div className="text-[14px] text-white font-mono">5042002</div>
+        </div>
+      </div>
+
+      {/* Security Model */}
+      <div className="bg-[#E9A13F]/5 border border-[#E9A13F]/10 rounded-xl p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Shield className="w-4 h-4 text-[#E9A13F]" />
+          <span className="text-[13px] font-medium text-[#E9A13F]">Hybrid Custody</span>
+        </div>
+        <p className="text-[13px] text-white/40 leading-relaxed">
+          Your key is split: part from your identity, part from our platform.
+          Neither party alone can access it. You can export your seed phrase and leave anytime.
+        </p>
+      </div>
+
+      {/* Export */}
+      {!showExport ? (
+        <button
+          onClick={handleExport}
+          disabled={exporting}
+          className="w-full flex items-center justify-center gap-2 btn-outline text-[14px] py-3"
+        >
+          <Download className="w-4 h-4" />
+          {exporting ? "Decrypting..." : "Export Seed Phrase"}
+        </button>
+      ) : (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-amber-400">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="text-[13px] font-medium">Never share this phrase</span>
+          </div>
+          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[12px] text-white/30 uppercase tracking-wider">Seed Phrase</span>
+              <button
+                onClick={() => setShowMnemonic(!showMnemonic)}
+                className="text-white/40 hover:text-white transition-colors"
+              >
+                {showMnemonic ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            {showMnemonic ? (
+              <div className="grid grid-cols-3 gap-2">
+                {mnemonic?.split(" ").map((word, i) => (
+                  <div key={i} className="bg-white/5 rounded-lg px-3 py-2 text-center">
+                    <span className="text-[11px] text-white/25">{i + 1}.</span>
+                    <span className="text-[14px] text-white font-mono ml-1">{word}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <Eye className="w-6 h-6 text-white/20 mx-auto mb-2" />
+                <span className="text-[13px] text-white/20">Click eye to reveal</span>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              setShowExport(false);
+              setMnemonic(null);
+              setShowMnemonic(false);
+            }}
+            className="text-[13px] text-white/30 hover:text-white/60 transition-colors"
+          >
+            Hide seed phrase
+          </button>
+        </div>
+      )}
     </div>
+  );
+}
+
+// ── NFT Gallery (Mock) ──────────────────────────────────────────
+
+function NFTGallery() {
+  const mockNFTs = [
+    { id: 1, name: "Arc Genesis Tee", image: "/api/placeholder/300/300", status: "minted" },
+    { id: 2, name: "USDC Hoodie", image: "/api/placeholder/300/300", status: "listed" },
+    { id: 3, name: "Stablecoin Cap", image: "/api/placeholder/300/300", status: "burned" },
+  ];
+
+  return (
+    <div className="card p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-[18px] font-light text-white">My NFTs</h3>
+        <span className="text-[13px] text-white/30">{mockNFTs.length} items</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {mockNFTs.map((nft) => (
+          <div key={nft.id} className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden group hover:border-white/10 transition-colors">
+            <div className="aspect-square bg-white/[0.02] flex items-center justify-center">
+              <Package className="w-10 h-10 text-white/10" />
+            </div>
+            <div className="p-3">
+              <div className="text-[14px] text-white mb-1">{nft.name}</div>
+              <span className={`text-[12px] px-2 py-0.5 rounded-full ${
+                nft.status === "minted" ? "bg-blue-500/10 text-blue-400" :
+                nft.status === "listed" ? "bg-[#E9A13F]/10 text-[#E9A13F]" :
+                "bg-red-500/10 text-red-400"
+              }`}>
+                {nft.status}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Activity (Mock) ─────────────────────────────────────────────
+
+function ActivityFeed() {
+  const activities = [
+    { icon: Zap, text: "Wallet created", time: "Just now", color: "text-green-400" },
+    { icon: Wallet, text: "Signed in with X", time: "Just now", color: "text-blue-400" },
+  ];
+
+  return (
+    <div className="card p-6">
+      <h3 className="text-[18px] font-light text-white mb-6">Activity</h3>
+      <div className="space-y-4">
+        {activities.map((a, i) => (
+          <div key={i} className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+              <a.icon className={`w-4 h-4 ${a.color}`} />
+            </div>
+            <div className="flex-1">
+              <div className="text-[14px] text-white">{a.text}</div>
+              <div className="text-[12px] text-white/25">{a.time}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Not Authenticated ───────────────────────────────────────────
+
+function NotSignedIn() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center max-w-[400px] mx-auto px-6">
+        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
+          <Wallet className="w-8 h-8 text-white/20" />
+        </div>
+        <h2 className="text-[24px] font-light text-white mb-3">Sign in to view profile</h2>
+        <p className="text-[15px] text-white/40 mb-8 leading-relaxed">
+          Connect with X to auto-create your Arc wallet. Hybrid custody — your key, your control.
+        </p>
+        <Link href="/" className="btn-primary inline-block">
+          Go to Home
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// ── Profile Page ────────────────────────────────────────────────
+
+export default function ProfilePage() {
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white/10 border-t-[#E9A13F] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) return <NotSignedIn />;
+
+  return (
+    <section className="section">
+      <div className="mb-10">
+        <div className="section-label mb-3">{"{ PROFILE }"}</div>
+        <h1 className="h1">Welcome, {user?.twitterHandle}</h1>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Wallet */}
+        <div className="lg:col-span-1 space-y-6">
+          <WalletCard />
+          <ActivityFeed />
+        </div>
+
+        {/* Right: NFTs */}
+        <div className="lg:col-span-2">
+          <NFTGallery />
+        </div>
+      </div>
+    </section>
   );
 }

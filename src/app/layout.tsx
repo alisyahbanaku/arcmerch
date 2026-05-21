@@ -3,6 +3,8 @@ import { DM_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
+import { AuthProvider } from "@/lib/auth-provider";
+import { AuthButton } from "@/components/auth-button";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -40,7 +42,7 @@ function Navbar() {
             </span>
           </Link>
 
-          {/* Nav Links — arc.io style: clean text, no heavy styling */}
+          {/* Nav Links */}
           <div className="hidden md:flex items-center gap-8">
             <Link href="/marketplace" className="text-[15px] text-white/60 hover:text-white transition-colors duration-150">
               Marketplace
@@ -53,12 +55,8 @@ function Navbar() {
             </Link>
           </div>
 
-          {/* CTA — arc.io style: outline button */}
-          <div className="flex items-center gap-3">
-            <button className="btn-outline text-[14px] py-2.5 px-5">
-              Connect Wallet
-            </button>
-          </div>
+          {/* Auth Button — Sign In / Wallet */}
+          <AuthButton />
         </div>
       </nav>
     </header>
@@ -141,9 +139,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </head>
       <body className="min-h-screen">
-        <Navbar />
-        <main className="pt-[72px]">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="pt-[72px]">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
