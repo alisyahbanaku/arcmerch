@@ -1,12 +1,13 @@
 /**
  * NextAuth v5 configuration
- * Supports: Twitter OAuth (production) + Credentials (demo/dev)
- * Twitter login = verified creator (✓ badge)
+ * Supports: Twitter OAuth, Google OAuth, Credentials (demo/dev)
+ * Twitter/Google login = verified creator (✓ badge)
  */
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Twitter from "next-auth/providers/twitter";
+import Google from "next-auth/providers/google";
 import { generateWallet } from "../lib/wallet";
 import { storeWallet, getWallet, hasWallet } from "../lib/wallet-store";
 
@@ -30,6 +31,23 @@ if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
     Twitter({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
+    })
+  );
+}
+
+// Google OAuth — verified creator
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     })
   );
 }
@@ -69,8 +87,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.userId = userId;
         token.twitterHandle = user.twitterHandle || user.name;
 
-        // Twitter OAuth = verified creator
-        token.verified = account?.provider === "twitter" || user.verified === true;
+        // Twitter/Google OAuth = verified creator
+        token.verified = account?.provider === "twitter" || account?.provider === "google" || user.verified === true;
 
         // Generate or retrieve wallet (deterministic — no sessionToken dependency)
         if (!hasWallet(userId)) {
