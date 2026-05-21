@@ -26,7 +26,7 @@ export function WalletButton() {
       <div className="relative" ref={ref}>
         <button
           onClick={() => setOpen(!open)}
-          className="arc-btn-outline text-sm px-4 py-2"
+          className="btn-outline text-[14px] px-4 py-2"
         >
           {short(address)}
         </button>

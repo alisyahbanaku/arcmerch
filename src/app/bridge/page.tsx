@@ -60,7 +60,10 @@ export default function BridgePage() {
 
   return (
     <div className="bg-black text-white min-h-screen">
-      <div className="mx-auto max-w-[720px] px-6 lg:px-10 py-16">
+      {/* Ambient glow — matches homepage */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
+
+      <div className="relative mx-auto max-w-[720px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
         {/* Header */}
         <div className="section-label mb-3">{"{ BRIDGE }"}</div>
         <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">

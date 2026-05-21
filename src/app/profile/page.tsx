@@ -357,10 +357,14 @@ export default function ProfilePage() {
   if (!isAuthenticated) return <NotSignedIn />;
 
   return (
-    <section className="section">
+    <div className="bg-black text-white min-h-screen">
+      {/* Ambient glow — matches homepage */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
+
+      <section className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
       <div className="mb-10">
         <div className="section-label mb-3">{"{ PROFILE }"}</div>
-        <h1 className="h1 flex items-center gap-3">
+        <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white flex items-center gap-3">
           Welcome, {user?.twitterHandle}
           {user?.verified ? <VerifiedBadge size="lg" /> : null}
         </h1>
@@ -379,6 +383,7 @@ export default function ProfilePage() {
           <NFTGallery />
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 }

@@ -181,14 +181,8 @@ html, body {
   }
 }
 
-/* Touch-friendly tap targets */
+/* Touch-friendly tap targets for interactive elements in content */
 @media (max-width: 768px) {
-  a, button {
-    min-height: 44px;
-    min-width: 44px;
-  }
-  
-  /* Smaller padding on mobile sections */
   .px-6 {
     padding-left: 16px;
     padding-right: 16px;
