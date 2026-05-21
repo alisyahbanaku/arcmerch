@@ -63,7 +63,7 @@ export default function Home() {
           </div>
 
           {/* Core loop — subtle */}
-          <div className="mt-16 flex items-center gap-2 text-[13px] text-white/25">
+          <div className="mt-16 flex items-center gap-2 text-sm sm:text-[13px] text-white/25">
             <span>Create</span>
             <span className="text-white/10">→</span>
             <span>Mint</span>
@@ -98,12 +98,12 @@ export default function Home() {
 
       {/* ═══════════ FEATURED DESIGNS ═══════════ */}
       <section className="bg-white text-black">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="section-label mb-3 text-black/30">{"{ FEATURED }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4 max-w-[600px]">
             Trending designs on ArcMerch
           </h2>
-          <p className="text-[16px] text-black/40 mb-14 max-w-[480px]">
+          <p className="text-base sm:text-[16px] text-black/40 mb-14 max-w-[480px]">
             AI-generated merchandise NFTs, traded and redeemed on Arc blockchain.
           </p>
 
@@ -123,14 +123,14 @@ export default function Home() {
 
                   {/* Top badges */}
                   <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="mono text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
+                    <span className="mono text-xs sm:text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
                       {d.edition}
                     </span>
-                    <span className="text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
+                    <span className="text-xs sm:text-[11px] bg-black/50 backdrop-blur-md text-white/90 px-2.5 py-1 rounded-md border border-white/[0.08]">
                       {d.product}
                     </span>
                     {d.hot && (
-                      <span className="text-[11px] bg-[#E9A13F]/90 backdrop-blur-md text-black px-2.5 py-1 rounded-md font-medium">
+                      <span className="text-xs sm:text-[11px] bg-[#E9A13F]/90 backdrop-blur-md text-black px-2.5 py-1 rounded-md font-medium">
                         🔥 HOT
                       </span>
                     )}
@@ -141,13 +141,13 @@ export default function Home() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         {d.burned > 0 && (
-                          <div className="flex items-center gap-1.5 text-[12px] text-white/70">
+                          <div className="flex items-center gap-1.5 text-xs sm:text-[12px] text-white/70">
                             <Flame className="h-3.5 w-3.5 text-orange-400" />
                             <span>{d.burned} burned</span>
                           </div>
                         )}
                       </div>
-                      <div className="text-[11px] text-white/50">
+                      <div className="text-xs sm:text-[11px] text-white/50">
                         {d.remaining} remaining
                       </div>
                     </div>
@@ -168,7 +168,7 @@ export default function Home() {
                       <h3 className="text-[16px] font-medium text-black group-hover:text-[#E9A13F] transition-colors duration-150">
                         {d.title}
                       </h3>
-                      <p className="text-[13px] text-black/40 mt-0.5 flex items-center gap-1">
+                      <p className="text-sm sm:text-[13px] text-black/40 mt-0.5 flex items-center gap-1">
                         {d.creator}
                         {d.verified && (
                           <svg className="w-3.5 h-3.5 text-[#1DA1F2] fill-[#1DA1F2]" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
@@ -179,7 +179,7 @@ export default function Home() {
                       <span className="mono text-[16px] font-medium text-black">
                         {d.price}
                       </span>
-                      <span className="text-[12px] text-black/30 ml-1">USDC</span>
+                      <span className="text-xs sm:text-[12px] text-black/30 ml-1">USDC</span>
                     </div>
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export default function Home() {
 
       {/* ═══════════ HOW IT WORKS ═══════════ */}
       <section className="bg-black">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ HOW IT WORKS }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
             From idea to physical product
@@ -207,9 +207,9 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-0 md:grid-cols-3">
             {STEPS.map((step, i) => (
               <div key={step.num} className={`py-8 md:py-0 md:px-8 ${i < 2 ? 'md:border-r md:border-white/[0.06]' : ''}`}>
-                <div className="mono text-[13px] text-amber mb-4">{step.num}</div>
+                <div className="mono text-sm sm:text-[13px] text-amber mb-4">{step.num}</div>
                 <h3 className="text-[22px] font-light text-white mb-3">{step.title}</h3>
-                <p className="text-[14px] text-white/40 leading-relaxed">{step.desc}</p>
+                <p className="text-sm sm:text-[14px] text-white/40 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -218,7 +218,7 @@ export default function Home() {
 
       {/* ═══════════ BURN MECHANIC ═══════════ */}
       <section className="bg-white text-black">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="grid items-start gap-16 lg:grid-cols-2">
             <div>
               <div className="section-label mb-3 text-black/30">{"{ BURN-TO-REDEEM }"}</div>
@@ -229,7 +229,7 @@ export default function Home() {
                 <br />
                 <span className="text-amber font-normal">NFTs rarer</span>
               </h2>
-              <p className="text-[16px] text-black/40 leading-relaxed mb-10 max-w-[440px]">
+              <p className="text-base sm:text-[16px] text-black/40 leading-relaxed mb-10 max-w-[440px]">
                 When you burn an NFT to redeem an HD file or physical print, 
                 that token is destroyed forever. Supply decreases. Scarcity increases.
               </p>
@@ -239,14 +239,14 @@ export default function Home() {
                   <Shield className="h-5 w-5 text-black/30 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-[15px] font-medium text-black">Soulbound Certificate</div>
-                    <div className="text-[13px] text-black/40 mt-1">Non-transferable proof of original ownership</div>
+                    <div className="text-sm sm:text-[13px] text-black/40 mt-1">Non-transferable proof of original ownership</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-5 rounded-xl border border-black/[0.06]">
                   <TrendingUp className="h-5 w-5 text-black/30 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-[15px] font-medium text-black">Deflationary Value</div>
-                    <div className="text-[13px] text-black/40 mt-1">100 → 50 → 20. Each burn = remaining NFTs 2-5× rarer</div>
+                    <div className="text-sm sm:text-[13px] text-black/40 mt-1">100 → 50 → 20. Each burn = remaining NFTs 2-5× rarer</div>
                   </div>
                 </div>
               </div>
@@ -265,8 +265,8 @@ export default function Home() {
                 ].map((item) => (
                   <div key={item.label}>
                     <div className="flex justify-between mb-2">
-                      <span className="text-[13px] text-black/40">{item.label}</span>
-                      <span className="mono text-[13px] text-black">{item.supply} NFTs</span>
+                      <span className="text-sm sm:text-[13px] text-black/40">{item.label}</span>
+                      <span className="mono text-sm sm:text-[13px] text-black">{item.supply} NFTs</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-black/[0.04]">
                       <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.pct}%` }} />
@@ -275,7 +275,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-4">
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
                 {[
                   { emoji: "🔒", label: "Hold", desc: "Trade & collect" },
                   { emoji: "🔥", label: "Burn HD", desc: "Get HD file" },
@@ -284,7 +284,7 @@ export default function Home() {
                   <div key={opt.label} className="text-center p-4 rounded-lg border border-black/[0.06]">
                     <div className="text-[24px] mb-2">{opt.emoji}</div>
                     <div className="text-[13px] font-medium text-black">{opt.label}</div>
-                    <div className="text-[11px] text-black/30 mt-0.5">{opt.desc}</div>
+                    <div className="text-xs sm:text-[11px] text-black/30 mt-0.5">{opt.desc}</div>
                   </div>
                 ))}
               </div>
@@ -295,7 +295,7 @@ export default function Home() {
 
       {/* ═══════════ WHY ARC ═══════════ */}
       <section className="bg-black">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ WHY ARC }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-16 max-w-[500px]">
             Purpose-built for stablecoin commerce
@@ -311,7 +311,7 @@ export default function Home() {
               <div key={item.title} className="bg-black p-8 md:p-10">
                 <div className="text-[28px] mb-5">{item.icon}</div>
                 <h3 className="text-[18px] font-medium text-white mb-2">{item.title}</h3>
-                <p className="text-[14px] text-white/40 leading-relaxed">{item.desc}</p>
+                <p className="text-sm sm:text-[14px] text-white/40 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -320,12 +320,12 @@ export default function Home() {
 
       {/* ═══════════ SECURITY ═══════════ */}
       <section className="bg-black text-white border-t border-white/[0.06]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="section-label mb-3">{"{ SECURITY }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-4 max-w-[600px]">
             Your keys. Your assets. <span className="text-amber font-normal">Your control.</span>
           </h2>
-          <p className="text-[16px] text-white/40 mb-16 max-w-[520px]">
+          <p className="text-base sm:text-[16px] text-white/40 mb-16 max-w-[520px]">
             ArcMerch uses hybrid custody — your wallet is generated from two secrets combined. 
             Neither you nor us can access it alone.
           </p>
@@ -342,20 +342,20 @@ export default function Home() {
               <div key={item.title} className="bg-black p-8">
                 <div className="text-[28px] mb-5">{item.icon}</div>
                 <h3 className="text-[16px] font-medium text-white mb-2">{item.title}</h3>
-                <p className="text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
+                <p className="text-sm sm:text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
 
           {/* Auth comparison */}
-          <div className="mt-16 rounded-xl border border-white/[0.06] overflow-hidden">
-            <div className="hidden sm:grid grid-cols-3 text-[13px] font-medium">
-              <div className="p-5 bg-white/[0.03] text-white/60">Feature</div>
-              <div className="p-5 bg-white/[0.03] text-amber flex items-center gap-2">
+          <div className="mt-16 rounded-xl border border-white/[0.06] overflow-x-auto">
+            <div className="hidden sm:grid grid-cols-3 text-sm sm:text-[13px] font-medium min-w-[480px]">
+              <div className="p-4 sm:p-5 bg-white/[0.03] text-white/60">Feature</div>
+              <div className="p-4 sm:p-5 bg-white/[0.03] text-amber flex items-center gap-2">
                 <span>Sign in with X</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber/10 text-amber">Verified</span>
+                <span className="text-xs sm:text-[10px] px-1.5 py-0.5 rounded bg-amber/10 text-amber">Verified</span>
               </div>
-              <div className="p-5 bg-white/[0.03] text-white/60">Demo Login</div>
+              <div className="p-4 sm:p-5 bg-white/[0.03] text-white/60">Demo Login</div>
             </div>
             {[
               { feature: "Creator badge", twitter: "✅ Verified ✓", demo: "❌ Unverified" },
@@ -364,15 +364,15 @@ export default function Home() {
               { feature: "NFT minting", twitter: "✅ Full access", demo: "⚠️ Test only" },
               { feature: "Use case", twitter: "Production", demo: "Development/testing" },
             ].map((row) => (
-              <div key={row.feature} className="grid grid-cols-2 sm:grid-cols-3 text-[12px] sm:text-[13px] border-t border-white/[0.06]">
-                <div className="p-4 text-white/60">{row.feature}</div>
-                <div className="p-4 text-white/80">{row.twitter}</div>
-                <div className="p-4 text-white/40">{row.demo}</div>
+              <div key={row.feature} className="grid grid-cols-1 sm:grid-cols-3 text-sm sm:text-[13px] border-t border-white/[0.06] min-w-[480px]">
+                <div className="p-3 sm:p-4 text-white/60 font-medium sm:font-normal">{row.feature}</div>
+                <div className="p-3 sm:p-4 text-white/80">{row.twitter}</div>
+                <div className="p-3 sm:p-4 text-white/40 hidden sm:block">{row.demo}</div>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 flex items-center gap-3 text-[13px] text-white/30">
+          <div className="mt-10 flex items-start gap-3 text-sm sm:text-[13px] text-white/30">
             <Shield className="h-4 w-4" />
             <span>ArcMerch will never ask for your private key or seed phrase. Export is initiated by you only, from Profile page.</span>
           </div>
@@ -381,12 +381,12 @@ export default function Home() {
 
       {/* ═══════════ CTA ═══════════ */}
       <section className="bg-white text-black border-t border-black/[0.06]">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px] text-center">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px] text-center">
           <div className="section-label mb-3 text-black/30">{"{ GET STARTED }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4">
             Ready to create?
           </h2>
-          <p className="text-[16px] text-black/40 mb-10 max-w-[420px] mx-auto">
+          <p className="text-base sm:text-[16px] text-black/40 mb-10 max-w-[420px] mx-auto">
             Connect wallet, describe your design, mint your first 
             AI-generated merchandise NFT — under 2 minutes.
           </p>
