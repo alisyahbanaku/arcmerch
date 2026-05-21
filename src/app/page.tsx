@@ -318,6 +318,67 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══════════ SECURITY ═══════════ */}
+      <section className="bg-black text-white border-t border-white/[0.06]">
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px]">
+          <div className="section-label mb-3">{"{ SECURITY }"}</div>
+          <h2 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-4 max-w-[600px]">
+            Your keys. Your assets. <span className="text-amber font-normal">Your control.</span>
+          </h2>
+          <p className="text-[16px] text-white/40 mb-16 max-w-[520px]">
+            ArcMerch uses hybrid custody — your wallet is generated from two secrets combined. 
+            Neither you nor us can access it alone.
+          </p>
+
+          <div className="grid grid-cols-1 gap-px bg-white/[0.06] rounded-xl overflow-hidden md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { icon: "🔐", title: "Hybrid Key Split", desc: "Your private key = HMAC-SHA256(your secret + our secret). Both required to reconstruct. Neither party alone can access your wallet." },
+              { icon: "🐦", title: "X (Twitter) Verification", desc: "Sign in with X = verified creator ✅. OAuth2 standard — we never handle your password. Twitter authenticates, we receive your public profile only." },
+              { icon: "🗝️", title: "Export Anytime", desc: "Export your seed phrase from Profile → Export Wallet. Take it to MetaMask, Phantom, or any wallet. You're never locked in." },
+              { icon: "🛡️", title: "AES-256 Encryption", desc: "Seed phrases encrypted with AES-256-GCM. Military-grade encryption. Even if our database leaks, mnemonics are unreadable." },
+              { icon: "🚫", title: "No Passwords Stored", desc: "We don't store passwords. OAuth tokens are session-only. Your identity is verified by Twitter, not by us." },
+              { icon: "🔒", title: "Security Headers", desc: "HSTS, X-Frame-Options DENY, CSP, nosniff. Clickjacking, XSS, and MIME-sniffing attacks blocked at infrastructure level." },
+            ].map((item) => (
+              <div key={item.title} className="bg-black p-8">
+                <div className="text-[28px] mb-5">{item.icon}</div>
+                <h3 className="text-[16px] font-medium text-white mb-2">{item.title}</h3>
+                <p className="text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Auth comparison */}
+          <div className="mt-16 rounded-xl border border-white/[0.06] overflow-hidden">
+            <div className="grid grid-cols-3 text-[13px] font-medium">
+              <div className="p-5 bg-white/[0.03] text-white/60">Feature</div>
+              <div className="p-5 bg-white/[0.03] text-amber flex items-center gap-2">
+                <span>Sign in with X</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber/10 text-amber">Verified</span>
+              </div>
+              <div className="p-5 bg-white/[0.03] text-white/60">Demo Login</div>
+            </div>
+            {[
+              { feature: "Creator badge", twitter: "✅ Verified ✓", demo: "❌ Unverified" },
+              { feature: "Export seed phrase", twitter: "✅ Allowed", demo: "❌ Blocked" },
+              { feature: "Identity proof", twitter: "✅ Twitter verified", demo: "⚠️ Self-declared" },
+              { feature: "NFT minting", twitter: "✅ Full access", demo: "⚠️ Test only" },
+              { feature: "Use case", twitter: "Production", demo: "Development/testing" },
+            ].map((row) => (
+              <div key={row.feature} className="grid grid-cols-3 text-[13px] border-t border-white/[0.06]">
+                <div className="p-4 text-white/60">{row.feature}</div>
+                <div className="p-4 text-white/80">{row.twitter}</div>
+                <div className="p-4 text-white/40">{row.demo}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex items-center gap-3 text-[13px] text-white/30">
+            <Shield className="h-4 w-4" />
+            <span>ArcMerch will never ask for your private key or seed phrase. Export is initiated by you only, from Profile page.</span>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ CTA ═══════════ */}
       <section className="bg-white text-black border-t border-black/[0.06]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-[100px] md:py-[140px] text-center">
