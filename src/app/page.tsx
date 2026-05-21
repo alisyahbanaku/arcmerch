@@ -63,15 +63,15 @@ export default function Home() {
           </div>
 
           {/* Core loop — subtle */}
-          <div className="mt-16 flex items-center gap-2 text-sm sm:text-[13px] text-white/25">
+          <div className="mt-16 flex items-center gap-2 text-sm sm:text-[13px] text-white/40">
             <span>Create</span>
-            <span className="text-white/10">→</span>
+            <span className="text-white/40">→</span>
             <span>Mint</span>
-            <span className="text-white/10">→</span>
+            <span className="text-white/40">→</span>
             <span>Trade</span>
-            <span className="text-white/10">→</span>
+            <span className="text-white/40">→</span>
             <span className="text-amber">Burn</span>
-            <span className="text-white/10">→</span>
+            <span className="text-white/40">→</span>
             <span>Print</span>
           </div>
         </div>
@@ -372,7 +372,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-10 flex items-start gap-3 text-sm sm:text-[13px] text-white/30">
+          <div className="mt-10 flex items-start gap-3 text-sm sm:text-[13px] text-white/45">
             <Shield className="h-4 w-4" />
             <span>ArcMerch will never ask for your private key or seed phrase. Export is initiated by you only, from Profile page.</span>
           </div>

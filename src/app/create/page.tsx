@@ -204,15 +204,15 @@ export default function CreatePage() {
 
         {/* Balance Bar */}
         {isConnected && (
-          <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3 mb-8">
+          <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 mb-8">
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-[11px] text-white/30">USDC Balance</span>
+                <span className="text-[11px] text-white/45">USDC Balance</span>
                 <div className="text-[14px] mono text-white">{usdcBalFormatted} USDC</div>
               </div>
               <div className="w-px h-8 bg-white/10" />
               <div>
-                <span className="text-[11px] text-white/30">Mint Price</span>
+                <span className="text-[11px] text-white/45">Mint Price</span>
                 <div className="text-[14px] mono text-[#E9A13F]">{priceFormatted} USDC</div>
               </div>
             </div>
@@ -235,9 +235,9 @@ export default function CreatePage() {
             { n: 3, label: "Mint" },
           ].map((s, i) => (
             <div key={s.n} className="flex items-center gap-3">
-              <div className={`flex items-center gap-2 ${step >= s.n ? "text-white" : "text-white/20"}`}>
+              <div className={`flex items-center gap-2 ${step >= s.n ? "text-white" : "text-white/35"}`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-medium ${
-                  step > s.n ? "bg-amber text-black" : step === s.n ? "border border-white/40 text-white" : "border border-white/10 text-white/20"
+                  step > s.n ? "bg-amber text-black" : step === s.n ? "border border-white/40 text-white" : "border border-white/10 text-white/35"
                 }`}>
                   {step > s.n ? <Check className="h-3 w-3" /> : s.n}
                 </div>
@@ -264,7 +264,7 @@ export default function CreatePage() {
                   <div className={`text-[15px] font-medium ${mode === "ai" ? "text-white" : "text-white/60"}`}>
                     Generate with AI
                   </div>
-                  <div className="text-[12px] text-white/30">Describe your vision</div>
+                  <div className="text-[12px] text-white/45">Describe your vision</div>
                 </div>
               </button>
               <button
@@ -278,7 +278,7 @@ export default function CreatePage() {
                   <div className={`text-[15px] font-medium ${mode === "upload" ? "text-white" : "text-white/60"}`}>
                     Upload Design
                   </div>
-                  <div className="text-[12px] text-white/30">Your own artwork</div>
+                  <div className="text-[12px] text-white/45">Your own artwork</div>
                 </div>
               </button>
             </div>
@@ -292,7 +292,7 @@ export default function CreatePage() {
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="e.g., Neon cyberpunk samurai with glowing katana on dark background"
                   rows={4}
-                  className="w-full rounded-lg border border-white/10 bg-transparent p-4 text-[15px] text-white placeholder:text-white/20 focus:border-white/25 focus:outline-none resize-none transition-colors"
+                  className="w-full rounded-lg border border-white/10 bg-transparent p-4 text-[15px] text-white placeholder:text-white/35 focus:border-white/25 focus:outline-none resize-none transition-colors"
                 />
 
                 {/* Style presets */}
@@ -318,11 +318,11 @@ export default function CreatePage() {
                     onClick={() => fileInputRef.current?.click()}
                     className="rounded-xl border-2 border-dashed border-white/10 hover:border-white/20 p-10 text-center cursor-pointer transition-colors"
                   >
-                    <ImageIcon className="w-10 h-10 text-white/15 mx-auto mb-4" />
+                    <ImageIcon className="w-10 h-10 text-white/45 mx-auto mb-4" />
                     <div className="text-[15px] text-white/40 mb-2">
                       Click to upload or drag and drop
                     </div>
-                    <div className="text-[12px] text-white/20">
+                    <div className="text-[12px] text-white/35">
                       PNG, JPG, WebP, SVG — max 10MB
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function CreatePage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-[14px] text-white truncate">{uploadedFile?.name}</div>
-                        <div className="text-[12px] text-white/30 mt-1">
+                        <div className="text-[12px] text-white/45 mt-1">
                           {uploadedFile ? (uploadedFile.size / 1024 / 1024).toFixed(2) : 0} MB
                         </div>
                         <div className="text-[12px] text-green-400 mt-1 flex items-center gap-1">
@@ -367,7 +367,7 @@ export default function CreatePage() {
                       value={designTitle}
                       onChange={(e) => setDesignTitle(e.target.value)}
                       placeholder="e.g., Cosmic Dragon Tee"
-                      className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white placeholder:text-white/20 focus:border-white/25 focus:outline-none transition-colors"
+                      className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white placeholder:text-white/35 focus:border-white/25 focus:outline-none transition-colors"
                     />
                   </div>
                 )}
@@ -386,7 +386,7 @@ export default function CreatePage() {
                   >
                     <div className="text-[28px] mb-2">{p.emoji}</div>
                     <div className="text-[12px] font-medium text-white">{p.name}</div>
-                    <div className="text-[11px] text-white/30 mt-0.5">{p.price}</div>
+                    <div className="text-[11px] text-white/45 mt-0.5">{p.price}</div>
                   </button>
                 ))}
               </div>
@@ -398,7 +398,7 @@ export default function CreatePage() {
               <input type="number" value={edition} onChange={(e) => setEdition(e.target.value)} min="1" max="1000"
                 className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white focus:border-white/25 focus:outline-none transition-colors"
               />
-              <p className="text-[11px] text-white/20 mt-2">Max 1000 per design</p>
+              <p className="text-[11px] text-white/35 mt-2">Max 1000 per design</p>
             </div>
 
             {/* Generate / Continue */}
@@ -417,7 +417,7 @@ export default function CreatePage() {
                         style={{ width: `${generateProgress}%` }}
                       />
                     </div>
-                    <p className="text-[11px] text-white/20">
+                    <p className="text-[11px] text-white/35">
                       AI is creating your unique design. This takes 10-30 seconds.
                     </p>
                   </div>
@@ -472,12 +472,12 @@ export default function CreatePage() {
                 ) : (
                   <div className="aspect-square rounded-lg bg-white/5 flex items-center justify-center">
                     <div className="text-center">
-                      <Sparkles className="w-10 h-10 text-white/10 mx-auto mb-3" />
-                      <p className="text-[13px] text-white/20">No design generated</p>
+                      <Sparkles className="w-10 h-10 text-white/40 mx-auto mb-3" />
+                      <p className="text-[13px] text-white/35">No design generated</p>
                     </div>
                   </div>
                 )}
-                <p className="text-[11px] text-white/20 text-center mt-3">
+                <p className="text-[11px] text-white/35 text-center mt-3">
                   {mode === "upload" ? "Your uploaded design" : generatedImageUrl ? "AI-generated unique design" : "Generate a design to preview"}
                 </p>
               </div>
@@ -487,33 +487,33 @@ export default function CreatePage() {
                 {mode === "ai" ? (
                   <>
                     <div className="rounded-lg border border-white/10 p-4">
-                      <div className="text-[11px] text-white/30 mb-1">Prompt</div>
+                      <div className="text-[11px] text-white/45 mb-1">Prompt</div>
                       <div className="text-[14px] text-white">{prompt}</div>
                     </div>
                     {style && (
                       <div className="rounded-lg border border-white/10 p-4">
-                        <div className="text-[11px] text-white/30 mb-1">Style</div>
+                        <div className="text-[11px] text-white/45 mb-1">Style</div>
                         <div className="text-[14px] text-white">{style}</div>
                       </div>
                     )}
                   </>
                 ) : (
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/30 mb-1">Design</div>
+                    <div className="text-[11px] text-white/45 mb-1">Design</div>
                     <div className="text-[14px] text-white">{designTitle || uploadedFile?.name || "Custom upload"}</div>
                   </div>
                 )}
                 <div className="rounded-lg border border-white/10 p-4">
-                  <div className="text-[11px] text-white/30 mb-1">Product</div>
+                  <div className="text-[11px] text-white/45 mb-1">Product</div>
                   <div className="text-[14px] text-white">{PRODUCTS.find(p => p.id === product)?.emoji} {PRODUCTS.find(p => p.id === product)?.name}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/30 mb-1">Edition</div>
+                    <div className="text-[11px] text-white/45 mb-1">Edition</div>
                     <div className="text-[20px] font-light text-white">{edition}</div>
                   </div>
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/30 mb-1">Mint Cost</div>
+                    <div className="text-[11px] text-white/45 mb-1">Mint Cost</div>
                     <div className="text-[20px] font-light text-amber">{priceFormatted} USDC</div>
                   </div>
                 </div>
@@ -525,7 +525,7 @@ export default function CreatePage() {
                       <div className="text-[13px] text-red-400">
                         ⚠️ Insufficient USDC on Arc. You need {priceFormatted} USDC to mint.
                       </div>
-                      <div className="text-[12px] text-white/30 mt-1">
+                      <div className="text-[12px] text-white/45 mt-1">
                         Arc balance: {usdcBalFormatted} USDC
                       </div>
                     </div>
@@ -708,7 +708,7 @@ export default function CreatePage() {
               )}
             </div>
 
-            <p className="text-[11px] text-white/20 text-center">
+            <p className="text-[11px] text-white/35 text-center">
               By minting you agree to ArcMerch terms. NFTs minted on Arc Testnet.
             </p>
           </div>

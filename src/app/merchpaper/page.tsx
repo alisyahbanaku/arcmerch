@@ -29,7 +29,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="text-white/20 hover:text-white/50 transition-colors"
+      className="text-white/35 hover:text-white/50 transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
     </button>
@@ -54,7 +54,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
     <div className="my-6 space-y-0">
       {rows.map((row, i) => (
-        <div key={i} className={`grid gap-4 py-3 ${i === 0 ? "border-b border-white/10" : "border-b border-white/[0.04]"}`}
+        <div key={i} className={`grid gap-4 py-3 ${i === 0 ? "border-b border-white/10" : "border-b border-white/[0.06]"}`}
           style={{ gridTemplateColumns: `repeat(${headers.length}, 1fr)` }}
         >
           {row.map((cell, j) => (
@@ -70,7 +70,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <div className="relative my-6 rounded-lg border border-white/[0.06] bg-white/[0.02] p-5 overflow-x-auto">
+    <div className="relative my-6 rounded-lg border border-white/[0.06] bg-white/[0.04] p-5 overflow-x-auto">
       <pre className="text-[12px] font-mono leading-[1.6] text-white/50 whitespace-pre">{children}</pre>
     </div>
   );
@@ -95,7 +95,7 @@ export default function MerchpaperPage() {
           <p className="text-[18px] text-white/40 max-w-[560px] leading-[1.6] mb-8">
             The Economic Operating System for AI-Powered Merchandise on Arc Blockchain
           </p>
-          <div className="flex flex-wrap gap-4 text-[12px] font-mono text-white/30">
+          <div className="flex flex-wrap gap-4 text-[12px] font-mono text-white/45">
             <span className="px-3 py-1.5 rounded border border-white/10">v1.0 · May 2026</span>
             <span className="px-3 py-1.5 rounded border border-white/10">Arc Testnet · 5042002</span>
           </div>
@@ -105,7 +105,7 @@ export default function MerchpaperPage() {
       <div className="mx-auto max-w-[900px] px-6 lg:px-10 py-16">
         {/* TOC */}
         <nav className="mb-20">
-          <div className="text-[11px] uppercase tracking-[0.15em] text-white/20 mb-6">Table of Contents</div>
+          <div className="text-[11px] uppercase tracking-[0.15em] text-white/35 mb-6">Table of Contents</div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-1">
             {TOC.map((item) => (
               <a
@@ -113,7 +113,7 @@ export default function MerchpaperPage() {
                 href={`#${item.id}`}
                 className="flex items-center gap-3 py-2 text-[14px] text-white/40 hover:text-white transition-colors group"
               >
-                <span className="font-mono text-[11px] text-white/15 group-hover:text-[#E9A13F]/60 w-6">{item.n}</span>
+                <span className="font-mono text-[11px] text-white/45 group-hover:text-[#E9A13F]/60 w-6">{item.n}</span>
                 {item.label}
               </a>
             ))}
@@ -217,7 +217,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               <div key={path.label} className="rounded-lg border border-white/[0.06] p-5 text-center">
                 <div className="text-[28px] mb-3">{path.icon}</div>
                 <div className="text-[14px] font-medium text-white mb-2">{path.label}</div>
-                <div className="text-[12px] text-white/30 leading-[1.5]">{path.desc}</div>
+                <div className="text-[12px] text-white/45 leading-[1.5]">{path.desc}</div>
               </div>
             ))}
           </div>
@@ -348,7 +348,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "80 burns", supply: "20", scarcity: "+400%" },
             ].map((s) => (
               <div key={s.label} className="rounded-lg border border-white/[0.06] p-4 text-center">
-                <div className="text-[12px] text-white/30 mb-2">{s.label}</div>
+                <div className="text-[12px] text-white/45 mb-2">{s.label}</div>
                 <div className="text-[24px] font-light text-white">{s.supply}</div>
                 <div className="text-[12px] text-[#E9A13F] mt-1">{s.scarcity}</div>
               </div>
@@ -449,7 +449,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "Bleed", value: '0.25" safe zone' },
             ].map((spec) => (
               <div key={spec.label} className="rounded-lg border border-white/[0.06] p-4 text-center">
-                <div className="text-[11px] text-white/30 mb-1">{spec.label}</div>
+                <div className="text-[11px] text-white/45 mb-1">{spec.label}</div>
                 <div className="text-[14px] font-medium text-white">{spec.value}</div>
               </div>
             ))}
@@ -482,7 +482,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               <div key={loc.region} className="rounded-lg border border-white/[0.06] p-4 text-center">
                 <div className="text-[24px] mb-2">{loc.flag}</div>
                 <div className="text-[14px] font-medium text-white">{loc.region}</div>
-                <div className="text-[11px] text-white/30 mt-1">{loc.detail}</div>
+                <div className="text-[11px] text-white/45 mt-1">{loc.detail}</div>
               </div>
             ))}
           </div>
@@ -500,7 +500,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "Treasury", value: "$1.25", pct: "2.5%" },
             ].map((r) => (
               <div key={r.label} className="rounded-lg border border-white/[0.06] p-5 text-center">
-                <div className="text-[11px] text-white/30 mb-2">{r.label}</div>
+                <div className="text-[11px] text-white/45 mb-2">{r.label}</div>
                 <div className="text-[22px] font-light text-white">{r.value}</div>
                 <div className="text-[12px] text-[#E9A13F] mt-1">{r.pct}</div>
               </div>
@@ -619,7 +619,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                       {p.status}
                     </span>
                   )}
-                  <span className="text-[12px] text-white/20 ml-auto">{p.time}</span>
+                  <span className="text-[12px] text-white/35 ml-auto">{p.time}</span>
                 </div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {p.items.map((item) => (

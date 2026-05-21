@@ -86,8 +86,8 @@ function Footer() {
         </div>
 
         <div className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-          <span className="text-xs sm:text-[13px] text-white/25">© 2026 ArcMerch</span>
-          <span className="text-xs sm:text-[13px] text-white/25 text-center sm:text-right">Built on Arc — Circle&apos;s L1 where USDC is native gas</span>
+          <span className="text-xs sm:text-[13px] text-white/40">© 2026 ArcMerch</span>
+          <span className="text-xs sm:text-[13px] text-white/40 text-center sm:text-right">Built on Arc — Circle&apos;s L1 where USDC is native gas</span>
         </div>
       </div>
     </footer>

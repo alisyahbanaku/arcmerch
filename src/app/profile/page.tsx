@@ -38,7 +38,7 @@ function OnChainCard() {
           </div>
           <div>
             <h3 className="text-[18px] font-light text-white">Connect Wallet</h3>
-            <p className="text-[13px] text-white/30">Connect to view on-chain assets</p>
+            <p className="text-[13px] text-white/45">Connect to view on-chain assets</p>
           </div>
         </div>
         <button
@@ -63,13 +63,13 @@ function OnChainCard() {
         </div>
         <div>
           <h3 className="text-[18px] font-light text-white">On-Chain Wallet</h3>
-          <p className="text-[13px] text-white/30">Connected to Arc Testnet</p>
+          <p className="text-[13px] text-white/45">Connected to Arc Testnet</p>
         </div>
       </div>
 
       {/* Address */}
       <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
-        <div className="text-[12px] text-white/30 uppercase tracking-wider mb-2">Wallet Address</div>
+        <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
         <div className="flex items-center justify-between">
           <code className="text-[15px] text-white font-mono">{shortAddress(address || "")}</code>
           <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
@@ -81,11 +81,11 @@ function OnChainCard() {
       {/* Balances */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">USDC Balance</div>
+          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">USDC Balance</div>
           <div className="text-[16px] font-light text-white mono">{usdcBalanceFormatted}</div>
         </div>
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">NFTs Owned</div>
+          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">NFTs Owned</div>
           <div className="text-[16px] font-light text-white mono">{nftBalance?.toString() || "0"}</div>
         </div>
       </div>
@@ -157,13 +157,13 @@ function AuthWalletCard() {
         </div>
         <div>
           <h3 className="text-[18px] font-light text-white">Platform Wallet</h3>
-          <p className="text-[13px] text-white/30">Hybrid custody — export anytime</p>
+          <p className="text-[13px] text-white/45">Hybrid custody — export anytime</p>
         </div>
       </div>
 
       {/* Address */}
       <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
-        <div className="text-[12px] text-white/30 uppercase tracking-wider mb-2">Wallet Address</div>
+        <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
         <div className="flex items-center justify-between">
           <code className="text-[15px] text-white font-mono">{shortAddress(user.walletAddress)}</code>
           <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
@@ -175,11 +175,11 @@ function AuthWalletCard() {
       {/* Network Info */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">Network</div>
+          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Network</div>
           <div className="text-[14px] text-white">Arc Testnet</div>
         </div>
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/25 uppercase tracking-wider mb-1">Chain ID</div>
+          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Chain ID</div>
           <div className="text-[14px] text-white font-mono">5042002</div>
         </div>
       </div>
@@ -214,7 +214,7 @@ function AuthWalletCard() {
           </div>
           <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[12px] text-white/30 uppercase tracking-wider">Seed Phrase</span>
+              <span className="text-[12px] text-white/45 uppercase tracking-wider">Seed Phrase</span>
               <button
                 onClick={() => setShowMnemonic(!showMnemonic)}
                 className="text-white/40 hover:text-white transition-colors"
@@ -226,15 +226,15 @@ function AuthWalletCard() {
               <div className="grid grid-cols-3 gap-2">
                 {mnemonic?.split(" ").map((word, i) => (
                   <div key={i} className="bg-white/5 rounded-lg px-3 py-2 text-center">
-                    <span className="text-[11px] text-white/25">{i + 1}.</span>
+                    <span className="text-[11px] text-white/40">{i + 1}.</span>
                     <span className="text-[14px] text-white font-mono ml-1">{word}</span>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-4">
-                <Eye className="w-6 h-6 text-white/20 mx-auto mb-2" />
-                <span className="text-[13px] text-white/20">Click eye to reveal</span>
+                <Eye className="w-6 h-6 text-white/35 mx-auto mb-2" />
+                <span className="text-[13px] text-white/35">Click eye to reveal</span>
               </div>
             )}
           </div>
@@ -244,7 +244,7 @@ function AuthWalletCard() {
               setMnemonic(null);
               setShowMnemonic(false);
             }}
-            className="text-[13px] text-white/30 hover:text-white/60 transition-colors"
+            className="text-[13px] text-white/45 hover:text-white/60 transition-colors"
           >
             Hide seed phrase
           </button>
@@ -267,13 +267,13 @@ function NFTGallery() {
     <div className="card p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-[18px] font-light text-white">My NFTs</h3>
-        <span className="text-[13px] text-white/30">{mockNFTs.length} items</span>
+        <span className="text-[13px] text-white/45">{mockNFTs.length} items</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {mockNFTs.map((nft) => (
           <div key={nft.id} className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden group hover:border-white/10 transition-colors">
-            <div className="aspect-square bg-white/[0.02] flex items-center justify-center">
-              <Package className="w-10 h-10 text-white/10" />
+            <div className="aspect-square bg-white/[0.04] flex items-center justify-center">
+              <Package className="w-10 h-10 text-white/40" />
             </div>
             <div className="p-3">
               <div className="text-[14px] text-white mb-1">{nft.name}</div>
@@ -311,7 +311,7 @@ function ActivityFeed() {
             </div>
             <div className="flex-1">
               <div className="text-[14px] text-white">{a.text}</div>
-              <div className="text-[12px] text-white/25">{a.time}</div>
+              <div className="text-[12px] text-white/40">{a.time}</div>
             </div>
           </div>
         ))}
@@ -327,7 +327,7 @@ function NotSignedIn() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center max-w-[400px] mx-auto px-6">
         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-          <Wallet className="w-8 h-8 text-white/20" />
+          <Wallet className="w-8 h-8 text-white/35" />
         </div>
         <h2 className="text-[24px] font-light text-white mb-3">Sign in to view profile</h2>
         <p className="text-[15px] text-white/40 mb-8 leading-relaxed">

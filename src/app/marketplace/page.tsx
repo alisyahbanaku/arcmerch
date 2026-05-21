@@ -73,26 +73,26 @@ export default function MarketplacePage() {
 
         {/* Live Contract Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-            <div className="text-[11px] text-white/30 mb-1">Total Minted</div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+            <div className="text-[11px] text-white/45 mb-1">Total Minted</div>
             <div className="text-[20px] font-light text-white mono">
               {totalMinted.data?.toString() || "0"}
             </div>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-            <div className="text-[11px] text-white/30 mb-1">Max Supply</div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+            <div className="text-[11px] text-white/45 mb-1">Max Supply</div>
             <div className="text-[20px] font-light text-white mono">
               {maxSupply.data?.toString() || "10,000"}
             </div>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-            <div className="text-[11px] text-white/30 mb-1">Mint Price</div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+            <div className="text-[11px] text-white/45 mb-1">Mint Price</div>
             <div className="text-[20px] font-light text-[#E9A13F] mono">
               {mintPrice.priceFormatted} USDC
             </div>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-            <div className="text-[11px] text-white/30 mb-1">Contract</div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+            <div className="text-[11px] text-white/45 mb-1">Contract</div>
             <a
               href="https://testnet.arcscan.app/address/0x27881c74CF4Db0B361Bc67647046583C6e0f2162"
               target="_blank"
@@ -130,18 +130,18 @@ export default function MarketplacePage() {
         {/* Filters */}
         <div className="flex flex-col gap-4 mb-10 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative max-w-[400px] flex-1">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/25" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
             <input
               type="text"
               placeholder="Search designs or creators..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-transparent py-3 pl-11 pr-4 text-[14px] text-white placeholder:text-white/25 focus:border-white/25 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-white/10 bg-transparent py-3 pl-11 pr-4 text-[14px] text-white placeholder:text-white/40 focus:border-white/25 focus:outline-none transition-colors"
             />
           </div>
 
           <div className="flex items-center gap-3">
-            <SlidersHorizontal className="h-4 w-4 text-white/25" />
+            <SlidersHorizontal className="h-4 w-4 text-white/40" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -170,7 +170,7 @@ export default function MarketplacePage() {
         </div>
 
         {/* Count */}
-        <div className="text-[13px] text-white/30 mb-8">
+        <div className="text-[13px] text-white/45 mb-8">
           {filtered.length} designs
         </div>
 
@@ -226,13 +226,13 @@ export default function MarketplacePage() {
           <div className="text-center py-20">
             <div className="text-[48px] mb-4">🔍</div>
             <div className="text-[18px] text-white/40">No designs found</div>
-            <p className="text-[14px] text-white/20 mt-2">Try adjusting your search or filters</p>
+            <p className="text-[14px] text-white/35 mt-2">Try adjusting your search or filters</p>
           </div>
         )}
 
         {/* Note about mock data */}
         <div className="mt-12 rounded-lg border border-white/5 bg-white/[0.01] p-6 text-center">
-          <p className="text-[13px] text-white/20">
+          <p className="text-[13px] text-white/35">
             Marketplace display uses sample data. On-chain minting is live — create your own NFTs via the{" "}
             <Link href="/create" className="text-[#E9A13F] hover:underline">Create</Link> page.
           </p>

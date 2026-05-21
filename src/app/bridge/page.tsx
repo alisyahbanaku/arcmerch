@@ -97,7 +97,7 @@ export default function BridgePage() {
 
         {/* Unified Balance Overview */}
         {isConnected && (
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 mb-8">
+          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-[#E9A13F]" />
@@ -106,7 +106,7 @@ export default function BridgePage() {
               <button
                 onClick={() => address && fetchBalances(address)}
                 disabled={balancesLoading}
-                className="text-[12px] text-white/30 hover:text-white/60 flex items-center gap-1 transition-colors"
+                className="text-[12px] text-white/45 hover:text-white/60 flex items-center gap-1 transition-colors"
               >
                 <RefreshCw className={`w-3 h-3 ${balancesLoading ? "animate-spin" : ""}`} />
                 Refresh
@@ -116,7 +116,7 @@ export default function BridgePage() {
             <div className="text-[32px] font-light text-white mb-1">
               {totalUnified} <span className="text-[16px] text-white/40">USDC</span>
             </div>
-            <p className="text-[12px] text-white/30 mb-4">
+            <p className="text-[12px] text-white/45 mb-4">
               Across all chains • Powered by Circle Gateway
             </p>
 
@@ -127,7 +127,7 @@ export default function BridgePage() {
                 return (
                   <div
                     key={chain.id}
-                    className="rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                    className="rounded-lg border border-white/5 bg-white/[0.04] p-3"
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[14px]">{chain.icon}</span>
@@ -164,7 +164,7 @@ export default function BridgePage() {
                         <span className="text-[20px]">{chain.icon}</span>
                         <span className="text-[14px] font-medium text-white">{chain.name}</span>
                       </div>
-                      <div className="text-[12px] text-white/30">
+                      <div className="text-[12px] text-white/45">
                         {balances[chain.name] || "0"} USDC
                       </div>
                     </button>
@@ -182,7 +182,7 @@ export default function BridgePage() {
                       placeholder="0.00"
                       min="0"
                       step="0.01"
-                      className="w-full rounded-lg border border-white/10 bg-transparent p-4 pr-20 text-[18px] font-light text-white placeholder:text-white/20 focus:border-white/25 focus:outline-none transition-colors"
+                      className="w-full rounded-lg border border-white/10 bg-transparent p-4 pr-20 text-[18px] font-light text-white placeholder:text-white/35 focus:border-white/25 focus:outline-none transition-colors"
                     />
                     <button
                       onClick={() => {
@@ -296,7 +296,7 @@ export default function BridgePage() {
                 <p className="text-[14px] text-white/40">
                   Transferring {amount} USDC from {selectedChain?.name} to Arc
                 </p>
-                <p className="text-[12px] text-white/20 mt-2">
+                <p className="text-[12px] text-white/35 mt-2">
                   This may take 15-60 seconds
                 </p>
               </div>
@@ -371,7 +371,7 @@ export default function BridgePage() {
         </div>
 
         {/* Footer note */}
-        <p className="text-[11px] text-white/20 text-center mt-12">
+        <p className="text-[11px] text-white/35 text-center mt-12">
           Powered by Circle App Kit • Unified Balance + Bridge • Arc Testnet
         </p>
       </div>
