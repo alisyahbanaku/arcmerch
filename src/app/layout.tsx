@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { AuthProvider } from "@/lib/auth-provider";
 import { AuthButton } from "@/components/auth-button";
+import { Web3Provider } from "@/components/web3-provider";
+import { WalletButton } from "@/components/wallet-button";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -58,8 +60,11 @@ function Navbar() {
             </Link>
           </div>
 
-          {/* Auth Button — Sign In / Wallet */}
-          <AuthButton />
+          {/* Auth + Wallet */}
+          <div className="flex items-center gap-3">
+            <WalletButton />
+            <AuthButton />
+          </div>
         </div>
       </nav>
     </header>
@@ -143,11 +148,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </head>
       <body className="min-h-screen">
-        <AuthProvider>
-          <Navbar />
-          <main className="pt-[72px]">{children}</main>
-          <Footer />
-        </AuthProvider>
+        <Web3Provider>
+          <AuthProvider>
+            <Navbar />
+            <main className="pt-[72px]">{children}</main>
+            <Footer />
+          </AuthProvider>
+        </Web3Provider>
       </body>
     </html>
   );

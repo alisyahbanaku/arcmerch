@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X } from "lucide-react";
-import { useAuth } from "@/lib/auth-provider";
-import { VerifiedBadge } from "@/components/verified-badge";
+import { useState, useRef, useEffect } from "react";
+import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X, Wallet, ExternalLink } from "lucide-react";
+import { useAccount, useConnect } from "wagmi";
+import { formatUnits } from "viem";
+import { useMintNFT, useApproveUSDC, useUSDCBalance, useUSDCAllowance, useMintPrice } from "@/hooks/useArcMerch";
+import { ARC_MERCH_NFT_ADDRESS } from "@/lib/contracts";
 
 const PRODUCTS = [
   { id: "tshirt", name: "T-Shirt", emoji: "👕", price: "$29.99" },
@@ -18,7 +20,14 @@ const STYLES = ["Realistic", "Anime", "Pixel Art", "Watercolor", "Cyberpunk", "M
 type DesignMode = "ai" | "upload";
 
 export default function CreatePage() {
-  const { user } = useAuth();
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { priceRaw, priceFormatted } = useMintPrice();
+  const usdcBalance = useUSDCBalance(address);
+  const usdcAllowance = useUSDCAllowance(address);
+  const { mint, isPending: isMinting, isConfirming, isSuccess, hash, error: mintError } = useMintNFT();
+  const { approve, isPending: isApproving, isConfirming: isApproveConfirming, isSuccess: isApproveSuccess, hash: approveHash } = useApproveUSDC();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState<DesignMode>("ai");
@@ -26,24 +35,39 @@ export default function CreatePage() {
   const [product, setProduct] = useState("tshirt");
   const [style, setStyle] = useState("");
   const [edition, setEdition] = useState("10");
-  const [price, setPrice] = useState("25");
   const [generating, setGenerating] = useState(false);
 
   // Upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
   const [designTitle, setDesignTitle] = useState("");
+  const [metadataUri, setMetadataUri] = useState("");
+
+  // Check if USDC approval is needed
+  const needsApproval = priceRaw && usdcAllowance.data !== undefined
+    ? usdcAllowance.data < priceRaw
+    : true;
+
+  // After approve success, check if we should auto-mint
+  useEffect(() => {
+    if (isApproveSuccess && step === 3) {
+      // Re-check allowance will update automatically via wagmi
+    }
+  }, [isApproveSuccess, step]);
 
   const handleGenerate = () => {
     setGenerating(true);
-    setTimeout(() => { setGenerating(false); setStep(2); }, 2000);
+    setTimeout(() => {
+      setGenerating(false);
+      setMetadataUri("ipfs://QmArcMerchDemo/" + Date.now());
+      setStep(2);
+    }, 2000);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file
     const validTypes = ["image/png", "image/jpeg", "image/webp", "image/svg+xml"];
     if (!validTypes.includes(file.type)) {
       alert("Please upload PNG, JPG, WebP, or SVG");
@@ -56,7 +80,7 @@ export default function CreatePage() {
 
     setUploadedFile(file);
     const reader = new FileReader();
-    reader.onload = (e) => setUploadedPreview(e.target?.result as string);
+    reader.onload = (ev) => setUploadedPreview(ev.target?.result as string);
     reader.readAsDataURL(file);
   };
 
@@ -66,7 +90,30 @@ export default function CreatePage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleApprove = () => {
+    approve(priceRaw);
+  };
+
+  const handleMint = () => {
+    if (!address || !priceRaw) return;
+
+    // In production, this would upload to IPFS first
+    const uri = metadataUri || `ipfs://QmArcMerch/${Date.now()}`;
+
+    mint({
+      uri,
+      productType: product,
+      designTitle: designTitle || prompt.slice(0, 50),
+      maxEditions: parseInt(edition) || 10,
+      to: address,
+    });
+  };
+
   const canProceed = mode === "ai" ? prompt.trim() : uploadedFile;
+
+  // Format balances
+  const usdcBalFormatted = usdcBalance.data ? formatUnits(usdcBalance.data, 6) : "0";
+  const hasEnoughUSDC = priceRaw ? (usdcBalance.data || BigInt(0)) >= priceRaw : false;
 
   return (
     <div className="bg-black text-white min-h-screen">
@@ -79,6 +126,53 @@ export default function CreatePage() {
         <p className="text-[16px] text-white/40 mb-12">
           Generate with AI or upload your own design, then mint as NFT
         </p>
+
+        {/* Wallet Status */}
+        {!isConnected && (
+          <div className="rounded-xl border border-[#E9A13F]/20 bg-[#E9A13F]/5 p-6 mb-8">
+            <div className="flex items-center gap-3 mb-3">
+              <Wallet className="w-5 h-5 text-[#E9A13F]" />
+              <span className="text-[15px] font-medium text-white">Connect wallet to mint</span>
+            </div>
+            <p className="text-[13px] text-white/40 mb-4">
+              You need a wallet connected to Arc Testnet to mint NFTs. USDC is used for gas and mint payments.
+            </p>
+            <button
+              onClick={() => {
+                const injected = connectors.find((c) => c.id === "injected");
+                if (injected) connect({ connector: injected });
+              }}
+              className="arc-btn text-sm px-6 py-2.5"
+            >
+              Connect Wallet
+            </button>
+          </div>
+        )}
+
+        {/* Balance Bar */}
+        {isConnected && (
+          <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.02] px-4 py-3 mb-8">
+            <div className="flex items-center gap-4">
+              <div>
+                <span className="text-[11px] text-white/30">USDC Balance</span>
+                <div className="text-[14px] mono text-white">{usdcBalFormatted} USDC</div>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div>
+                <span className="text-[11px] text-white/30">Mint Price</span>
+                <div className="text-[14px] mono text-[#E9A13F]">{priceFormatted} USDC</div>
+              </div>
+            </div>
+            <a
+              href="https://faucet.circle.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[12px] text-[#E9A13F] hover:underline flex items-center gap-1"
+            >
+              Get USDC <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
 
         {/* Progress */}
         <div className="flex items-center gap-3 mb-12">
@@ -224,16 +318,6 @@ export default function CreatePage() {
                     />
                   </div>
                 )}
-
-                {/* Verified creator note */}
-                {user?.verified && (
-                  <div className="mt-4 flex items-center gap-2 bg-[#1DA1F2]/5 border border-[#1DA1F2]/10 rounded-lg px-4 py-3">
-                    <VerifiedBadge size="md" />
-                    <span className="text-[13px] text-[#1DA1F2]/80">
-                      Verified creator — your X-verified designs get priority listing
-                    </span>
-                  </div>
-                )}
               </div>
             )}
 
@@ -255,22 +339,13 @@ export default function CreatePage() {
               </div>
             </div>
 
-            {/* Edition + Price */}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="text-[13px] text-white/40 mb-3 block">Edition size</label>
-                <input type="number" value={edition} onChange={(e) => setEdition(e.target.value)} min="1" max="1000"
-                  className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white focus:border-white/25 focus:outline-none transition-colors"
-                />
-                <p className="text-[11px] text-white/20 mt-2">Max 1000 per design</p>
-              </div>
-              <div>
-                <label className="text-[13px] text-white/40 mb-3 block">Price (USDC)</label>
-                <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} min="5"
-                  className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white focus:border-white/25 focus:outline-none transition-colors"
-                />
-                <p className="text-[11px] text-white/20 mt-2">Minimum 5 USDC</p>
-              </div>
+            {/* Edition */}
+            <div>
+              <label className="text-[13px] text-white/40 mb-3 block">Edition size</label>
+              <input type="number" value={edition} onChange={(e) => setEdition(e.target.value)} min="1" max="1000"
+                className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white focus:border-white/25 focus:outline-none transition-colors"
+              />
+              <p className="text-[11px] text-white/20 mt-2">Max 1000 per design</p>
             </div>
 
             {/* Generate / Continue */}
@@ -281,7 +356,7 @@ export default function CreatePage() {
                 {generating ? <><Loader2 className="h-4 w-4 animate-spin" />Generating...</> : <><Sparkles className="h-4 w-4" />Generate with AI</>}
               </button>
             ) : (
-              <button onClick={() => setStep(2)} disabled={!uploadedFile}
+              <button onClick={() => { setMetadataUri(`ipfs://QmArcMerchUpload/${Date.now()}`); setStep(2); }} disabled={!uploadedFile}
                 className="w-full btn-primary justify-center py-4 text-[16px] disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 Continue <ArrowRight className="h-4 w-4" />
@@ -321,10 +396,6 @@ export default function CreatePage() {
                   <div className="rounded-lg border border-white/10 p-4">
                     <div className="text-[11px] text-white/30 mb-1">Design</div>
                     <div className="text-[14px] text-white">{designTitle || uploadedFile?.name || "Custom upload"}</div>
-                    <div className="text-[12px] text-white/20 mt-1 flex items-center gap-1">
-                      <Upload className="w-3 h-3" /> Original artwork
-                      {user?.verified && <><span className="mx-1">·</span><VerifiedBadge size="sm" showLabel /></>}
-                    </div>
                   </div>
                 )}
                 <div className="rounded-lg border border-white/10 p-4">
@@ -337,15 +408,36 @@ export default function CreatePage() {
                     <div className="text-[20px] font-light text-white">{edition}</div>
                   </div>
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/30 mb-1">Price</div>
-                    <div className="text-[20px] font-light text-amber">{price} USDC</div>
+                    <div className="text-[11px] text-white/30 mb-1">Mint Cost</div>
+                    <div className="text-[20px] font-light text-amber">{priceFormatted} USDC</div>
                   </div>
                 </div>
 
+                {/* USDC Warning */}
+                {!hasEnoughUSDC && (
+                  <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                    <div className="text-[13px] text-red-400">
+                      ⚠️ Insufficient USDC balance. You need {priceFormatted} USDC to mint.
+                    </div>
+                    <a
+                      href="https://faucet.circle.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[12px] text-[#E9A13F] hover:underline mt-2 inline-flex items-center gap-1"
+                    >
+                      Get testnet USDC <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+
                 <div className="flex gap-3 pt-2">
                   <button onClick={() => setStep(1)} className="flex-1 btn-outline justify-center">Back</button>
-                  <button onClick={() => setStep(3)} className="flex-1 btn-primary justify-center">
-                    Continue <ArrowRight className="h-4 w-4" />
+                  <button
+                    onClick={() => setStep(3)}
+                    disabled={!isConnected || !hasEnoughUSDC}
+                    className="flex-1 btn-primary justify-center disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {!isConnected ? "Connect Wallet" : !hasEnoughUSDC ? "Insufficient USDC" : "Continue"} <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
               </div>
@@ -360,35 +452,116 @@ export default function CreatePage() {
               <div className="text-[48px] mb-6">🖼️</div>
               <h2 className="text-[28px] font-light text-white mb-2">Ready to mint</h2>
               <p className="text-[14px] text-white/40 mb-10 max-w-[380px] mx-auto">
-                {mode === "upload"
-                  ? "Your original design will be minted as ERC-721 on Arc. Ownership permanently on-chain."
-                  : "Your AI design will be minted as ERC-721 on Arc. Gas paid in USDC."
+                {isSuccess
+                  ? "NFT minted successfully! View on explorer."
+                  : mode === "upload"
+                    ? "Your original design will be minted as ERC-721 on Arc. Ownership permanently on-chain."
+                    : "Your AI design will be minted as ERC-721 on Arc. Gas paid in USDC."
                 }
               </p>
 
-              <div className="mx-auto max-w-[320px] space-y-3 mb-10">
-                {[
-                  { label: "NFT Price", value: `${price} USDC` },
-                  { label: "Gas (est.)", value: "~0.05 USDC" },
-                  { label: "Platform (2.5%)", value: `${(Number(price) * 0.025).toFixed(2)} USDC` },
-                ].map((row) => (
-                  <div key={row.label} className="flex justify-between py-3 border-b border-white/[0.06]">
-                    <span className="text-[13px] text-white/40">{row.label}</span>
-                    <span className="mono text-[13px] text-white">{row.value}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between py-3">
-                  <span className="text-[14px] font-medium text-white">You receive</span>
-                  <span className="mono text-[14px] text-amber">{(Number(price) * 0.975).toFixed(2)} USDC/sale</span>
+              {/* Transaction Status */}
+              {hash && (
+                <div className="mx-auto max-w-[320px] mb-6">
+                  <a
+                    href={`https://testnet.arcscan.app/tx/${hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[13px] text-[#E9A13F] hover:underline"
+                  >
+                    View Transaction <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
-              </div>
+              )}
 
-              <div className="flex gap-3 max-w-[320px] mx-auto">
-                <button onClick={() => setStep(2)} className="flex-1 btn-outline justify-center">Back</button>
-                <button className="flex-1 btn-primary justify-center">
-                  🔥 {mode === "upload" ? "Mint Original" : "Mint NFT"}
-                </button>
-              </div>
+              {/* Error */}
+              {mintError && (
+                <div className="mx-auto max-w-[320px] mb-6 rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                  <div className="text-[13px] text-red-400">
+                    {mintError.message.includes("User rejected") ? "Transaction cancelled" : `Error: ${mintError.message.slice(0, 100)}`}
+                  </div>
+                </div>
+              )}
+
+              {/* Success State */}
+              {isSuccess ? (
+                <div className="mx-auto max-w-[320px] space-y-4">
+                  <div className="rounded-lg border border-green-500/20 bg-green-500/5 p-4">
+                    <div className="text-[14px] text-green-400 flex items-center justify-center gap-2">
+                      <Check className="w-4 h-4" /> NFT Minted Successfully!
+                    </div>
+                  </div>
+                  <a
+                    href={`https://testnet.arcscan.app/tx/${hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full btn-primary justify-center py-3 inline-flex items-center gap-2"
+                  >
+                    View on Explorer <ExternalLink className="w-4 h-4" />
+                  </a>
+                  <button
+                    onClick={() => {
+                      setStep(1);
+                      setPrompt("");
+                      setUploadedFile(null);
+                      setUploadedPreview(null);
+                      setDesignTitle("");
+                    }}
+                    className="w-full btn-outline justify-center py-3"
+                  >
+                    Create Another
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="mx-auto max-w-[320px] space-y-3 mb-10">
+                    <div className="flex justify-between py-3 border-b border-white/[0.06]">
+                      <span className="text-[13px] text-white/40">Mint Price</span>
+                      <span className="mono text-[13px] text-white">{priceFormatted} USDC</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-white/[0.06]">
+                      <span className="text-[13px] text-white/40">Gas (est.)</span>
+                      <span className="mono text-[13px] text-white">~0.05 USDC</span>
+                    </div>
+                    <div className="flex justify-between py-3">
+                      <span className="text-[14px] font-medium text-white">Total</span>
+                      <span className="mono text-[14px] text-amber">~{(parseFloat(priceFormatted) + 0.05).toFixed(2)} USDC</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 max-w-[320px] mx-auto">
+                    <button onClick={() => setStep(2)} className="flex-1 btn-outline justify-center">Back</button>
+
+                    {needsApproval ? (
+                      <button
+                        onClick={handleApprove}
+                        disabled={isApproving || isApproveConfirming}
+                        className="flex-1 btn-primary justify-center disabled:opacity-50"
+                      >
+                        {isApproving || isApproveConfirming ? (
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Approving...</>
+                        ) : (
+                          <> Approve USDC</>
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleMint}
+                        disabled={isMinting || isConfirming}
+                        className="flex-1 btn-primary justify-center disabled:opacity-50"
+                      >
+                        {isMinting ? (
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Confirm...</>
+                        ) : isConfirming ? (
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Minting...</>
+                        ) : (
+                          <>🔥 {mode === "upload" ? "Mint Original" : "Mint NFT"}</>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
             <p className="text-[11px] text-white/20 text-center">

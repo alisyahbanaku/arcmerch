@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Flame, SlidersHorizontal } from "lucide-react";
+import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useAccount, useConnect } from "wagmi";
+import { useTotalMinted, useMaxSupply, useMintPrice, useBurnNFT } from "@/hooks/useArcMerch";
 
 const ALL_DESIGNS = [
   { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, color: "#9F72FF", emoji: "⚔️", verified: true },
@@ -20,15 +22,33 @@ const FILTERS = ["All", "T-Shirt", "Hoodie", "Cap", "Mug", "Poster"];
 const SORT = ["Recent", "Price: Low", "Price: High", "Most Burned"];
 
 export default function MarketplacePage() {
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const totalMinted = useTotalMinted();
+  const maxSupply = useMaxSupply();
+  const mintPrice = useMintPrice();
+  const { burn, isPending: isBurning, hash: burnHash } = useBurnNFT();
+
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("Recent");
+  const [burningId, setBurningId] = useState<number | null>(null);
 
   const filtered = ALL_DESIGNS.filter((d) => {
     const matchSearch = d.title.toLowerCase().includes(search.toLowerCase()) || d.creator.toLowerCase().includes(search.toLowerCase());
     const matchProduct = activeFilter === "All" || d.product === activeFilter;
     return matchSearch && matchProduct;
   });
+
+  const handleBurn = (id: number) => {
+    if (!isConnected) {
+      const injected = connectors.find((c) => c.id === "injected");
+      if (injected) connect({ connector: injected });
+      return;
+    }
+    setBurningId(id);
+    burn(id);
+  };
 
   return (
     <div className="bg-black text-white min-h-screen">
@@ -38,9 +58,42 @@ export default function MarketplacePage() {
         <h1 className="text-[40px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           Explore designs
         </h1>
-        <p className="text-[16px] text-white/40 mb-12">
+        <p className="text-[16px] text-white/40 mb-8">
           Browse AI-generated merchandise NFTs on Arc blockchain
         </p>
+
+        {/* Live Contract Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+            <div className="text-[11px] text-white/30 mb-1">Total Minted</div>
+            <div className="text-[20px] font-light text-white mono">
+              {totalMinted.data?.toString() || "0"}
+            </div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+            <div className="text-[11px] text-white/30 mb-1">Max Supply</div>
+            <div className="text-[20px] font-light text-white mono">
+              {maxSupply.data?.toString() || "10,000"}
+            </div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+            <div className="text-[11px] text-white/30 mb-1">Mint Price</div>
+            <div className="text-[20px] font-light text-[#E9A13F] mono">
+              {mintPrice.priceFormatted} USDC
+            </div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+            <div className="text-[11px] text-white/30 mb-1">Contract</div>
+            <a
+              href="https://testnet.arcscan.app/address/0x27881c74CF4Db0B361Bc67647046583C6e0f2162"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[13px] text-[#E9A13F] hover:underline flex items-center gap-1"
+            >
+              0x2788...f2162 <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </div>
 
         {/* Filters */}
         <div className="flex flex-col gap-4 mb-10 sm:flex-row sm:items-center sm:justify-between">
@@ -119,13 +172,38 @@ export default function MarketplacePage() {
                   <button className="flex-1 rounded-lg bg-amber text-black py-2 text-[13px] font-medium hover:bg-amber/80 transition-colors">
                     Buy NFT
                   </button>
-                  <button className="rounded-lg border border-white/10 py-2 px-3 text-[13px] text-white/40 hover:border-red-500/30 hover:text-red-400 transition-colors">
-                    <Flame className="h-3.5 w-3.5" />
+                  <button
+                    onClick={() => handleBurn(d.id)}
+                    disabled={isBurning && burningId === d.id}
+                    className="rounded-lg border border-white/10 py-2 px-3 text-[13px] text-white/40 hover:border-red-500/30 hover:text-red-400 transition-colors disabled:opacity-50"
+                  >
+                    {isBurning && burningId === d.id ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Flame className="h-3.5 w-3.5" />
+                    )}
                   </button>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Empty state */}
+        {filtered.length === 0 && (
+          <div className="text-center py-20">
+            <div className="text-[48px] mb-4">🔍</div>
+            <div className="text-[18px] text-white/40">No designs found</div>
+            <p className="text-[14px] text-white/20 mt-2">Try adjusting your search or filters</p>
+          </div>
+        )}
+
+        {/* Note about mock data */}
+        <div className="mt-12 rounded-lg border border-white/5 bg-white/[0.01] p-6 text-center">
+          <p className="text-[13px] text-white/20">
+            Marketplace display uses sample data. On-chain minting is live — create your own NFTs via the{" "}
+            <Link href="/create" className="text-[#E9A13F] hover:underline">Create</Link> page.
+          </p>
         </div>
       </div>
     </div>
