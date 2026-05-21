@@ -55,6 +55,9 @@ function Navbar() {
             <Link href="/create" className="text-[15px] text-white/60 hover:text-white transition-colors duration-150">
               Create
             </Link>
+            <Link href="/bridge" className="text-[15px] text-white/60 hover:text-white transition-colors duration-150">
+              Bridge
+            </Link>
             <Link href="/profile" className="text-[15px] text-white/60 hover:text-white transition-colors duration-150">
               Profile
             </Link>
@@ -95,6 +98,7 @@ function Footer() {
               {[
             { href: "/marketplace", label: "Marketplace" },
             { href: "/create", label: "Create" },
+            { href: "/bridge", label: "Bridge" },
             { href: "/merchpaper", label: "Merchpaper" },
                 { href: "/profile", label: "My Profile" },
               ].map((link) => (

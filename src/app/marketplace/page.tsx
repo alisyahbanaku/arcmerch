@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2, Zap, Globe } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useConnect } from "wagmi";
 import { useTotalMinted, useMaxSupply, useMintPrice, useBurnNFT } from "@/hooks/useArcMerch";
+import { useUnifiedBalance } from "@/hooks/useAppKit";
 
 const ALL_DESIGNS = [
   { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, color: "#9F72FF", emoji: "⚔️", verified: true },
@@ -28,11 +29,16 @@ export default function MarketplacePage() {
   const maxSupply = useMaxSupply();
   const mintPrice = useMintPrice();
   const { burn, isPending: isBurning, hash: burnHash } = useBurnNFT();
+  const { totalUnified, fetchBalances } = useUnifiedBalance();
 
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("Recent");
   const [burningId, setBurningId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (address) fetchBalances(address);
+  }, [address, fetchBalances]);
 
   const filtered = ALL_DESIGNS.filter((d) => {
     const matchSearch = d.title.toLowerCase().includes(search.toLowerCase()) || d.creator.toLowerCase().includes(search.toLowerCase());
@@ -94,6 +100,29 @@ export default function MarketplacePage() {
             </a>
           </div>
         </div>
+
+        {/* Unified Balance Banner */}
+        {isConnected && parseFloat(totalUnified) > 0 && (
+          <div className="rounded-xl border border-[#E9A13F]/20 bg-[#E9A13F]/5 p-4 mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Zap className="w-5 h-5 text-[#E9A13F]" />
+              <div>
+                <span className="text-[14px] font-medium text-white">
+                  {totalUnified} USDC unified balance
+                </span>
+                <span className="text-[12px] text-white/40 ml-2">
+                  across chains
+                </span>
+              </div>
+            </div>
+            <Link
+              href="/bridge"
+              className="text-[13px] text-[#E9A13F] hover:underline flex items-center gap-1"
+            >
+              <Globe className="w-3 h-3" /> Bridge to Arc
+            </Link>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-col gap-4 mb-10 sm:flex-row sm:items-center sm:justify-between">

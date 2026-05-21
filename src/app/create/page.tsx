@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X, Wallet, ExternalLink } from "lucide-react";
+import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X, Wallet, ExternalLink, Zap, Globe } from "lucide-react";
 import { useAccount, useConnect } from "wagmi";
 import { formatUnits } from "viem";
 import { useMintNFT, useApproveUSDC, useUSDCBalance, useUSDCAllowance, useMintPrice } from "@/hooks/useArcMerch";
+import { useUnifiedBalance } from "@/hooks/useAppKit";
 import { ARC_MERCH_NFT_ADDRESS } from "@/lib/contracts";
+import Link from "next/link";
 
 const PRODUCTS = [
   { id: "tshirt", name: "T-Shirt", emoji: "👕", price: "$29.99" },
@@ -27,6 +29,7 @@ export default function CreatePage() {
   const usdcAllowance = useUSDCAllowance(address);
   const { mint, isPending: isMinting, isConfirming, isSuccess, hash, error: mintError } = useMintNFT();
   const { approve, isPending: isApproving, isConfirming: isApproveConfirming, isSuccess: isApproveSuccess, hash: approveHash } = useApproveUSDC();
+  const { totalUnified, fetchBalances } = useUnifiedBalance();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
@@ -54,6 +57,11 @@ export default function CreatePage() {
       // Re-check allowance will update automatically via wagmi
     }
   }, [isApproveSuccess, step]);
+
+  // Fetch unified balance when wallet connects
+  useEffect(() => {
+    if (address) fetchBalances(address);
+  }, [address, fetchBalances]);
 
   const handleGenerate = () => {
     setGenerating(true);
@@ -413,20 +421,59 @@ export default function CreatePage() {
                   </div>
                 </div>
 
-                {/* USDC Warning */}
+                {/* USDC Warning + Unified Balance */}
                 {!hasEnoughUSDC && (
-                  <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
-                    <div className="text-[13px] text-red-400">
-                      ⚠️ Insufficient USDC balance. You need {priceFormatted} USDC to mint.
+                  <div className="space-y-3">
+                    <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                      <div className="text-[13px] text-red-400">
+                        ⚠️ Insufficient USDC on Arc. You need {priceFormatted} USDC to mint.
+                      </div>
+                      <div className="text-[12px] text-white/30 mt-1">
+                        Arc balance: {usdcBalFormatted} USDC
+                      </div>
                     </div>
-                    <a
-                      href="https://faucet.circle.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[12px] text-[#E9A13F] hover:underline mt-2 inline-flex items-center gap-1"
-                    >
-                      Get testnet USDC <ExternalLink className="w-3 h-3" />
-                    </a>
+
+                    {/* Unified Balance hint */}
+                    {parseFloat(totalUnified) > 0 && (
+                      <div className="rounded-lg border border-[#E9A13F]/20 bg-[#E9A13F]/5 p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Zap className="w-4 h-4 text-[#E9A13F]" />
+                          <span className="text-[13px] font-medium text-[#E9A13F]">
+                            You have {totalUnified} USDC across chains
+                          </span>
+                        </div>
+                        <p className="text-[12px] text-white/40 mb-3">
+                          Bridge your USDC to Arc to mint this NFT.
+                        </p>
+                        <Link
+                          href="/bridge"
+                          className="inline-flex items-center gap-2 text-[13px] text-[#E9A13F] hover:underline"
+                        >
+                          <Globe className="w-3 h-3" /> Open Bridge
+                        </Link>
+                      </div>
+                    )}
+
+                    {parseFloat(totalUnified) === 0 && (
+                      <div className="flex gap-3">
+                        <a
+                          href="https://faucet.circle.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 rounded-lg border border-white/10 p-3 text-center text-[13px] text-white/60 hover:border-white/20 transition-colors"
+                        >
+                          <ExternalLink className="w-3 h-3 inline mr-1" />
+                          Faucet
+                        </a>
+                        <Link
+                          href="/bridge"
+                          className="flex-1 rounded-lg border border-[#E9A13F]/20 p-3 text-center text-[13px] text-[#E9A13F] hover:bg-[#E9A13F]/5 transition-colors"
+                        >
+                          <Globe className="w-3 h-3 inline mr-1" />
+                          Bridge USDC
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 )}
 
