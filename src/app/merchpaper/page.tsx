@@ -575,30 +575,80 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
 
         {/* 15 — Roadmap */}
         <Section id="roadmap" n="15" title="Roadmap">
-          <div className="space-y-8 mt-6">
+          <p className="text-[14px] text-white/40 leading-[1.8] mt-6 mb-10 max-w-[640px]">
+            ArcMerch roadmap aligns with Arc testnet → mainnet transition and the Commerce Stack Challenge (Apr–Jul 2026). 
+            Each phase builds on the previous, with clear milestones for grant evaluation.
+          </p>
+          <div className="space-y-8">
             {[
-              { phase: "Phase 1", title: "MVP", time: "Week 1–2", items: ["Smart contracts (NFT + marketplace)", "Wallet connection on Arc testnet", "AI design generation", "NFT minting flow", "Gallery/marketplace UI"] },
-              { phase: "Phase 2", title: "Identity & Burn", time: "Week 3–4", items: ["X OAuth verification", "Creator profiles + registry", "Burn-to-redeem (HD + Print)", "Soulbound burn certificates", "Reputation system v1"] },
-              { phase: "Phase 3", title: "Launch", time: "Week 5–6", items: ["Printful API integration", "Testnet beta launch", "Arc grant submission", "Community onboarding (10 creators)", "First physical product tests"] },
-              { phase: "Phase 4", title: "Scale", time: "Week 7–12", items: ["Mainnet deployment", "Mobile-responsive UI", "100+ creators onboarded", "Secondary marketplace features", "Analytics dashboard"] },
-              { phase: "Phase 5", title: "Growth", time: "Month 4–6", items: ["Mobile app (React Native)", "Custom AI model fine-tuning", "Brand collaboration program", "Multi-chain bridge (future)", "DAO governance for treasury"] },
+              { 
+                phase: "Phase 1", title: "Testnet Foundation", time: "Mei–Juni 2026", status: "✅ DONE",
+                items: ["Frontend UI (homepage, marketplace, create, profile)", "Hybrid wallet auth (NextAuth + X verification)", "Merchpaper published", "Security hardening (6 audit findings fixed)", "Deployed ke Arc Testnet + Vercel production"] 
+              },
+              { 
+                phase: "Phase 2", title: "Smart Contracts", time: "Juni 2026", status: "NEXT",
+                items: ["ERC-721 contract di Arc Testnet", "Mint NFT dari frontend (wagmi + viem)", "Metadata onchain (IPFS/Arweave)", "USDC sebagai payment token", "Verify contract di arcscan.app"] 
+              },
+              { 
+                phase: "Phase 3", title: "Burn-to-Redeem", time: "Juli 2026", status: "",
+                items: ["Burn contract: NFT → redeem HD file / physical print", "Soulbound certificate (non-transferable proof)", "Deflationary supply tracking onchain", "Fulfillment API integration (Printful/Printify)", "First physical product test"] 
+              },
+              { 
+                phase: "Phase 4", title: "Marketplace", time: "Agustus 2026", status: "",
+                items: ["List NFT for sale (USDC pricing)", "Buy/sell dengan sub-second finality", "Creator royalties onchain", "Search, filter, trending algorithms", "Analytics dashboard"] 
+              },
+              { 
+                phase: "Phase 5", title: "Agentic Economy", time: "September 2026", status: "",
+                items: ["ERC-8004: AI agent identity untuk automated minting", "ERC-8183: Job settlement — AI submit design, get paid USDC", "Agent-to-agent commerce pipeline", "AI Design Agent sebagai first-class creator", "Reputation system onchain"] 
+              },
+              { 
+                phase: "Phase 6", title: "Mainnet Ready", time: "Q4 2026", status: "",
+                items: ["Security audit", "Mainnet deployment saat Arc mainnet launch", "CCTP V2 integration (cross-chain USDC)", "Compliance layer (Elliptic/TRM Labs)", "100+ creators onboarded"] 
+              },
             ].map((p) => (
               <div key={p.phase} className="rounded-lg border border-white/[0.06] p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-[12px] font-mono text-[#E9A13F]/60">{p.phase}</span>
                   <span className="text-[18px] font-light text-white">{p.title}</span>
+                  {p.status && (
+                    <span className={`text-[11px] font-mono px-2 py-0.5 rounded ${
+                      p.status === "✅ DONE" 
+                        ? "bg-green-500/10 text-green-400" 
+                        : "bg-amber/10 text-amber"
+                    }`}>
+                      {p.status}
+                    </span>
+                  )}
                   <span className="text-[12px] text-white/20 ml-auto">{p.time}</span>
                 </div>
-                <ul className="grid grid-cols-2 gap-2">
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {p.items.map((item) => (
-                    <li key={item} className="text-[13px] text-white/40 flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-white/15" />
+                    <li key={item} className="text-[13px] text-white/40 flex items-start gap-2">
+                      <span className="w-1 h-1 rounded-full bg-white/15 mt-2 flex-shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
+          </div>
+
+          {/* Arc alignment callout */}
+          <div className="mt-10 rounded-lg border border-[#E9A13F]/10 bg-[#E9A13F]/[0.02] p-6">
+            <div className="text-[12px] font-mono text-[#E9A13F]/60 mb-3">{"{ ARC ALIGNMENT }"}</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { title: "Commerce Stack Challenge", time: "Apr–Jul 2026", desc: "Phase 2–3 aligns dengan challenge timeline. Real commerce on Arc testnet." },
+                { title: "Agentic Economy", time: "Trending 15.1K views", desc: "Phase 5 targets hot topic di Arc community. AI agents as economic participants." },
+                { title: "Mainnet Launch", time: "Q4 2026 (est.)", desc: "Phase 6 ready untuk Arc mainnet. First-mover advantage di new L1." },
+              ].map((item) => (
+                <div key={item.title}>
+                  <div className="text-[14px] font-medium text-white mb-1">{item.title}</div>
+                  <div className="text-[11px] font-mono text-[#E9A13F]/40 mb-2">{item.time}</div>
+                  <p className="text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </Section>
 
