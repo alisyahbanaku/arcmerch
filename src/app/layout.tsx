@@ -88,8 +88,9 @@ function Footer() {
             <h4 className="section-label mb-4">Platform</h4>
             <ul className="space-y-3">
               {[
-                { href: "/marketplace", label: "Marketplace" },
-                { href: "/create", label: "Create Design" },
+            { href: "/marketplace", label: "Marketplace" },
+            { href: "/create", label: "Create" },
+            { href: "/merchpaper", label: "Merchpaper" },
                 { href: "/profile", label: "My Profile" },
               ].map((link) => (
                 <li key={link.href}>
