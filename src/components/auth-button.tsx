@@ -1,155 +1,50 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/auth-provider";
-import { shortAddress } from "@/lib/wallet";
-import { LogOut, Wallet, Copy, Check, ChevronDown, User } from "lucide-react";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { LogOut, Wallet, Copy, Check, ChevronDown, User, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { VerifiedBadge, UnverifiedBadge } from "@/components/verified-badge";
+import { VerifiedBadge } from "@/components/verified-badge";
 
-// ── Sign In Modal ───────────────────────────────────────────────
-
-function SignInModal({ onClose }: { onClose: () => void }) {
-  const [handle, setHandle] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  const handleDemoLogin = async () => {
-    if (!handle.trim()) return;
-    setIsLoading(true);
-    try {
-      const { signIn } = await import("next-auth/react");
-      await signIn("credentials", {
-        username: handle.replace("@", ""),
-        redirect: false,
-      });
-      onClose();
-      window.location.reload();
-    } catch (err) {
-      console.error("Sign in failed:", err);
-    }
-    setIsLoading(false);
-  };
-
-  const handleTwitterLogin = async () => {
-    setIsLoading(true);
-    try {
-      const { signIn } = await import("next-auth/react");
-      await signIn("twitter", { callbackUrl: "/profile" });
-    } catch (err) {
-      console.error("Twitter sign in failed:", err);
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    try {
-      const { signIn } = await import("next-auth/react");
-      await signIn("google", { callbackUrl: "/profile" });
-    } catch (err) {
-      console.error("Google sign in failed:", err);
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[80px] sm:pt-[100px]">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-
-      {/* Modal */}
-      <div className="relative bg-[#111] border border-white/10 rounded-xl p-6 sm:p-8 w-full max-w-[420px] mx-4 max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/40 hover:text-white text-xl z-10">×</button>
-
-        <div className="text-center mb-8">
-          <h2 className="text-[22px] font-light text-white mb-2">Sign In to ArcMerch</h2>
-          <p className="text-[14px] text-white/40">Wallet auto-created. No seed phrase to manage.</p>
-        </div>
-
-        {/* Twitter OAuth */}
-        <button
-          onClick={handleTwitterLogin}
-          disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 bg-white text-black font-medium text-[15px] py-3.5 px-6 rounded-lg hover:bg-white/90 transition-colors mb-3"
-        >
-          <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
-          {isLoading ? "Connecting..." : "Sign in with X"}
-        </button>
-
-        {/* Google OAuth */}
-        <button
-          onClick={handleGoogleLogin}
-          disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 bg-white text-black font-medium text-[15px] py-3.5 px-6 rounded-lg hover:bg-white/90 transition-colors mb-6"
-        >
-          <svg viewBox="0 0 24 24" className="w-5 h-5">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          {isLoading ? "Connecting..." : "Sign in with Google"}
-        </button>
-
-        {/* Divider */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="flex-1 h-px bg-white/10" />
-          <span className="text-[12px] text-white/30 uppercase tracking-wider">or demo mode</span>
-          <div className="flex-1 h-px bg-white/10" />
-        </div>
-
-        {/* Demo Login */}
-        <div className="space-y-3">
-          <input
-            type="text"
-            value={handle}
-            onChange={(e) => setHandle(e.target.value)}
-            placeholder="@yourhandle"
-            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-[15px] text-white placeholder-white/20 focus:outline-none focus:border-[#E9A13F]/50 transition-colors"
-            onKeyDown={(e) => e.key === "Enter" && handleDemoLogin()}
-          />
-          <button
-            onClick={handleDemoLogin}
-            disabled={isLoading || !handle.trim()}
-            className="w-full btn-outline text-[14px] py-3 disabled:opacity-30"
-          >
-            {isLoading ? "Creating wallet..." : "Demo Login (test only)"}
-          </button>
-        </div>
-
-        <p className="text-[12px] text-white/20 mt-6 text-center leading-relaxed">
-          Hybrid custody: your key is split between your identity and our platform.
-          You can export anytime. We never see your full key.
-        </p>
-      </div>
-    </div>
-  );
+function shortAddr(addr: string) {
+  if (!addr) return "";
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
 // ── Wallet Dropdown ─────────────────────────────────────────────
 
 function WalletDropdown() {
-  const { user, signOut } = useAuth();
+  const { user, logout } = usePrivy();
+  const { wallets } = useWallets();
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const primaryWallet = wallets[0];
+  const address = primaryWallet?.address || "";
+
   const copyAddress = () => {
-    if (user?.walletAddress) {
-      navigator.clipboard.writeText(user.walletAddress);
+    if (address) {
+      navigator.clipboard.writeText(address);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  if (!user) return null;
+  // Get display name from linked accounts
+  const twitterAccount = user?.linkedAccounts?.find(a => a.type === "twitter_oauth");
+  const googleAccount = user?.linkedAccounts?.find(a => a.type === "google_oauth");
+  const emailAccount = user?.linkedAccounts?.find(a => a.type === "email");
+
+  const displayName = twitterAccount
+    ? `@${(twitterAccount as unknown as unknown as Record<string, unknown>).username || (twitterAccount as unknown as unknown as Record<string, unknown>).name || "user"}`
+    : googleAccount
+    ? String((googleAccount as unknown as unknown as Record<string, unknown>).name || "Google User")
+    : emailAccount
+    ? String((emailAccount as unknown as Record<string, unknown>).address || "Email User")
+    : shortAddr(address);
+
+  const isVerified = !!twitterAccount || !!googleAccount;
+  const avatarLetter = displayName.replace("@", "").charAt(0).toUpperCase() || "?";
 
   return (
     <div className="relative">
@@ -158,53 +53,86 @@ function WalletDropdown() {
         className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-lg py-2 px-3 hover:border-white/20 transition-colors"
       >
         <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
-          <span className="text-[12px] font-semibold text-black">
-            {user.twitterHandle?.replace("@", "").charAt(0).toUpperCase()}
-          </span>
+          <span className="text-[12px] font-semibold text-black">{avatarLetter}</span>
         </div>
-        <span className="text-[14px] text-white hidden sm:inline">{user.twitterHandle}</span>
+        <span className="text-[14px] text-white hidden sm:inline">{displayName}</span>
         <ChevronDown className="w-3.5 h-3.5 text-white/40" />
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-[60]" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 z-[70] w-[260px] bg-[#111] border border-white/10 rounded-xl p-4 shadow-2xl">
+          <div className="absolute right-0 top-full mt-2 z-[70] w-[280px] bg-[#111] border border-white/10 rounded-xl p-4 shadow-2xl">
             {/* User Info */}
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/[0.06]">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
-                <span className="text-[16px] font-semibold text-black">
-                  {user.twitterHandle?.replace("@", "").charAt(0).toUpperCase()}
-                </span>
+                <span className="text-[16px] font-semibold text-black">{avatarLetter}</span>
               </div>
               <div>
                 <div className="text-[14px] font-medium text-white flex items-center gap-1.5">
-                  {user.twitterHandle}
-                  {user.verified ? <VerifiedBadge /> : <UnverifiedBadge />}
+                  {displayName}
+                  {isVerified ? <VerifiedBadge /> : <span className="text-[10px] text-white/30 bg-white/5 px-1.5 py-0.5 rounded">Unverified</span>}
                 </div>
-                <div className="text-[12px] text-white/30 font-mono">{shortAddress(user.walletAddress)}</div>
+                {address && (
+                  <div className="text-[12px] text-white/30 font-mono">{shortAddr(address)}</div>
+                )}
               </div>
             </div>
 
+            {/* Linked Accounts */}
+            {user?.linkedAccounts && user.linkedAccounts.length > 0 && (
+              <div className="mb-3 pb-3 border-b border-white/[0.06]">
+                <p className="text-[11px] text-white/25 uppercase tracking-wider mb-2">Linked</p>
+                <div className="space-y-1.5">
+                  {user.linkedAccounts.map((account, i) => (
+                    <div key={i} className="flex items-center gap-2 text-[12px] text-white/40">
+                      <span className="w-4 text-center">
+                        {account.type.includes("twitter") ? "𝕏" : account.type.includes("google") ? "G" : account.type.includes("email") ? "✉" : account.type.includes("wallet") ? "⟠" : "?"}
+                      </span>
+                      <span className="truncate">
+                        {account.type.includes("twitter") && `@${(account as unknown as Record<string, unknown>).username || (account as unknown as Record<string, unknown>).name || "user"}`}
+                        {account.type.includes("google") && String((account as unknown as Record<string, unknown>).name || (account as unknown as Record<string, unknown>).email || "Google")}
+                        {account.type.includes("email") && String((account as unknown as Record<string, unknown>).address || (account as unknown as Record<string, unknown>).email || "Email")}
+                        {account.type.includes("wallet") && shortAddr((account as unknown as Record<string, unknown>).address as string || "")}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Actions */}
             <div className="space-y-1">
-              <button
-                onClick={copyAddress}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] text-white/60 hover:text-white hover:bg-white/5 transition-colors"
-              >
-                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied!" : "Copy Address"}
-              </button>
+              {address && (
+                <button
+                  onClick={copyAddress}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                  {copied ? "Copied!" : "Copy Address"}
+                </button>
+              )}
               <Link
                 href="/profile"
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] text-white/60 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <User className="w-4 h-4" />
-                Profile & Wallet
+                Profile
               </Link>
+              {address && (
+                <a
+                  href={`https://testnet.arcscan.app/address/${address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Explorer
+                </a>
+              )}
               <button
-                onClick={() => signOut()}
+                onClick={() => { setOpen(false); logout(); }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[14px] text-red-400/70 hover:text-red-400 hover:bg-red-400/5 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
@@ -218,28 +146,66 @@ function WalletDropdown() {
   );
 }
 
+// ── Sign In Modal (Demo Login fallback) ─────────────────────────
+
+function DemoLoginModal({ onClose }: { onClose: () => void }) {
+  const [handle, setHandle] = useState("");
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[80px] sm:pt-[100px]">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-[#111] border border-white/10 rounded-xl p-6 sm:p-8 w-full max-w-[380px] mx-4">
+        <button onClick={onClose} className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white/40 hover:text-white text-xl">×</button>
+        <h2 className="text-[20px] font-light text-white mb-2">Demo Mode</h2>
+        <p className="text-[13px] text-white/40 mb-5">Quick test — no real wallet created.</p>
+        <input
+          type="text"
+          value={handle}
+          onChange={(e) => setHandle(e.target.value)}
+          placeholder="@yourhandle"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-[15px] text-white placeholder-white/20 focus:outline-none focus:border-[#E9A13F]/50 mb-3"
+        />
+        <button
+          onClick={onClose}
+          disabled={!handle.trim()}
+          className="w-full btn-outline text-[14px] py-3 disabled:opacity-30"
+        >
+          Continue as Demo
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── Main Component ──────────────────────────────────────────────
 
 export function AuthButton() {
-  const { isAuthenticated, isLoading } = useAuth();
-  const [showModal, setShowModal] = useState(false);
+  const { ready, authenticated, login } = usePrivy();
+  const [showDemo, setShowDemo] = useState(false);
 
-  if (isLoading) {
+  if (!ready) {
     return (
       <div className="w-[140px] h-[42px] bg-white/5 rounded-lg animate-pulse" />
     );
   }
 
-  if (isAuthenticated) {
+  if (authenticated) {
     return <WalletDropdown />;
   }
 
   return (
     <>
-      <button onClick={() => setShowModal(true)} className="btn-outline text-[14px] py-2.5 px-5">
-        Sign In
-      </button>
-      {showModal && <SignInModal onClose={() => setShowModal(false)} />}
+      <div className="flex items-center gap-2">
+        <button onClick={login} className="btn-outline text-[14px] py-2.5 px-5">
+          Sign In
+        </button>
+      </div>
+      {showDemo && <DemoLoginModal onClose={() => setShowDemo(false)} />}
     </>
   );
 }

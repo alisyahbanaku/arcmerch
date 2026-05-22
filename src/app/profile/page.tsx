@@ -1,24 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/lib/auth-provider";
-import { shortAddress } from "@/lib/wallet";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useAccount, useConnect } from "wagmi";
-import { formatUnits } from "viem";
-import { useArcMerch } from "@/hooks/useArcMerch";
+import { shortAddress } from "@/lib/wallet";
 import {
-  Wallet, Copy, Check, Download, Eye, EyeOff, Shield, AlertTriangle,
-  ExternalLink, Package, Link as LinkIcon
+  Wallet, Copy, Check, Package, Link as LinkIcon, ExternalLink, Shield
 } from "lucide-react";
 import Link from "next/link";
 import { VerifiedBadge } from "@/components/verified-badge";
 
-// ── On-Chain Wallet Card ───────────────────────────────────────
+// ── Helper: Get display info from Privy user ────────────────────
+
+function getUserInfo(user: ReturnType<typeof usePrivy>["user"]) {
+  const twitter = user?.linkedAccounts?.find(a => a.type === "twitter_oauth") as unknown as Record<string, unknown> | undefined;
+  const google = user?.linkedAccounts?.find(a => a.type === "google_oauth") as unknown as Record<string, unknown> | undefined;
+  const email = user?.linkedAccounts?.find(a => a.type === "email") as unknown as Record<string, unknown> | undefined;
+  const wallet = user?.linkedAccounts?.find(a => a.type === "wallet") as unknown as Record<string, unknown> | undefined;
+
+  return {
+    displayName: twitter
+      ? `@${twitter.username || twitter.name || "user"}`
+      : google
+      ? String(google.name || "Google User")
+      : email
+      ? String(email.address || "Email User")
+      : "Anonymous",
+    isVerified: !!twitter || !!google,
+    avatarLetter: (twitter ? String(twitter.username || twitter.name || "u") : "u").charAt(0).toUpperCase(),
+    method: twitter ? "Twitter" : google ? "Google" : email ? "Email" : "Wallet",
+    walletAddress: (wallet?.address as string) || null,
+  };
+}
+
+// ── On-Chain Wallet Card ────────────────────────────────────────
 
 function OnChainCard() {
   const { address, isConnected } = useAccount();
   const { connect, connectors } = useConnect();
-  const { usdcBalanceFormatted, nftBalance, mintPriceFormatted } = useArcMerch();
   const [copied, setCopied] = useState(false);
 
   const copyAddress = () => {
@@ -38,7 +57,7 @@ function OnChainCard() {
           </div>
           <div>
             <h3 className="text-[18px] font-light text-white">Connect Wallet</h3>
-            <p className="text-[13px] text-white/45">Connect to view on-chain assets</p>
+            <p className="text-[13px] text-white/45">Connect external wallet for on-chain actions</p>
           </div>
         </div>
         <button
@@ -56,7 +75,6 @@ function OnChainCard() {
 
   return (
     <div className="card p-6 space-y-5">
-      {/* Header */}
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
           <LinkIcon className="w-7 h-7 text-white" />
@@ -67,7 +85,6 @@ function OnChainCard() {
         </div>
       </div>
 
-      {/* Address */}
       <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
         <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
         <div className="flex items-center justify-between">
@@ -78,19 +95,6 @@ function OnChainCard() {
         </div>
       </div>
 
-      {/* Balances */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">USDC Balance</div>
-          <div className="text-[16px] font-light text-white mono">{usdcBalanceFormatted}</div>
-        </div>
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">NFTs Owned</div>
-          <div className="text-[16px] font-light text-white mono">{nftBalance?.toString() || "0"}</div>
-        </div>
-      </div>
-
-      {/* Links */}
       <div className="flex gap-3">
         <a
           href={`https://testnet.arcscan.app/address/${address}`}
@@ -113,143 +117,73 @@ function OnChainCard() {
   );
 }
 
-// ── Auth Wallet Card (Hybrid Custody) ──────────────────────────
+// ── Privy Wallet Card ───────────────────────────────────────────
 
-function AuthWalletCard() {
-  const { user } = useAuth();
+function PrivyWalletCard() {
+  const { wallets } = useWallets();
   const [copied, setCopied] = useState(false);
-  const [showExport, setShowExport] = useState(false);
-  const [mnemonic, setMnemonic] = useState<string | null>(null);
-  const [showMnemonic, setShowMnemonic] = useState(false);
-  const [exporting, setExporting] = useState(false);
+
+  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
+  const address = embeddedWallet?.address || "";
 
   const copyAddress = () => {
-    if (user?.walletAddress) {
-      navigator.clipboard.writeText(user.walletAddress);
+    if (address) {
+      navigator.clipboard.writeText(address);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  const handleExport = async () => {
-    setExporting(true);
-    try {
-      const res = await fetch("/api/wallet/export", { method: "POST" });
-      const data = await res.json();
-      if (data.mnemonic) {
-        setMnemonic(data.mnemonic);
-        setShowExport(true);
-      }
-    } catch (err) {
-      console.error("Export failed:", err);
-    }
-    setExporting(false);
-  };
-
-  if (!user) return null;
-
   return (
-    <div className="card p-6 space-y-6">
-      {/* Header */}
+    <div className="card p-6 space-y-5">
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
           <Wallet className="w-7 h-7 text-black" />
         </div>
         <div>
-          <h3 className="text-[18px] font-light text-white">Platform Wallet</h3>
-          <p className="text-[13px] text-white/45">Hybrid custody — export anytime</p>
+          <h3 className="text-[18px] font-light text-white">Embedded Wallet</h3>
+          <p className="text-[13px] text-white/45">Auto-created by Privy</p>
         </div>
       </div>
 
-      {/* Address */}
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
-        <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
-        <div className="flex items-center justify-between">
-          <code className="text-[15px] text-white font-mono">{shortAddress(user.walletAddress)}</code>
-          <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
-            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-          </button>
-        </div>
-      </div>
+      {address ? (
+        <>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
+            <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
+            <div className="flex items-center justify-between">
+              <code className="text-[15px] text-white font-mono">{shortAddress(address)}</code>
+              <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
+                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
 
-      {/* Network Info */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Network</div>
-          <div className="text-[14px] text-white">Arc Testnet</div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
+              <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Network</div>
+              <div className="text-[14px] text-white">Arc Testnet</div>
+            </div>
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
+              <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Chain ID</div>
+              <div className="text-[14px] text-white font-mono">5042002</div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="text-center py-4">
+          <p className="text-[14px] text-white/40">No embedded wallet yet. Sign in with social to create one.</p>
         </div>
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-          <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Chain ID</div>
-          <div className="text-[14px] text-white font-mono">5042002</div>
-        </div>
-      </div>
+      )}
 
-      {/* Security Model */}
       <div className="bg-[#E9A13F]/5 border border-[#E9A13F]/10 rounded-xl p-4">
         <div className="flex items-center gap-2 mb-2">
           <Shield className="w-4 h-4 text-[#E9A13F]" />
-          <span className="text-[13px] font-medium text-[#E9A13F]">Hybrid Custody</span>
+          <span className="text-[13px] font-medium text-[#E9A13F]">Non-Custodial</span>
         </div>
         <p className="text-[13px] text-white/40 leading-relaxed">
-          Your key is split: part from your identity, part from our platform.
-          Neither party alone can access it. You can export your seed phrase and leave anytime.
+          Privy creates and manages your wallet securely. You can export your private key anytime from settings. Your keys, your assets.
         </p>
       </div>
-
-      {/* Export */}
-      {!showExport ? (
-        <button
-          onClick={handleExport}
-          disabled={exporting}
-          className="w-full flex items-center justify-center gap-2 btn-outline text-[14px] py-3"
-        >
-          <Download className="w-4 h-4" />
-          {exporting ? "Decrypting..." : "Export Seed Phrase"}
-        </button>
-      ) : (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-amber-400">
-            <AlertTriangle className="w-4 h-4" />
-            <span className="text-[13px] font-medium">Never share this phrase</span>
-          </div>
-          <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[12px] text-white/45 uppercase tracking-wider">Seed Phrase</span>
-              <button
-                onClick={() => setShowMnemonic(!showMnemonic)}
-                className="text-white/40 hover:text-white transition-colors"
-              >
-                {showMnemonic ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
-            {showMnemonic ? (
-              <div className="grid grid-cols-3 gap-2">
-                {mnemonic?.split(" ").map((word, i) => (
-                  <div key={i} className="bg-white/5 rounded-lg px-3 py-2 text-center">
-                    <span className="text-[11px] text-white/40">{i + 1}.</span>
-                    <span className="text-[14px] text-white font-mono ml-1">{word}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4">
-                <Eye className="w-6 h-6 text-white/35 mx-auto mb-2" />
-                <span className="text-[13px] text-white/35">Click eye to reveal</span>
-              </div>
-            )}
-          </div>
-          <button
-            onClick={() => {
-              setShowExport(false);
-              setMnemonic(null);
-              setShowMnemonic(false);
-            }}
-            className="text-[13px] text-white/45 hover:text-white/60 transition-colors"
-          >
-            Hide seed phrase
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -258,9 +192,9 @@ function AuthWalletCard() {
 
 function NFTGallery() {
   const mockNFTs = [
-    { id: 1, name: "Arc Genesis Tee", image: "/api/placeholder/300/300", status: "minted" },
-    { id: 2, name: "USDC Hoodie", image: "/api/placeholder/300/300", status: "listed" },
-    { id: 3, name: "Stablecoin Cap", image: "/api/placeholder/300/300", status: "burned" },
+    { id: 1, name: "Arc Genesis Tee", status: "minted" },
+    { id: 2, name: "USDC Hoodie", status: "listed" },
+    { id: 3, name: "Stablecoin Cap", status: "burned" },
   ];
 
   return (
@@ -292,34 +226,6 @@ function NFTGallery() {
   );
 }
 
-// ── Activity (Mock) ─────────────────────────────────────────────
-
-function ActivityFeed() {
-  const activities = [
-    { icon: Wallet, text: "Wallet created", time: "Just now", color: "text-green-400" },
-    { icon: Wallet, text: "Signed in with X", time: "Just now", color: "text-blue-400" },
-  ];
-
-  return (
-    <div className="card p-6">
-      <h3 className="text-[18px] font-light text-white mb-6">Activity</h3>
-      <div className="space-y-4">
-        {activities.map((a, i) => (
-          <div key={i} className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-              <a.icon className={`w-4 h-4 ${a.color}`} />
-            </div>
-            <div className="flex-1">
-              <div className="text-[14px] text-white">{a.text}</div>
-              <div className="text-[12px] text-white/40">{a.time}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ── Not Authenticated ───────────────────────────────────────────
 
 function NotSignedIn() {
@@ -331,7 +237,7 @@ function NotSignedIn() {
         </div>
         <h2 className="text-[24px] font-light text-white mb-3">Sign in to view profile</h2>
         <p className="text-[15px] text-white/40 mb-8 leading-relaxed">
-          Connect with X to auto-create your Arc wallet. Hybrid custody — your key, your control.
+          Sign in with X, Google, or email to auto-create your Arc wallet.
         </p>
         <Link href="/" className="btn-primary inline-block">
           Go to Home
@@ -344,9 +250,9 @@ function NotSignedIn() {
 // ── Profile Page ────────────────────────────────────────────────
 
 export default function ProfilePage() {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { ready, authenticated, user } = usePrivy();
 
-  if (isLoading) {
+  if (!ready) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-white/10 border-t-[#E9A13F] rounded-full animate-spin" />
@@ -354,35 +260,36 @@ export default function ProfilePage() {
     );
   }
 
-  if (!isAuthenticated) return <NotSignedIn />;
+  if (!authenticated) return <NotSignedIn />;
+
+  const info = getUserInfo(user);
 
   return (
     <div className="bg-black text-white min-h-screen">
-      {/* Ambient glow — matches homepage */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
 
       <section className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
-      <div className="mb-10">
-        <div className="section-label mb-3">{"{ PROFILE }"}</div>
-        <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white flex items-center gap-3">
-          Welcome, {user?.twitterHandle}
-          {user?.verified ? <VerifiedBadge size="lg" /> : null}
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Wallets */}
-        <div className="lg:col-span-1 space-y-6">
-          <OnChainCard />
-          <AuthWalletCard />
-          <ActivityFeed />
+        <div className="mb-10">
+          <div className="section-label mb-3">{"{ PROFILE }"}</div>
+          <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white flex items-center gap-3">
+            Welcome, {info.displayName}
+            {info.isVerified ? <VerifiedBadge size="lg" /> : null}
+          </h1>
+          <p className="text-[14px] text-white/40 mt-2">
+            Signed in via {info.method}
+            {info.walletAddress && <> · Wallet: <code className="font-mono">{shortAddress(info.walletAddress)}</code></>}
+          </p>
         </div>
 
-        {/* Right: NFTs */}
-        <div className="lg:col-span-2">
-          <NFTGallery />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 space-y-6">
+            <OnChainCard />
+            <PrivyWalletCard />
+          </div>
+          <div className="lg:col-span-2">
+            <NFTGallery />
+          </div>
         </div>
-      </div>
       </section>
     </div>
   );

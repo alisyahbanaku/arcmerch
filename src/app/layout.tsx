@@ -3,7 +3,7 @@ import { DM_Sans, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { AuthProvider } from "@/lib/auth-provider";
+import { PrivyWrapper } from "@/lib/privy-provider";
 import { Web3Provider } from "@/components/web3-provider";
 import { Navbar } from "@/components/navbar";
 
@@ -108,13 +108,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </head>
       <body className="min-h-screen">
-        <Web3Provider>
-          <AuthProvider>
+        <PrivyWrapper>
+          <Web3Provider>
             <Navbar />
             <main className="pt-[60px] sm:pt-[72px]">{children}</main>
             <Footer />
-          </AuthProvider>
-        </Web3Provider>
+          </Web3Provider>
+        </PrivyWrapper>
       </body>
     </html>
   );
