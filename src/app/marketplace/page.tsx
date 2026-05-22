@@ -1,26 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2, Zap, Globe } from "lucide-react";
+import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2, Zap, Globe, Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePrivy } from "@privy-io/react-auth";
 import { useActiveWallet } from "@/lib/wallet-context";
 import { useTotalMinted, useMaxSupply, useMintPrice, useBurnNFT } from "@/hooks/useArcMerch";
 import { useUnifiedBalance } from "@/hooks/useAppKit";
 
-const ALL_DESIGNS = [
-  { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, color: "#9F72FF", emoji: "⚔️", verified: true },
-  { id: 2, title: "Arc Galaxy", creator: "@builder0x", price: "30", edition: "1/50", product: "Hoodie", burned: 12, color: "#2F578C", emoji: "🌌", verified: true },
-  { id: 3, title: "USDC Waves", creator: "@stabledev", price: "15", edition: "1/100", product: "Cap", burned: 45, color: "#2A9D8F", emoji: "🌊", verified: false },
-  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", price: "20", edition: "1/25", product: "T-Shirt", burned: 8, color: "#E9A13F", emoji: "🐱", verified: true },
-  { id: 5, title: "Blockchain City", creator: "@web3painter", price: "50", edition: "1/10", product: "Poster", burned: 2, color: "#E76F51", emoji: "🏙️", verified: false },
-  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", price: "35", edition: "1/20", product: "Hoodie", burned: 7, color: "#7B68EE", emoji: "💭", verified: true },
-  { id: 7, title: "Moon Phase", creator: "@lunartist", price: "18", edition: "1/50", product: "Mug", burned: 15, color: "#6B7280", emoji: "🌙", verified: false },
-  { id: 8, title: "Crypto Tiger", creator: "@nftbeast", price: "45", edition: "1/5", product: "Hoodie", burned: 1, color: "#F59E0B", emoji: "🐯", verified: true },
-  { id: 9, title: "Stablecoin Rose", creator: "@floraldefi", price: "22", edition: "1/30", product: "T-Shirt", burned: 10, color: "#E11D48", emoji: "🌹", verified: false },
+// Featured collection: Arc ecosystem logo merch
+const FEATURED_DESIGNS = [
+  { id: 101, title: "Arc Logo Tee", creator: "@arcmerch", price: "25", edition: "1/100", product: "T-Shirt", burned: 0, image: "/arc-logo.svg", bgColor: "#0A0A0A", badge: "OFFICIAL", verified: true, description: "The Arc blockchain logo on premium black tee. Minimalist arch mark." },
+  { id: 102, title: "Circle × Arc Hoodie", creator: "@arcmerch", price: "45", edition: "1/50", product: "Hoodie", burned: 0, image: "/circle-logo.png", bgColor: "#29233B", badge: "COLLAB", verified: true, description: "Circle logo on deep purple hoodie. Stablecoin-native drip." },
+  { id: 103, title: "ArcMerch OG Cap", creator: "@arconomist", price: "20", edition: "1/25", product: "Cap", burned: 0, image: "/logo.jpg", bgColor: "#1A1A1A", badge: "GENESIS", verified: true, description: "The original ArcMerch logo. First-ever merch NFT on Arc." },
+  { id: 104, title: "Arc Icon Sticker Pack", creator: "@arcmerch", price: "5", edition: "1/500", product: "Sticker", burned: 0, image: "/arc-icon.svg", bgColor: "#111111", badge: "NEW", verified: true, description: "Minimal arch icon sticker. Laptop, phone, everywhere." },
+  { id: 105, title: "Circle Payments Poster", creator: "@arcmerch", price: "35", edition: "1/20", product: "Poster", burned: 0, image: "/circle-logo.png", bgColor: "#1A1030", badge: "LIMITED", verified: true, description: "Circle full-stack platform poster. A3 matte print." },
+  { id: 106, title: "Arc Builder Hoodie", creator: "@arconomist", price: "50", edition: "1/10", product: "Hoodie", burned: 0, image: "/arc-logo.svg", bgColor: "#0D0D0D", badge: "RARE", verified: true, description: "For builders on Arc. Back print: {BUILD ON ARC}." },
 ];
 
-const FILTERS = ["All", "T-Shirt", "Hoodie", "Cap", "Mug", "Poster"];
+const ALL_DESIGNS = [
+  ...FEATURED_DESIGNS,
+  { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, image: null, bgColor: "#9F72FF", emoji: "⚔️", badge: null, verified: true, description: "AI-generated samurai in neon style." },
+  { id: 2, title: "Arc Galaxy", creator: "@builder0x", price: "30", edition: "1/50", product: "Hoodie", burned: 12, image: null, bgColor: "#2F578C", emoji: "🌌", badge: null, verified: true, description: "Galaxy pattern inspired by Arc ecosystem." },
+  { id: 3, title: "USDC Waves", creator: "@stabledev", price: "15", edition: "1/100", product: "Cap", burned: 45, image: null, bgColor: "#2A9D8F", emoji: "🌊", badge: null, verified: false, description: "Ocean waves in stablecoin blue." },
+  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", price: "20", edition: "1/25", product: "T-Shirt", burned: 8, image: null, bgColor: "#E9A13F", emoji: "🐱", badge: null, verified: true, description: "Cyberpunk cat with amber glow." },
+  { id: 5, title: "Blockchain City", creator: "@web3painter", price: "50", edition: "1/10", product: "Poster", burned: 2, image: null, bgColor: "#E76F51", emoji: "🏙️", badge: null, verified: false, description: "Futuristic city powered by blockchain." },
+  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", price: "35", edition: "1/20", product: "Hoodie", burned: 7, image: null, bgColor: "#7B68EE", emoji: "💭", badge: null, verified: true, description: "Abstract DeFi visualization." },
+];
+
+const FILTERS = ["All", "T-Shirt", "Hoodie", "Cap", "Sticker", "Poster"];
 const SORT = ["Recent", "Price: Low", "Price: High", "Most Burned"];
 
 export default function MarketplacePage() {
@@ -180,12 +189,30 @@ export default function MarketplacePage() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((d) => (
             <div key={d.id} className="group cursor-pointer">
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: d.color }}>
-                <span className="text-[64px]">{d.emoji}</span>
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: d.bgColor }}>
+                {d.image ? (
+                  <div className="relative w-full h-full flex items-center justify-center p-8">
+                    <Image
+                      src={d.image}
+                      alt={d.title}
+                      width={200}
+                      height={200}
+                      className="object-contain max-h-[120px] w-auto"
+                      unoptimized
+                    />
+                  </div>
+                ) : (
+                  <span className="text-[64px]">{"emoji" in d ? (d as { emoji: string }).emoji : "🎨"}</span>
+                )}
                 <div className="absolute top-3 left-3 flex gap-2">
                   <span className="mono text-[11px] bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md">{d.edition}</span>
                   <span className="text-[11px] bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md">{d.product}</span>
                 </div>
+                {d.badge && (
+                  <div className="absolute top-3 right-3 flex items-center gap-1 bg-[#E9A13F] text-black px-2 py-1 rounded-md text-[10px] font-bold">
+                    <Star className="h-2.5 w-2.5" />{d.badge}
+                  </div>
+                )}
                 {d.burned > 0 && (
                   <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white px-2 py-1 rounded-md text-[11px]">
                     <Flame className="h-3 w-3" />{d.burned}
@@ -199,6 +226,9 @@ export default function MarketplacePage() {
                     <p className="text-[13px] text-white/40 mt-0.5">
                       {d.creator}{d.verified && <span className="ml-1 text-blue-400">✓</span>}
                     </p>
+                    {d.description && (
+                      <p className="text-[12px] text-white/30 mt-1 line-clamp-1">{d.description}</p>
+                    )}
                   </div>
                   <span className="mono text-[15px] font-medium text-white">{d.price} USDC</span>
                 </div>
