@@ -10,12 +10,8 @@ import {
 
 // Mock data
 const FEATURED = [
-  { id: 1, title: "Neon Samurai", creator: "@arconomist", verified: true, price: "25", edition: "1/10", product: "T-Shirt", burned: 3, remaining: 7, color: "#9F72FF", gradient: "from-[#9F72FF] to-[#5B21B6]", emoji: "⚔️", hot: true },
-  { id: 2, title: "Arc Galaxy", creator: "@builder0x", verified: true, price: "30", edition: "1/50", product: "Hoodie", burned: 12, remaining: 38, color: "#2F578C", gradient: "from-[#2F578C] to-[#1A3551]", emoji: "🌌", hot: false },
-  { id: 3, title: "USDC Waves", creator: "@stabledev", verified: false, price: "15", edition: "1/100", product: "Cap", burned: 45, remaining: 55, color: "#2A9D8F", gradient: "from-[#2A9D8F] to-[#1A6B60]", emoji: "🌊", hot: true },
-  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", verified: true, price: "20", edition: "1/25", product: "T-Shirt", burned: 8, remaining: 17, color: "#E9A13F", gradient: "from-[#E9A13F] to-[#B87A1E]", emoji: "🐱", hot: false },
-  { id: 5, title: "Blockchain City", creator: "@web3painter", verified: false, price: "50", edition: "1/10", product: "Poster", burned: 2, remaining: 8, color: "#E76F51", gradient: "from-[#E76F51] to-[#B84A35]", emoji: "🏙️", hot: false },
-  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", verified: true, price: "35", edition: "1/20", product: "Hoodie", burned: 7, remaining: 13, color: "#7B68EE", gradient: "from-[#7B68EE] to-[#4B3FA0]", emoji: "💭", hot: true },
+  { id: 101, title: "Arc Logo Tee", creator: "@arcmerch", verified: true, price: "25", edition: "1/100", product: "T-Shirt", burned: 0, remaining: 100, color: "#E9A13F", gradient: "from-[#1A1A1A] to-[#0A0A0A]", image: "/mockups/arc-tee-mockup.jpg", hot: true },
+  { id: 102, title: "Arc Cap", creator: "@arcmerch", verified: true, price: "20", edition: "1/50", product: "Cap", burned: 0, remaining: 50, color: "#E9A13F", gradient: "from-[#1A1A1A] to-[#0A0A0A]", image: "/mockups/arc-cap-mockup.jpg", hot: true },
 ];
 
 const STEPS = [
@@ -116,9 +112,9 @@ export default function Home() {
                   <div className={`absolute inset-0 bg-gradient-to-br ${d.gradient}`} />
                   <div className="absolute inset-0 bg-black/10" />
 
-                  {/* Emoji art */}
+                  {/* Product image */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[48px] sm:text-[60px] md:text-[72px] drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{d.emoji}</span>
+                    <img src={d.image} alt={d.title} className="w-full h-full object-cover" />
                   </div>
 
                   {/* Top badges */}
