@@ -1,5 +1,6 @@
 import { http, createConfig } from "wagmi";
 import { defineChain } from "viem";
+import { injected } from "wagmi/connectors";
 
 // Arc Testnet chain definition
 export const arcTestnet = defineChain({
@@ -26,6 +27,7 @@ export const arcTestnet = defineChain({
 
 export const config = createConfig({
   chains: [arcTestnet],
+  connectors: [injected()],
   transports: {
     [arcTestnet.id]: http("https://rpc.testnet.arc.network"),
   },

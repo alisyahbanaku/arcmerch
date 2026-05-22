@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { AuthButton } from "@/components/auth-button";
-import { WalletButton } from "@/components/wallet-button";
 
 const NAV_LINKS = [
   { href: "/marketplace", label: "Marketplace" },
@@ -63,7 +62,6 @@ export function Navbar() {
 
             {/* Auth + Wallet + Hamburger */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <WalletButton />
               <AuthButton />
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
