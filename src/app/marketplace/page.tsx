@@ -191,12 +191,10 @@ export default function MarketplacePage() {
             <div key={d.id} className="group cursor-pointer">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center" style={{ backgroundColor: d.bgColor }}>
                 {d.image ? (
-                  <Image
+                  <img
                     src={d.image}
                     alt={d.title}
-                    fill
-                    className="object-cover"
-                    unoptimized
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                 ) : (
                   <span className="text-[64px]">{"emoji" in d ? (d as { emoji: string }).emoji : "🎨"}</span>
