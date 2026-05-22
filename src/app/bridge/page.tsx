@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
+import { useActiveWallet } from "@/lib/wallet-context";
 import { ArrowRight, Loader2, Check, ExternalLink, Globe, Zap, Shield } from "lucide-react";
 
 const BRIDGE_CHAINS = [
@@ -13,13 +14,12 @@ const BRIDGE_CHAINS = [
 
 export default function BridgePage() {
   const { ready, authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
+  const { activeWallet } = useActiveWallet();
   const [fromChain, setFromChain] = useState("base");
   const [amount, setAmount] = useState("");
   const [step, setStep] = useState<"select" | "confirm" | "processing" | "success">("select");
 
-  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
-  const address = embeddedWallet?.address || wallets[0]?.address || "";
+  const address = activeWallet?.address || "";
 
   if (!ready) {
     return (

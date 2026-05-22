@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X, Wallet, ExternalLink, Zap, Globe } from "lucide-react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
+import { useActiveWallet } from "@/lib/wallet-context";
 import { formatUnits } from "viem";
 import { useMintNFT, useApproveUSDC, useUSDCBalance, useUSDCAllowance, useMintPrice } from "@/hooks/useArcMerch";
 import { useUnifiedBalance } from "@/hooks/useAppKit";
@@ -23,9 +24,8 @@ type DesignMode = "ai" | "upload";
 
 export default function CreatePage() {
   const { authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
-  const address = embeddedWallet?.address || wallets[0]?.address || "";
+  const { activeWallet } = useActiveWallet();
+  const address = activeWallet?.address || "";
   const isConnected = authenticated && !!address;
   const { priceRaw, priceFormatted } = useMintPrice();
   const usdcBalance = useUSDCBalance(address);

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useActiveWallet } from "@/lib/wallet-context";
 import { Wallet, Copy, Check, ExternalLink, Shield, Key, Link2 } from "lucide-react";
 
 function shortAddr(addr: string) {

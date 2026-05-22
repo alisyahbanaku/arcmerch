@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2, Zap, Globe } from "lucide-react";
 import Link from "next/link";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
+import { useActiveWallet } from "@/lib/wallet-context";
 import { useTotalMinted, useMaxSupply, useMintPrice, useBurnNFT } from "@/hooks/useArcMerch";
 import { useUnifiedBalance } from "@/hooks/useAppKit";
 
@@ -24,8 +25,8 @@ const SORT = ["Recent", "Price: Low", "Price: High", "Most Burned"];
 
 export default function MarketplacePage() {
   const { authenticated, login } = usePrivy();
-  const { wallets } = useWallets();
-  const address = wallets[0]?.address || "";
+  const { activeWallet } = useActiveWallet();
+  const address = activeWallet?.address || "";
   const isConnected = authenticated && !!address;
   const totalMinted = useTotalMinted();
   const maxSupply = useMaxSupply();

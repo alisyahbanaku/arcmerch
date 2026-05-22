@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { PrivyWrapper } from "@/lib/privy-provider";
+import { WalletProvider } from "@/lib/wallet-context";
 
 import { Navbar } from "@/components/navbar";
 
@@ -109,9 +110,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen">
         <PrivyWrapper>
+          <WalletProvider>
             <Navbar />
             <main className="pt-[60px] sm:pt-[72px]">{children}</main>
             <Footer />
+          </WalletProvider>
         </PrivyWrapper>
       </body>
     </html>
