@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Search, Flame, SlidersHorizontal, ExternalLink, Loader2, Zap, Globe } from "lucide-react";
 import Link from "next/link";
-import { useAccount, useConnect } from "wagmi";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useTotalMinted, useMaxSupply, useMintPrice, useBurnNFT } from "@/hooks/useArcMerch";
 import { useUnifiedBalance } from "@/hooks/useAppKit";
 
@@ -23,8 +23,10 @@ const FILTERS = ["All", "T-Shirt", "Hoodie", "Cap", "Mug", "Poster"];
 const SORT = ["Recent", "Price: Low", "Price: High", "Most Burned"];
 
 export default function MarketplacePage() {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { authenticated, login } = usePrivy();
+  const { wallets } = useWallets();
+  const address = wallets[0]?.address || "";
+  const isConnected = authenticated && !!address;
   const totalMinted = useTotalMinted();
   const maxSupply = useMaxSupply();
   const mintPrice = useMintPrice();
@@ -48,8 +50,7 @@ export default function MarketplacePage() {
 
   const handleBurn = (id: number) => {
     if (!isConnected) {
-      const injected = connectors.find((c) => c.id === "injected");
-      if (injected) connect({ connector: injected });
+      login();
       return;
     }
     setBurningId(id);

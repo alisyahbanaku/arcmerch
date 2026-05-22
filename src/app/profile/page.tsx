@@ -2,295 +2,207 @@
 
 import { useState } from "react";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { useAccount, useConnect } from "wagmi";
-import { shortAddress } from "@/lib/wallet";
-import {
-  Wallet, Copy, Check, Package, Link as LinkIcon, ExternalLink, Shield
-} from "lucide-react";
-import Link from "next/link";
-import { VerifiedBadge } from "@/components/verified-badge";
+import { Wallet, Copy, Check, ExternalLink, Shield, Key, Link2 } from "lucide-react";
 
-// ── Helper: Get display info from Privy user ────────────────────
-
-function getUserInfo(user: ReturnType<typeof usePrivy>["user"]) {
-  const twitter = user?.linkedAccounts?.find(a => a.type === "twitter_oauth") as unknown as Record<string, unknown> | undefined;
-  const google = user?.linkedAccounts?.find(a => a.type === "google_oauth") as unknown as Record<string, unknown> | undefined;
-  const email = user?.linkedAccounts?.find(a => a.type === "email") as unknown as Record<string, unknown> | undefined;
-  const wallet = user?.linkedAccounts?.find(a => a.type === "wallet") as unknown as Record<string, unknown> | undefined;
-
-  return {
-    displayName: twitter
-      ? `@${twitter.username || twitter.name || "user"}`
-      : google
-      ? String(google.name || "Google User")
-      : email
-      ? String(email.address || "Email User")
-      : "Anonymous",
-    isVerified: !!twitter || !!google,
-    avatarLetter: (twitter ? String(twitter.username || twitter.name || "u") : "u").charAt(0).toUpperCase(),
-    method: twitter ? "Twitter" : google ? "Google" : email ? "Email" : "Wallet",
-    walletAddress: (wallet?.address as string) || null,
-  };
+function shortAddr(addr: string) {
+  return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
 }
 
-// ── On-Chain Wallet Card ────────────────────────────────────────
-
-function OnChainCard() {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
-  const [copied, setCopied] = useState(false);
-
-  const copyAddress = () => {
-    if (address) {
-      navigator.clipboard.writeText(address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  if (!isConnected) {
-    return (
-      <div className="card p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-            <LinkIcon className="w-7 h-7 text-white" />
-          </div>
-          <div>
-            <h3 className="text-[18px] font-light text-white">Connect Wallet</h3>
-            <p className="text-[13px] text-white/45">Connect external wallet for on-chain actions</p>
-          </div>
-        </div>
-        <button
-          onClick={() => {
-            const injected = connectors.find((c) => c.id === "injected");
-            if (injected) connect({ connector: injected });
-          }}
-          className="w-full arc-btn justify-center py-3"
-        >
-          Connect Wallet
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="card p-6 space-y-5">
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-          <LinkIcon className="w-7 h-7 text-white" />
-        </div>
-        <div>
-          <h3 className="text-[18px] font-light text-white">On-Chain Wallet</h3>
-          <p className="text-[13px] text-white/45">Connected to Arc Testnet</p>
-        </div>
-      </div>
-
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
-        <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
-        <div className="flex items-center justify-between">
-          <code className="text-[15px] text-white font-mono">{shortAddress(address || "")}</code>
-          <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
-            {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-          </button>
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <a
-          href={`https://testnet.arcscan.app/address/${address}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-white/10 py-2.5 text-[13px] text-white/40 hover:text-white hover:border-white/20 transition-colors"
-        >
-          Explorer <ExternalLink className="w-3 h-3" />
-        </a>
-        <a
-          href="https://faucet.circle.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-white/10 py-2.5 text-[13px] text-white/40 hover:text-white hover:border-white/20 transition-colors"
-        >
-          Faucet <ExternalLink className="w-3 h-3" />
-        </a>
-      </div>
-    </div>
-  );
-}
-
-// ── Privy Wallet Card ───────────────────────────────────────────
-
-function PrivyWalletCard() {
+export default function ProfilePage() {
+  const { ready, authenticated, user, login, exportWallet } = usePrivy();
   const { wallets } = useWallets();
   const [copied, setCopied] = useState(false);
 
-  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
-  const address = embeddedWallet?.address || "";
-
-  const copyAddress = () => {
-    if (address) {
-      navigator.clipboard.writeText(address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  return (
-    <div className="card p-6 space-y-5">
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
-          <Wallet className="w-7 h-7 text-black" />
-        </div>
-        <div>
-          <h3 className="text-[18px] font-light text-white">Embedded Wallet</h3>
-          <p className="text-[13px] text-white/45">Auto-created by Privy</p>
-        </div>
-      </div>
-
-      {address ? (
-        <>
-          <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
-            <div className="text-[12px] text-white/45 uppercase tracking-wider mb-2">Wallet Address</div>
-            <div className="flex items-center justify-between">
-              <code className="text-[15px] text-white font-mono">{shortAddress(address)}</code>
-              <button onClick={copyAddress} className="text-white/40 hover:text-white transition-colors">
-                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-              <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Network</div>
-              <div className="text-[14px] text-white">Arc Testnet</div>
-            </div>
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-lg p-3">
-              <div className="text-[11px] text-white/40 uppercase tracking-wider mb-1">Chain ID</div>
-              <div className="text-[14px] text-white font-mono">5042002</div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="text-center py-4">
-          <p className="text-[14px] text-white/40">No embedded wallet yet. Sign in with social to create one.</p>
-        </div>
-      )}
-
-      <div className="bg-[#E9A13F]/5 border border-[#E9A13F]/10 rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Shield className="w-4 h-4 text-[#E9A13F]" />
-          <span className="text-[13px] font-medium text-[#E9A13F]">Non-Custodial</span>
-        </div>
-        <p className="text-[13px] text-white/40 leading-relaxed">
-          Privy creates and manages your wallet securely. You can export your private key anytime from settings. Your keys, your assets.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ── NFT Gallery (Mock) ──────────────────────────────────────────
-
-function NFTGallery() {
-  const mockNFTs = [
-    { id: 1, name: "Arc Genesis Tee", status: "minted" },
-    { id: 2, name: "USDC Hoodie", status: "listed" },
-    { id: 3, name: "Stablecoin Cap", status: "burned" },
-  ];
-
-  return (
-    <div className="card p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[18px] font-light text-white">My NFTs</h3>
-        <span className="text-[13px] text-white/45">{mockNFTs.length} items</span>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {mockNFTs.map((nft) => (
-          <div key={nft.id} className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden group hover:border-white/10 transition-colors">
-            <div className="aspect-square bg-white/[0.04] flex items-center justify-center">
-              <Package className="w-10 h-10 text-white/40" />
-            </div>
-            <div className="p-3">
-              <div className="text-[14px] text-white mb-1">{nft.name}</div>
-              <span className={`text-[12px] px-2 py-0.5 rounded-full ${
-                nft.status === "minted" ? "bg-blue-500/10 text-blue-400" :
-                nft.status === "listed" ? "bg-[#E9A13F]/10 text-[#E9A13F]" :
-                "bg-red-500/10 text-red-400"
-              }`}>
-                {nft.status}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Not Authenticated ───────────────────────────────────────────
-
-function NotSignedIn() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center max-w-[400px] mx-auto px-6">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-          <Wallet className="w-8 h-8 text-white/35" />
-        </div>
-        <h2 className="text-[24px] font-light text-white mb-3">Sign in to view profile</h2>
-        <p className="text-[15px] text-white/40 mb-8 leading-relaxed">
-          Sign in with X, Google, or email to auto-create your Arc wallet.
-        </p>
-        <Link href="/" className="btn-primary inline-block">
-          Go to Home
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-// ── Profile Page ────────────────────────────────────────────────
-
-export default function ProfilePage() {
-  const { ready, authenticated, user } = usePrivy();
-
   if (!ready) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white/10 border-t-[#E9A13F] rounded-full animate-spin" />
+      <div className="bg-black text-white min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#E9A13F] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  if (!authenticated) return <NotSignedIn />;
+  if (!authenticated) {
+    return (
+      <div className="bg-black text-white min-h-screen">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
+        <div className="relative mx-auto max-w-[600px] px-4 py-20 text-center">
+          <h1 className="text-[32px] font-light text-white mb-4">Your Profile</h1>
+          <p className="text-[15px] text-white/40 mb-8">Sign in to view your wallet, designs, and creator status.</p>
+          <button onClick={login} className="arc-btn text-[15px] px-8 py-3">
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-  const info = getUserInfo(user);
+  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
+  const externalWallets = wallets.filter(w => w.walletClientType !== "privy");
+  const primaryAddress = embeddedWallet?.address || wallets[0]?.address || "";
+
+  // Identity
+  const twitterAccount = user?.linkedAccounts?.find((a: any) => a.type === "twitter_oauth");
+  const googleAccount = user?.linkedAccounts?.find((a: any) => a.type === "google_oauth");
+  const emailAccount = user?.linkedAccounts?.find((a: any) => a.type === "email");
+
+  const displayName = twitterAccount
+    ? `@${(twitterAccount as any).username || "user"}`
+    : googleAccount
+    ? String((googleAccount as any).name || "User")
+    : emailAccount
+    ? String((emailAccount as any).address || "User")
+    : shortAddr(primaryAddress);
+
+  const isVerified = !!twitterAccount;
+  const avatarLetter = displayName.replace("@", "").charAt(0).toUpperCase() || "?";
+
+  const copyAddress = (addr: string) => {
+    navigator.clipboard.writeText(addr);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="bg-black text-white min-h-screen">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
 
-      <section className="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
-        <div className="mb-10">
-          <div className="section-label mb-3">{"{ PROFILE }"}</div>
-          <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white flex items-center gap-3">
-            Welcome, {info.displayName}
-            {info.isVerified ? <VerifiedBadge size="lg" /> : null}
-          </h1>
-          <p className="text-[14px] text-white/40 mt-2">
-            Signed in via {info.method}
-            {info.walletAddress && <> · Wallet: <code className="font-mono">{shortAddress(info.walletAddress)}</code></>}
-          </p>
+      <div className="relative mx-auto max-w-[800px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
+        <div className="section-label mb-3">{"{ PROFILE }"}</div>
+
+        {/* Identity Card */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 mb-6">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#E9A13F] to-[#c47f1a] flex items-center justify-center">
+              <span className="text-[24px] font-semibold text-black">{avatarLetter}</span>
+            </div>
+            <div>
+              <h1 className="text-[24px] font-light text-white flex items-center gap-2">
+                {displayName}
+                {isVerified ? (
+                  <span className="text-[11px] bg-[#E9A13F]/10 text-[#E9A13F] border border-[#E9A13F]/20 px-2 py-0.5 rounded font-medium">✓ VERIFIED CREATOR</span>
+                ) : (
+                  <span className="text-[11px] text-white/30 bg-white/5 px-2 py-0.5 rounded">Unverified</span>
+                )}
+              </h1>
+              <p className="text-[13px] text-white/40 mt-1">
+                Joined via {twitterAccount ? "X (Twitter)" : googleAccount ? "Google" : "Email"}
+              </p>
+            </div>
+          </div>
+
+          {/* Linked Accounts */}
+          <div className="border-t border-white/[0.06] pt-4">
+            <p className="text-[11px] text-white/25 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Link2 className="w-3 h-3" /> Linked Accounts
+            </p>
+            <div className="space-y-2">
+              {user?.linkedAccounts?.map((account: any, i: number) => (
+                <div key={i} className="flex items-center gap-3 text-[13px]">
+                  <span className="w-5 text-center text-white/40">
+                    {account.type.includes("twitter") ? "𝕏" : account.type.includes("google") ? "G" : account.type.includes("email") ? "✉" : "⟠"}
+                  </span>
+                  <span className="text-white/60">
+                    {account.type.includes("twitter") && `@${account.username || account.name || "user"}`}
+                    {account.type.includes("google") && (account.name || account.email || "Google")}
+                    {account.type.includes("email") && (account.address || account.email || "Email")}
+                    {account.type.includes("wallet") && shortAddr(account.address || "")}
+                  </span>
+                  {account.type.includes("twitter") && (
+                    <span className="text-[9px] text-[#E9A13F] bg-[#E9A13F]/10 px-1.5 py-0.5 rounded">Creator ID</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-6">
-            <OnChainCard />
-            <PrivyWalletCard />
+        {/* Wallet Card */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 mb-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Wallet className="w-5 h-5 text-[#E9A13F]" />
+            <h2 className="text-[18px] font-light text-white">Your Wallet</h2>
           </div>
-          <div className="lg:col-span-2">
-            <NFTGallery />
+
+          {/* Embedded Wallet */}
+          {embeddedWallet && (
+            <div className="rounded-lg border border-[#E9A13F]/20 bg-[#E9A13F]/5 p-4 mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] text-[#E9A13F] bg-[#E9A13F]/10 border border-[#E9A13F]/20 px-2 py-0.5 rounded font-medium">PRIMARY</span>
+                  <span className="text-[11px] text-white/30">Embedded Wallet</span>
+                </div>
+                <button
+                  onClick={() => copyAddress(embeddedWallet.address)}
+                  className="text-white/40 hover:text-white transition-colors"
+                >
+                  {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                </button>
+              </div>
+              <div className="font-mono text-[15px] text-white mb-3">{shortAddr(embeddedWallet.address)}</div>
+              <div className="flex items-center gap-3">
+                <a
+                  href={`https://testnet.arcscan.app/address/${embeddedWallet.address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[12px] text-white/40 hover:text-white flex items-center gap-1 transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3" /> Explorer
+                </a>
+                <button
+                  onClick={() => exportWallet()}
+                  className="text-[12px] text-[#E9A13F]/70 hover:text-[#E9A13F] flex items-center gap-1 transition-colors"
+                >
+                  <Key className="w-3 h-3" /> Export Seed Phrase
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* External Wallets */}
+          {externalWallets.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-[11px] text-white/25 uppercase tracking-wider">External Wallets</p>
+              {externalWallets.map((w, i) => (
+                <div key={i} className="rounded-lg border border-white/10 p-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-white/30 bg-white/5 px-1.5 py-0.5 rounded">{w.walletClientType}</span>
+                    <span className="font-mono text-[13px] text-white/60">{shortAddr(w.address)}</span>
+                  </div>
+                  <a
+                    href={`https://testnet.arcscan.app/address/${w.address}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/30 hover:text-white transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!embeddedWallet && wallets.length === 0 && (
+            <div className="text-center py-6">
+              <p className="text-[14px] text-white/40">Wallet is being created...</p>
+              <div className="w-6 h-6 border-2 border-[#E9A13F] border-t-transparent rounded-full animate-spin mx-auto mt-3" />
+            </div>
+          )}
+        </div>
+
+        {/* Security Info */}
+        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Shield className="w-5 h-5 text-[#E9A13F]" />
+            <h2 className="text-[18px] font-light text-white">Security</h2>
+          </div>
+          <div className="space-y-3 text-[13px] text-white/45">
+            <p>• Your embedded wallet is secured by Privy — keys are split across multiple parties</p>
+            <p>• Export your seed phrase anytime from this page</p>
+            <p>• X verification proves your creator identity on the marketplace</p>
+            <p>• All transactions happen on Arc Testnet (Chain ID: 5042002)</p>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

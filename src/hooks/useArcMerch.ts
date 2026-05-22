@@ -1,205 +1,263 @@
 "use client";
 
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount, useBalance } from "wagmi";
-import { parseUnits, formatUnits } from "viem";
+import { useState, useEffect, useCallback } from "react";
+import { createPublicClient, http, formatUnits, parseUnits } from "viem";
+import { useWallets } from "@privy-io/react-auth";
 import { ARC_MERCH_NFT_ADDRESS, ARC_MERCH_NFT_ABI, USDC_ADDRESS, USDC_ABI } from "@/lib/contracts";
+
+// Arc Testnet public client for reads
+const publicClient = createPublicClient({
+  chain: {
+    id: 5042002,
+    name: "Arc Testnet",
+    nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+    rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+  },
+  transport: http("https://rpc.testnet.arc.network"),
+});
 
 // ── Read Hooks ──────────────────────────────────────────────
 
 export function useMintPrice() {
-  const { data, ...rest } = useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "mintPrice",
-  });
+  const [data, setData] = useState<bigint | undefined>();
+
+  useEffect(() => {
+    publicClient.readContract({
+      address: ARC_MERCH_NFT_ADDRESS,
+      abi: ARC_MERCH_NFT_ABI,
+      functionName: "mintPrice",
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }, []);
 
   return {
     priceRaw: data,
     priceFormatted: data ? formatUnits(data, 6) : "0",
-    ...rest,
   };
 }
 
 export function useTotalMinted() {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "totalMinted",
-  });
+  const [data, setData] = useState<bigint | undefined>();
+
+  useEffect(() => {
+    publicClient.readContract({
+      address: ARC_MERCH_NFT_ADDRESS,
+      abi: ARC_MERCH_NFT_ABI,
+      functionName: "totalMinted",
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }, []);
+
+  return { data };
 }
 
 export function useMaxSupply() {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "maxSupply",
-  });
-}
+  const [data, setData] = useState<bigint | undefined>();
 
-export function useNFTBalance(address?: `0x${string}`) {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "balanceOf",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address },
-  });
-}
-
-export function useTokenOwner(tokenId: bigint) {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "ownerOf",
-    args: [tokenId],
-  });
-}
-
-export function useTokenURI(tokenId: bigint) {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "tokenURI",
-    args: [tokenId],
-  });
-}
-
-export function useEditionInfo(tokenId: bigint) {
-  return useReadContract({
-    address: ARC_MERCH_NFT_ADDRESS,
-    abi: ARC_MERCH_NFT_ABI,
-    functionName: "getEditionInfo",
-    args: [tokenId],
-  });
-}
-
-export function useUSDCBalance(address?: `0x${string}`) {
-  return useReadContract({
-    address: USDC_ADDRESS,
-    abi: USDC_ABI,
-    functionName: "balanceOf",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address },
-  });
-}
-
-export function useUSDCAllowance(owner?: `0x${string}`) {
-  return useReadContract({
-    address: USDC_ADDRESS,
-    abi: USDC_ABI,
-    functionName: "allowance",
-    args: owner ? [owner, ARC_MERCH_NFT_ADDRESS] : undefined,
-    query: { enabled: !!owner },
-  });
-}
-
-// ── Write Hooks ─────────────────────────────────────────────
-
-export function useMintNFT() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
-
-  const mint = ({
-    uri,
-    productType,
-    designTitle,
-    maxEditions,
-    to,
-  }: {
-    uri: string;
-    productType: string;
-    designTitle: string;
-    maxEditions: number;
-    to: `0x${string}`;
-  }) => {
-    writeContract({
+  useEffect(() => {
+    publicClient.readContract({
       address: ARC_MERCH_NFT_ADDRESS,
       abi: ARC_MERCH_NFT_ABI,
-      functionName: "mint",
-      args: [uri, productType, designTitle, BigInt(maxEditions), to],
-    });
-  };
+      functionName: "maxSupply",
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }, []);
+
+  return { data };
+}
+
+export function useUSDCBalance(address?: string) {
+  const [data, setData] = useState<bigint | undefined>();
+
+  useEffect(() => {
+    if (!address) return;
+    publicClient.readContract({
+      address: USDC_ADDRESS,
+      abi: USDC_ABI,
+      functionName: "balanceOf",
+      args: [address as `0x${string}`],
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }, [address]);
+
+  return { data };
+}
+
+export function useUSDCAllowance(owner?: string) {
+  const [data, setData] = useState<bigint | undefined>();
+
+  useEffect(() => {
+    if (!owner) return;
+    publicClient.readContract({
+      address: USDC_ADDRESS,
+      abi: USDC_ABI,
+      functionName: "allowance",
+      args: [owner as `0x${string}`, ARC_MERCH_NFT_ADDRESS],
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }, [owner]);
+
+  return { data, refetch: () => {
+    if (!owner) return;
+    publicClient.readContract({
+      address: USDC_ADDRESS,
+      abi: USDC_ABI,
+      functionName: "allowance",
+      args: [owner as `0x${string}`, ARC_MERCH_NFT_ADDRESS],
+    }).then(d => setData(d as bigint)).catch(() => {});
+  }};
+}
+
+// ── Write Hooks (use Privy wallet provider) ─────────────────
+
+export function useMintNFT() {
+  const { wallets } = useWallets();
+  const [isPending, setIsPending] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [hash, setHash] = useState<string | undefined>();
+  const [error, setError] = useState<Error | null>(null);
+
+  const mint = useCallback(async ({
+    uri, productType, designTitle, maxEditions, to,
+  }: {
+    uri: string; productType: string; designTitle: string; maxEditions: number; to: string;
+  }) => {
+    const wallet = wallets.find(w => w.walletClientType === "privy") || wallets[0];
+    if (!wallet) { setError(new Error("No wallet available")); return; }
+
+    setIsPending(true); setError(null); setIsSuccess(false);
+    try {
+      const provider = await wallet.getEthereumProvider();
+      const { createWalletClient, custom } = await import("viem");
+      const walletClient = createWalletClient({
+        chain: {
+          id: 5042002,
+          name: "Arc Testnet",
+          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+          rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+        },
+        transport: custom(provider),
+        account: wallet.address as `0x${string}`,
+      });
+
+      const txHash = await walletClient.writeContract({
+        address: ARC_MERCH_NFT_ADDRESS,
+        abi: ARC_MERCH_NFT_ABI,
+        functionName: "mint",
+        args: [uri, productType, designTitle, BigInt(maxEditions), to as `0x${string}`],
+      });
+
+      setHash(txHash);
+      setIsPending(false);
+      setIsConfirming(true);
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+      setIsConfirming(false);
+      setIsSuccess(true);
+    } catch (e: any) {
+      setError(e);
+      setIsPending(false);
+      setIsConfirming(false);
+    }
+  }, [wallets]);
 
   return { mint, hash, isPending, isConfirming, isSuccess, error };
 }
 
-export function useMintEdition() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
-
-  const mintEdition = ({
-    originalTokenId,
-    uri,
-    to,
-  }: {
-    originalTokenId: number;
-    uri: string;
-    to: `0x${string}`;
-  }) => {
-    writeContract({
-      address: ARC_MERCH_NFT_ADDRESS,
-      abi: ARC_MERCH_NFT_ABI,
-      functionName: "mintEdition",
-      args: [BigInt(originalTokenId), uri, to],
-    });
-  };
-
-  return { mintEdition, hash, isPending, isConfirming, isSuccess, error };
-}
-
-export function useBurnNFT() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
-
-  const burn = (tokenId: number) => {
-    writeContract({
-      address: ARC_MERCH_NFT_ADDRESS,
-      abi: ARC_MERCH_NFT_ABI,
-      functionName: "burn",
-      args: [BigInt(tokenId)],
-    });
-  };
-
-  return { burn, hash, isPending, isConfirming, isSuccess, error };
-}
-
 export function useApproveUSDC() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const { wallets } = useWallets();
+  const [isPending, setIsPending] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [hash, setHash] = useState<string | undefined>();
+  const [error, setError] = useState<Error | null>(null);
 
-  const approve = (amount?: bigint) => {
-    writeContract({
-      address: USDC_ADDRESS,
-      abi: USDC_ABI,
-      functionName: "approve",
-      args: [ARC_MERCH_NFT_ADDRESS, amount ?? parseUnits("1000", 6)], // Default: approve 1000 USDC
-    });
-  };
+  const approve = useCallback(async (amount?: bigint) => {
+    const wallet = wallets.find(w => w.walletClientType === "privy") || wallets[0];
+    if (!wallet) { setError(new Error("No wallet available")); return; }
+
+    setIsPending(true); setError(null); setIsSuccess(false);
+    try {
+      const provider = await wallet.getEthereumProvider();
+      const { createWalletClient, custom } = await import("viem");
+      const walletClient = createWalletClient({
+        chain: {
+          id: 5042002,
+          name: "Arc Testnet",
+          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+          rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+        },
+        transport: custom(provider),
+        account: wallet.address as `0x${string}`,
+      });
+
+      const txHash = await walletClient.writeContract({
+        address: USDC_ADDRESS,
+        abi: USDC_ABI,
+        functionName: "approve",
+        args: [ARC_MERCH_NFT_ADDRESS, amount ?? parseUnits("1000", 6)],
+      });
+
+      setHash(txHash);
+      setIsPending(false);
+      setIsConfirming(true);
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+      setIsConfirming(false);
+      setIsSuccess(true);
+    } catch (e: any) {
+      setError(e);
+      setIsPending(false);
+      setIsConfirming(false);
+    }
+  }, [wallets]);
 
   return { approve, hash, isPending, isConfirming, isSuccess, error };
 }
 
-// ── Combined Hook ───────────────────────────────────────────
+export function useBurnNFT() {
+  const { wallets } = useWallets();
+  const [isPending, setIsPending] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [hash, setHash] = useState<string | undefined>();
+  const [error, setError] = useState<Error | null>(null);
 
-export function useArcMerch() {
-  const { address, isConnected } = useAccount();
-  const { priceRaw, priceFormatted } = useMintPrice();
-  const totalMinted = useTotalMinted();
-  const maxSupply = useMaxSupply();
-  const nftBalance = useNFTBalance(address);
-  const usdcBalance = useUSDCBalance(address);
-  const usdcAllowance = useUSDCAllowance(address);
+  const burn = useCallback(async (tokenId: number) => {
+    const wallet = wallets.find(w => w.walletClientType === "privy") || wallets[0];
+    if (!wallet) { setError(new Error("No wallet available")); return; }
 
-  return {
-    address,
-    isConnected,
-    mintPrice: priceRaw,
-    mintPriceFormatted: priceFormatted,
-    totalMinted: totalMinted.data,
-    maxSupply: maxSupply.data,
-    nftBalance: nftBalance.data,
-    usdcBalance: usdcBalance.data,
-    usdcBalanceFormatted: usdcBalance.data ? formatUnits(usdcBalance.data, 6) : "0",
-    usdcAllowance: usdcAllowance.data,
-  };
+    setIsPending(true); setError(null); setIsSuccess(false);
+    try {
+      const provider = await wallet.getEthereumProvider();
+      const { createWalletClient, custom } = await import("viem");
+      const walletClient = createWalletClient({
+        chain: {
+          id: 5042002,
+          name: "Arc Testnet",
+          nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+          rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+        },
+        transport: custom(provider),
+        account: wallet.address as `0x${string}`,
+      });
+
+      const txHash = await walletClient.writeContract({
+        address: ARC_MERCH_NFT_ADDRESS,
+        abi: ARC_MERCH_NFT_ABI,
+        functionName: "burn",
+        args: [BigInt(tokenId)],
+      });
+
+      setHash(txHash);
+      setIsPending(false);
+      setIsConfirming(true);
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+      setIsConfirming(false);
+      setIsSuccess(true);
+    } catch (e: any) {
+      setError(e);
+      setIsPending(false);
+      setIsConfirming(false);
+    }
+  }, [wallets]);
+
+  return { burn, hash, isPending, isConfirming, isSuccess, error };
 }

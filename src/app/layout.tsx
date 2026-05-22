@@ -4,7 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { PrivyWrapper } from "@/lib/privy-provider";
-import { Web3Provider } from "@/components/web3-provider";
+
 import { Navbar } from "@/components/navbar";
 
 const dmSans = DM_Sans({
@@ -109,11 +109,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen">
         <PrivyWrapper>
-          <Web3Provider>
             <Navbar />
             <main className="pt-[60px] sm:pt-[72px]">{children}</main>
             <Footer />
-          </Web3Provider>
         </PrivyWrapper>
       </body>
     </html>

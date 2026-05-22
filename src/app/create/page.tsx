@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, ArrowRight, Loader2, Check, Upload, Image as ImageIcon, X, Wallet, ExternalLink, Zap, Globe } from "lucide-react";
-import { useAccount, useConnect } from "wagmi";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { formatUnits } from "viem";
 import { useMintNFT, useApproveUSDC, useUSDCBalance, useUSDCAllowance, useMintPrice } from "@/hooks/useArcMerch";
 import { useUnifiedBalance } from "@/hooks/useAppKit";
@@ -22,8 +22,11 @@ const STYLES = ["Realistic", "Anime", "Pixel Art", "Watercolor", "Cyberpunk", "M
 type DesignMode = "ai" | "upload";
 
 export default function CreatePage() {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
+  const { authenticated, login } = usePrivy();
+  const { wallets } = useWallets();
+  const embeddedWallet = wallets.find(w => w.walletClientType === "privy");
+  const address = embeddedWallet?.address || wallets[0]?.address || "";
+  const isConnected = authenticated && !!address;
   const { priceRaw, priceFormatted } = useMintPrice();
   const usdcBalance = useUSDCBalance(address);
   const usdcAllowance = useUSDCAllowance(address);
@@ -58,7 +61,7 @@ export default function CreatePage() {
   // After approve success, check if we should auto-mint
   useEffect(() => {
     if (isApproveSuccess && step === 3) {
-      // Re-check allowance will update automatically via wagmi
+      // Re-check allowance after approval
     }
   }, [isApproveSuccess, step]);
 
@@ -191,13 +194,10 @@ export default function CreatePage() {
               You need a wallet connected to Arc Testnet to mint NFTs. USDC is used for gas and mint payments.
             </p>
             <button
-              onClick={() => {
-                const injected = connectors.find((c) => c.id === "injected");
-                if (injected) connect({ connector: injected });
-              }}
+              onClick={login}
               className="arc-btn text-sm px-6 py-2.5"
             >
-              Connect Wallet
+              Sign In to Mint
             </button>
           </div>
         )}
