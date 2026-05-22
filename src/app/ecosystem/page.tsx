@@ -40,7 +40,7 @@ export default function EcosystemPage() {
         <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           On-chain integrations
         </h1>
-        <p className="text-[16px] text-white/40 mb-4">
+        <p className="text-[16px] text-white/70 mb-4">
           ArcMerch leverages Arc&apos;s native protocols for AI agent identity, reputation, job settlement, and USDC payments.
         </p>
 
@@ -56,9 +56,9 @@ export default function EcosystemPage() {
               href={`https://testnet.arcscan.app/address/${c.addr}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-[12px] text-white/50 hover:border-[#E9A13F]/30 hover:text-[#E9A13F] transition-colors"
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-[12px] text-white/70 hover:border-[#E9A13F]/30 hover:text-[#E9A13F] transition-colors"
             >
-              <span className="text-white/30">{c.label}:</span>
+              <span className="text-white/50">{c.label}:</span>
               <span className="mono">{c.addr.slice(0, 8)}...{c.addr.slice(-4)}</span>
               <ExternalLink className="w-3 h-3" />
             </a>
@@ -74,12 +74,12 @@ export default function EcosystemPage() {
               className={`flex items-center gap-2 rounded-lg px-4 py-3 text-[13px] font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
                   ? "bg-[#E9A13F] text-black"
-                  : "border border-white/10 text-white/50 hover:border-white/20 hover:text-white"
+                  : "border border-white/10 text-white/70 hover:border-white/20 hover:text-white"
               }`}
             >
               <tab.icon className="w-4 h-4" />
               {tab.label}
-              <span className={`text-[10px] ${activeTab === tab.id ? "text-black/60" : "text-white/30"}`}>
+              <span className={`text-[10px] ${activeTab === tab.id ? "text-black/60" : "text-white/50"}`}>
                 {tab.desc}
               </span>
             </button>
@@ -95,7 +95,7 @@ export default function EcosystemPage() {
                 <Bot className="w-6 h-6 text-[#E9A13F]" />
                 <h2 className="text-[20px] font-light">AI Design Agent — ERC-8004</h2>
               </div>
-              <p className="text-[14px] text-white/45 leading-relaxed">
+              <p className="text-[14px] text-white/70 leading-relaxed">
                 Register the ArcMerch AI Design Generator as an on-chain agent with verifiable identity.
                 Every design generated gets provenance tracked through the agent&apos;s identity NFT.
               </p>
@@ -104,13 +104,13 @@ export default function EcosystemPage() {
               <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4 space-y-2">
                 <div className="text-[11px] text-white/35 uppercase tracking-wider">Agent Metadata</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[13px]">
-                  <div><span className="text-white/40">Name:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.name}</span></div>
-                  <div><span className="text-white/40">Type:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.agent_type}</span></div>
-                  <div><span className="text-white/40">Version:</span> <span className="text-white mono">{ARCMERCH_AGENT_METADATA.version}</span></div>
-                  <div><span className="text-white/40">Chain:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.properties.chain}</span></div>
+                  <div><span className="text-white/70">Name:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.name}</span></div>
+                  <div><span className="text-white/70">Type:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.agent_type}</span></div>
+                  <div><span className="text-white/70">Version:</span> <span className="text-white mono">{ARCMERCH_AGENT_METADATA.version}</span></div>
+                  <div><span className="text-white/70">Chain:</span> <span className="text-white">{ARCMERCH_AGENT_METADATA.properties.chain}</span></div>
                 </div>
                 <div className="mt-2">
-                  <span className="text-white/40 text-[13px]">Capabilities:</span>
+                  <span className="text-white/70 text-[13px]">Capabilities:</span>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {ARCMERCH_AGENT_METADATA.capabilities.map((cap) => (
                       <span key={cap} className="text-[11px] bg-white/5 border border-white/10 rounded px-2 py-1 text-white/60">{cap}</span>
@@ -125,7 +125,7 @@ export default function EcosystemPage() {
                   <CheckCircle className="w-5 h-5 text-green-400" />
                   <div>
                     <div className="text-[14px] text-green-400">Agent Registered</div>
-                    <div className="text-[12px] text-white/40 mono">Agent ID: #{agentId.toString()}</div>
+                    <div className="text-[12px] text-white/70 mono">Agent ID: #{agentId.toString()}</div>
                   </div>
                 </div>
               ) : (
@@ -157,7 +157,7 @@ export default function EcosystemPage() {
                 <Star className="w-6 h-6 text-[#E9A13F]" />
                 <h2 className="text-[20px] font-light">Reputation System — ERC-8004</h2>
               </div>
-              <p className="text-[14px] text-white/45 leading-relaxed">
+              <p className="text-[14px] text-white/70 leading-relaxed">
                 Rate creators and printers on-chain. Reputation scores are recorded via the ReputationRegistry
                 and cannot be self-attested — only external validators can give feedback.
               </p>
@@ -168,7 +168,7 @@ export default function EcosystemPage() {
                   <div key={key} className="rounded-lg border border-white/10 bg-white/[0.02] p-4 flex items-center justify-between">
                     <div>
                       <div className="text-[13px] text-white">{tag.replace(/_/g, " ")}</div>
-                      <div className="text-[11px] text-white/30 mono">{key}</div>
+                      <div className="text-[11px] text-white/50 mono">{key}</div>
                     </div>
                     <button
                       onClick={() => {
@@ -176,7 +176,7 @@ export default function EcosystemPage() {
                         if (agentId) giveFeedback(agentId, 95, tag, "Great quality");
                       }}
                       disabled={isRating || !agentId}
-                      className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-white/50 hover:border-[#E9A13F]/30 hover:text-[#E9A13F] transition-colors disabled:opacity-30"
+                      className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-white/70 hover:border-[#E9A13F]/30 hover:text-[#E9A13F] transition-colors disabled:opacity-30"
                     >
                       {isRating ? "..." : "+1"}
                     </button>
@@ -191,11 +191,11 @@ export default function EcosystemPage() {
                   <div className="flex gap-6">
                     <div>
                       <div className="text-[24px] font-light text-[#E9A13F]">{reputation.totalScore.toString()}</div>
-                      <div className="text-[11px] text-white/40">Total Score</div>
+                      <div className="text-[11px] text-white/70">Total Score</div>
                     </div>
                     <div>
                       <div className="text-[24px] font-light text-white">{reputation.feedbackCount.toString()}</div>
-                      <div className="text-[11px] text-white/40">Feedbacks</div>
+                      <div className="text-[11px] text-white/70">Feedbacks</div>
                     </div>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function EcosystemPage() {
                 <Truck className="w-6 h-6 text-[#E9A13F]" />
                 <h2 className="text-[20px] font-light">Print Fulfillment — ERC-8183</h2>
               </div>
-              <p className="text-[14px] text-white/45 leading-relaxed">
+              <p className="text-[14px] text-white/70 leading-relaxed">
                 Burn-to-redeem flow with USDC escrow. When you burn an NFT, a print job is created on-chain.
                 The printer submits proof of delivery, and USDC is released from escrow.
               </p>
@@ -269,7 +269,7 @@ export default function EcosystemPage() {
                   <CheckCircle className="w-5 h-5 text-green-400" />
                   <div>
                     <div className="text-[14px] text-green-400">Job Created & Funded</div>
-                    <div className="text-[12px] text-white/40 mono">Job ID: #{jobId.toString()}</div>
+                    <div className="text-[12px] text-white/70 mono">Job ID: #{jobId.toString()}</div>
                   </div>
                 </div>
               )}
@@ -284,7 +284,7 @@ export default function EcosystemPage() {
                 <DollarSign className="w-6 h-6 text-[#E9A13F]" />
                 <h2 className="text-[20px] font-light">USDC Payments — Native</h2>
               </div>
-              <p className="text-[14px] text-white/45 leading-relaxed">
+              <p className="text-[14px] text-white/70 leading-relaxed">
                 All transactions on ArcMerch are settled in USDC. Arc uses USDC as native gas token —
                 no ETH needed. Fees are predictable and dollar-denominated.
               </p>
@@ -294,22 +294,22 @@ export default function EcosystemPage() {
                 <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
                   <div className="text-[11px] text-white/35 uppercase mb-2">Mint Price</div>
                   <div className="text-[20px] font-light text-[#E9A13F]">5 USDC</div>
-                  <div className="text-[12px] text-white/30 mt-1">Per NFT (configurable by owner)</div>
+                  <div className="text-[12px] text-white/50 mt-1">Per NFT (configurable by owner)</div>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
                   <div className="text-[11px] text-white/35 uppercase mb-2">Gas Cost</div>
                   <div className="text-[20px] font-light text-white">~$0.001</div>
-                  <div className="text-[12px] text-white/30 mt-1">USDC-denominated, predictable</div>
+                  <div className="text-[12px] text-white/50 mt-1">USDC-denominated, predictable</div>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
                   <div className="text-[11px] text-white/35 uppercase mb-2">Royalties</div>
                   <div className="text-[20px] font-light text-white">5%</div>
-                  <div className="text-[12px] text-white/30 mt-1">EIP-2981, paid to creator</div>
+                  <div className="text-[12px] text-white/50 mt-1">EIP-2981, paid to creator</div>
                 </div>
                 <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
                   <div className="text-[11px] text-white/35 uppercase mb-2">Settlement</div>
                   <div className="text-[20px] font-light text-white">&lt;1s</div>
-                  <div className="text-[12px] text-white/30 mt-1">Deterministic finality</div>
+                  <div className="text-[12px] text-white/50 mt-1">Deterministic finality</div>
                 </div>
               </div>
 
@@ -356,23 +356,23 @@ export default function EcosystemPage() {
             <div className="rounded-lg border border-white/10 p-4">
               <Bot className="w-8 h-8 text-[#E9A13F] mx-auto mb-2" />
               <div className="text-[14px] text-white font-medium">ERC-8004</div>
-              <div className="text-[12px] text-white/40 mt-1">AI Agent Identity + Reputation</div>
-              <div className="text-[11px] text-white/25 mt-2 mono">IdentityRegistry</div>
-              <div className="text-[11px] text-white/25 mono">ReputationRegistry</div>
+              <div className="text-[12px] text-white/70 mt-1">AI Agent Identity + Reputation</div>
+              <div className="text-[11px] text-white/50 mt-2 mono">IdentityRegistry</div>
+              <div className="text-[11px] text-white/50 mono">ReputationRegistry</div>
             </div>
             <div className="rounded-lg border border-white/10 p-4">
               <Truck className="w-8 h-8 text-[#E9A13F] mx-auto mb-2" />
               <div className="text-[14px] text-white font-medium">ERC-8183</div>
-              <div className="text-[12px] text-white/40 mt-1">Job Settlement + Escrow</div>
-              <div className="text-[11px] text-white/25 mt-2 mono">AgenticCommerce</div>
-              <div className="text-[11px] text-white/25 mono">USDC Escrow</div>
+              <div className="text-[12px] text-white/70 mt-1">Job Settlement + Escrow</div>
+              <div className="text-[11px] text-white/50 mt-2 mono">AgenticCommerce</div>
+              <div className="text-[11px] text-white/50 mono">USDC Escrow</div>
             </div>
             <div className="rounded-lg border border-white/10 p-4">
               <Shield className="w-8 h-8 text-[#E9A13F] mx-auto mb-2" />
               <div className="text-[14px] text-white font-medium">ERC-721</div>
-              <div className="text-[12px] text-white/40 mt-1">NFT + Burn-to-Redeem</div>
-              <div className="text-[11px] text-white/25 mt-2 mono">ArcMerchNFT</div>
-              <div className="text-[11px] text-white/25 mono">EIP-2981 Royalties</div>
+              <div className="text-[12px] text-white/70 mt-1">NFT + Burn-to-Redeem</div>
+              <div className="text-[11px] text-white/50 mt-2 mono">ArcMerchNFT</div>
+              <div className="text-[11px] text-white/50 mono">EIP-2981 Royalties</div>
             </div>
           </div>
         </div>

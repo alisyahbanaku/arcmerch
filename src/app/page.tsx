@@ -42,7 +42,7 @@ export default function Home() {
           </h1>
 
           {/* Sub */}
-          <p className="mt-8 text-[17px] text-white/50 leading-relaxed max-w-[520px]">
+          <p className="mt-8 text-[17px] text-white/70 leading-relaxed max-w-[520px]">
             Create merchandise designs with AI. Mint as NFTs on Arc. 
             Trade, collect, or burn to redeem physical products — all in USDC.
           </p>
@@ -59,15 +59,15 @@ export default function Home() {
           </div>
 
           {/* Core loop — subtle */}
-          <div className="mt-16 flex items-center gap-2 text-sm sm:text-[13px] text-white/40">
+          <div className="mt-16 flex items-center gap-2 text-sm sm:text-[13px] text-white/70">
             <span>Create</span>
-            <span className="text-white/40">→</span>
+            <span className="text-white/70">→</span>
             <span>Mint</span>
-            <span className="text-white/40">→</span>
+            <span className="text-white/70">→</span>
             <span>Trade</span>
-            <span className="text-white/40">→</span>
+            <span className="text-white/70">→</span>
             <span className="text-amber">Burn</span>
-            <span className="text-white/40">→</span>
+            <span className="text-white/70">→</span>
             <span>Print</span>
           </div>
         </div>
@@ -95,11 +95,11 @@ export default function Home() {
       {/* ═══════════ FEATURED DESIGNS ═══════════ */}
       <section className="bg-white text-black">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
-          <div className="section-label mb-3 text-black/30">{"{ FEATURED }"}</div>
+          <div className="section-label mb-3 text-black/50">{"{ FEATURED }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4 max-w-[600px]">
             Trending designs on ArcMerch
           </h2>
-          <p className="text-base sm:text-[16px] text-black/40 mb-14 max-w-[480px]">
+          <p className="text-base sm:text-[16px] text-black/70 mb-14 max-w-[480px]">
             AI-generated merchandise NFTs, traded and redeemed on Arc blockchain.
           </p>
 
@@ -143,7 +143,7 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                      <div className="text-xs sm:text-[11px] text-white/50">
+                      <div className="text-xs sm:text-[11px] text-white/70">
                         {d.remaining} remaining
                       </div>
                     </div>
@@ -164,7 +164,7 @@ export default function Home() {
                       <h3 className="text-[16px] font-medium text-black group-hover:text-[#E9A13F] transition-colors duration-150">
                         {d.title}
                       </h3>
-                      <p className="text-sm sm:text-[13px] text-black/40 mt-0.5 flex items-center gap-1">
+                      <p className="text-sm sm:text-[13px] text-black/70 mt-0.5 flex items-center gap-1">
                         {d.creator}
                         {d.verified && (
                           <svg className="w-3.5 h-3.5 text-[#1DA1F2] fill-[#1DA1F2]" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
@@ -175,7 +175,7 @@ export default function Home() {
                       <span className="mono text-[16px] font-medium text-black">
                         {d.price}
                       </span>
-                      <span className="text-xs sm:text-[12px] text-black/30 ml-1">USDC</span>
+                      <span className="text-xs sm:text-[12px] text-black/50 ml-1">USDC</span>
                     </div>
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export default function Home() {
               <div key={step.num} className={`py-8 md:py-0 md:px-8 ${i < 2 ? 'md:border-r md:border-white/[0.06]' : ''}`}>
                 <div className="mono text-sm sm:text-[13px] text-amber mb-4">{step.num}</div>
                 <h3 className="text-[22px] font-light text-white mb-3">{step.title}</h3>
-                <p className="text-sm sm:text-[14px] text-white/40 leading-relaxed">{step.desc}</p>
+                <p className="text-sm sm:text-[14px] text-white/70 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -217,7 +217,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px]">
           <div className="grid items-start gap-16 lg:grid-cols-2">
             <div>
-              <div className="section-label mb-3 text-black/30">{"{ BURN-TO-REDEEM }"}</div>
+              <div className="section-label mb-3 text-black/50">{"{ BURN-TO-REDEEM }"}</div>
               <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-6">
                 Every burn
                 <br />
@@ -225,24 +225,24 @@ export default function Home() {
                 <br />
                 <span className="text-amber font-normal">NFTs rarer</span>
               </h2>
-              <p className="text-base sm:text-[16px] text-black/40 leading-relaxed mb-10 max-w-[440px]">
+              <p className="text-base sm:text-[16px] text-black/70 leading-relaxed mb-10 max-w-[440px]">
                 When you burn an NFT to redeem an HD file or physical print, 
                 that token is destroyed forever. Supply decreases. Scarcity increases.
               </p>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-5 rounded-xl border border-black/[0.06]">
-                  <Shield className="h-5 w-5 text-black/30 flex-shrink-0 mt-0.5" />
+                  <Shield className="h-5 w-5 text-black/50 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-[15px] font-medium text-black">Soulbound Certificate</div>
-                    <div className="text-sm sm:text-[13px] text-black/40 mt-1">Non-transferable proof of original ownership</div>
+                    <div className="text-sm sm:text-[13px] text-black/70 mt-1">Non-transferable proof of original ownership</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-5 rounded-xl border border-black/[0.06]">
-                  <TrendingUp className="h-5 w-5 text-black/30 flex-shrink-0 mt-0.5" />
+                  <TrendingUp className="h-5 w-5 text-black/50 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-[15px] font-medium text-black">Deflationary Value</div>
-                    <div className="text-sm sm:text-[13px] text-black/40 mt-1">100 → 50 → 20. Each burn = remaining NFTs 2-5× rarer</div>
+                    <div className="text-sm sm:text-[13px] text-black/70 mt-1">100 → 50 → 20. Each burn = remaining NFTs 2-5× rarer</div>
                   </div>
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default function Home() {
 
             {/* Supply visualization */}
             <div className="rounded-xl border border-black/[0.06] p-8">
-              <div className="section-label mb-8 text-black/30">{"{ SUPPLY OVER TIME }"}</div>
+              <div className="section-label mb-8 text-black/50">{"{ SUPPLY OVER TIME }"}</div>
               
               <div className="space-y-6">
                 {[
@@ -261,7 +261,7 @@ export default function Home() {
                 ].map((item) => (
                   <div key={item.label}>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm sm:text-[13px] text-black/40">{item.label}</span>
+                      <span className="text-sm sm:text-[13px] text-black/70">{item.label}</span>
                       <span className="mono text-sm sm:text-[13px] text-black">{item.supply} NFTs</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-black/[0.04]">
@@ -280,7 +280,7 @@ export default function Home() {
                   <div key={opt.label} className="text-center p-4 rounded-lg border border-black/[0.06]">
                     <div className="text-[24px] mb-2">{opt.emoji}</div>
                     <div className="text-[13px] font-medium text-black">{opt.label}</div>
-                    <div className="text-xs sm:text-[11px] text-black/30 mt-0.5">{opt.desc}</div>
+                    <div className="text-xs sm:text-[11px] text-black/50 mt-0.5">{opt.desc}</div>
                   </div>
                 ))}
               </div>
@@ -307,7 +307,7 @@ export default function Home() {
               <div key={item.title} className="bg-black p-8 md:p-10">
                 <div className="text-[28px] mb-5">{item.icon}</div>
                 <h3 className="text-[18px] font-medium text-white mb-2">{item.title}</h3>
-                <p className="text-sm sm:text-[14px] text-white/40 leading-relaxed">{item.desc}</p>
+                <p className="text-sm sm:text-[14px] text-white/70 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -321,7 +321,7 @@ export default function Home() {
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-4 max-w-[600px]">
             Your keys. Your assets. <span className="text-amber font-normal">Your control.</span>
           </h2>
-          <p className="text-base sm:text-[16px] text-white/40 mb-16 max-w-[520px]">
+          <p className="text-base sm:text-[16px] text-white/70 mb-16 max-w-[520px]">
             ArcMerch uses hybrid custody — your wallet is generated from two secrets combined. 
             Neither you nor us can access it alone.
           </p>
@@ -338,7 +338,7 @@ export default function Home() {
               <div key={item.title} className="bg-black p-8">
                 <div className="text-[28px] mb-5">{item.icon}</div>
                 <h3 className="text-[16px] font-medium text-white mb-2">{item.title}</h3>
-                <p className="text-sm sm:text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
+                <p className="text-sm sm:text-[13px] text-white/70 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -363,12 +363,12 @@ export default function Home() {
               <div key={row.feature} className="grid grid-cols-1 sm:grid-cols-3 text-sm sm:text-[13px] border-t border-white/[0.06] min-w-[480px]">
                 <div className="p-3 sm:p-4 text-white/60 font-medium sm:font-normal">{row.feature}</div>
                 <div className="p-3 sm:p-4 text-white/80">{row.twitter}</div>
-                <div className="p-3 sm:p-4 text-white/40 hidden sm:block">{row.demo}</div>
+                <div className="p-3 sm:p-4 text-white/70 hidden sm:block">{row.demo}</div>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 flex items-start gap-3 text-sm sm:text-[13px] text-white/45">
+          <div className="mt-10 flex items-start gap-3 text-sm sm:text-[13px] text-white/70">
             <Shield className="h-4 w-4" />
             <span>ArcMerch will never ask for your private key or seed phrase. Export is initiated by you only, from Profile page.</span>
           </div>
@@ -378,11 +378,11 @@ export default function Home() {
       {/* ═══════════ CTA ═══════════ */}
       <section className="bg-white text-black border-t border-black/[0.06]">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10 py-16 sm:py-[100px] md:py-[140px] text-center">
-          <div className="section-label mb-3 text-black/30">{"{ GET STARTED }"}</div>
+          <div className="section-label mb-3 text-black/50">{"{ GET STARTED }"}</div>
           <h2 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-black mb-4">
             Ready to create?
           </h2>
-          <p className="text-base sm:text-[16px] text-black/40 mb-10 max-w-[420px] mx-auto">
+          <p className="text-base sm:text-[16px] text-black/70 mb-10 max-w-[420px] mx-auto">
             Connect wallet, describe your design, mint your first 
             AI-generated merchandise NFT — under 2 minutes.
           </p>

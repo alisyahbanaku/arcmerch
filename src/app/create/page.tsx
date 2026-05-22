@@ -179,7 +179,7 @@ export default function CreatePage() {
         <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           Create design
         </h1>
-        <p className="text-[16px] text-white/40 mb-12">
+        <p className="text-[16px] text-white/70 mb-12">
           Generate with AI or upload your own design, then mint as NFT
         </p>
 
@@ -190,7 +190,7 @@ export default function CreatePage() {
               <Wallet className="w-5 h-5 text-[#E9A13F]" />
               <span className="text-[15px] font-medium text-white">Connect wallet to mint</span>
             </div>
-            <p className="text-[13px] text-white/40 mb-4">
+            <p className="text-[13px] text-white/70 mb-4">
               You need a wallet connected to Arc Testnet to mint NFTs. USDC is used for gas and mint payments.
             </p>
             <button
@@ -207,12 +207,12 @@ export default function CreatePage() {
           <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 mb-8">
             <div className="flex items-center gap-4">
               <div>
-                <span className="text-[11px] text-white/45">USDC Balance</span>
+                <span className="text-[11px] text-white/70">USDC Balance</span>
                 <div className="text-[14px] mono text-white">{usdcBalFormatted} USDC</div>
               </div>
               <div className="w-px h-8 bg-white/10" />
               <div>
-                <span className="text-[11px] text-white/45">Mint Price</span>
+                <span className="text-[11px] text-white/70">Mint Price</span>
                 <div className="text-[14px] mono text-[#E9A13F]">{priceFormatted} USDC</div>
               </div>
             </div>
@@ -259,12 +259,12 @@ export default function CreatePage() {
                   mode === "ai" ? "border-[#E9A13F] bg-[#E9A13F]/5" : "border-white/10 hover:border-white/20"
                 }`}
               >
-                <Sparkles className={`w-5 h-5 ${mode === "ai" ? "text-[#E9A13F]" : "text-white/40"}`} />
+                <Sparkles className={`w-5 h-5 ${mode === "ai" ? "text-[#E9A13F]" : "text-white/70"}`} />
                 <div className="text-left">
                   <div className={`text-[15px] font-medium ${mode === "ai" ? "text-white" : "text-white/60"}`}>
                     Generate with AI
                   </div>
-                  <div className="text-[12px] text-white/45">Describe your vision</div>
+                  <div className="text-[12px] text-white/70">Describe your vision</div>
                 </div>
               </button>
               <button
@@ -273,12 +273,12 @@ export default function CreatePage() {
                   mode === "upload" ? "border-[#E9A13F] bg-[#E9A13F]/5" : "border-white/10 hover:border-white/20"
                 }`}
               >
-                <Upload className={`w-5 h-5 ${mode === "upload" ? "text-[#E9A13F]" : "text-white/40"}`} />
+                <Upload className={`w-5 h-5 ${mode === "upload" ? "text-[#E9A13F]" : "text-white/70"}`} />
                 <div className="text-left">
                   <div className={`text-[15px] font-medium ${mode === "upload" ? "text-white" : "text-white/60"}`}>
                     Upload Design
                   </div>
-                  <div className="text-[12px] text-white/45">Your own artwork</div>
+                  <div className="text-[12px] text-white/70">Your own artwork</div>
                 </div>
               </button>
             </div>
@@ -286,7 +286,7 @@ export default function CreatePage() {
             {/* AI Mode */}
             {mode === "ai" && (
               <div>
-                <label className="text-[13px] text-white/40 mb-3 block">Design prompt</label>
+                <label className="text-[13px] text-white/70 mb-3 block">Design prompt</label>
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
@@ -300,7 +300,7 @@ export default function CreatePage() {
                   {STYLES.map((s) => (
                     <button key={s} onClick={() => setStyle(style === s ? "" : s)}
                       className={`rounded-md px-3 py-1.5 text-[12px] transition-all duration-150 ${
-                        style === s ? "bg-amber text-black" : "border border-white/10 text-white/40 hover:border-white/20"
+                        style === s ? "bg-amber text-black" : "border border-white/10 text-white/70 hover:border-white/20"
                       }`}
                     >{s}</button>
                   ))}
@@ -311,15 +311,15 @@ export default function CreatePage() {
             {/* Upload Mode */}
             {mode === "upload" && (
               <div>
-                <label className="text-[13px] text-white/40 mb-3 block">Upload your design</label>
+                <label className="text-[13px] text-white/70 mb-3 block">Upload your design</label>
 
                 {!uploadedPreview ? (
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     className="rounded-xl border-2 border-dashed border-white/10 hover:border-white/20 p-10 text-center cursor-pointer transition-colors"
                   >
-                    <ImageIcon className="w-10 h-10 text-white/45 mx-auto mb-4" />
-                    <div className="text-[15px] text-white/40 mb-2">
+                    <ImageIcon className="w-10 h-10 text-white/70 mx-auto mb-4" />
+                    <div className="text-[15px] text-white/70 mb-2">
                       Click to upload or drag and drop
                     </div>
                     <div className="text-[12px] text-white/35">
@@ -340,7 +340,7 @@ export default function CreatePage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-[14px] text-white truncate">{uploadedFile?.name}</div>
-                        <div className="text-[12px] text-white/45 mt-1">
+                        <div className="text-[12px] text-white/70 mt-1">
                           {uploadedFile ? (uploadedFile.size / 1024 / 1024).toFixed(2) : 0} MB
                         </div>
                         <div className="text-[12px] text-green-400 mt-1 flex items-center gap-1">
@@ -361,7 +361,7 @@ export default function CreatePage() {
                 {/* Design title for uploads */}
                 {uploadedFile && (
                   <div className="mt-4">
-                    <label className="text-[13px] text-white/40 mb-3 block">Design title</label>
+                    <label className="text-[13px] text-white/70 mb-3 block">Design title</label>
                     <input
                       type="text"
                       value={designTitle}
@@ -376,7 +376,7 @@ export default function CreatePage() {
 
             {/* Product */}
             <div>
-              <label className="text-[13px] text-white/40 mb-3 block">Product type</label>
+              <label className="text-[13px] text-white/70 mb-3 block">Product type</label>
               <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
                 {PRODUCTS.map((p) => (
                   <button key={p.id} onClick={() => setProduct(p.id)}
@@ -386,7 +386,7 @@ export default function CreatePage() {
                   >
                     <div className="text-[28px] mb-2">{p.emoji}</div>
                     <div className="text-[12px] font-medium text-white">{p.name}</div>
-                    <div className="text-[11px] text-white/45 mt-0.5">{p.price}</div>
+                    <div className="text-[11px] text-white/70 mt-0.5">{p.price}</div>
                   </button>
                 ))}
               </div>
@@ -394,7 +394,7 @@ export default function CreatePage() {
 
             {/* Edition */}
             <div>
-              <label className="text-[13px] text-white/40 mb-3 block">Edition size</label>
+              <label className="text-[13px] text-white/70 mb-3 block">Edition size</label>
               <input type="number" value={edition} onChange={(e) => setEdition(e.target.value)} min="1" max="1000"
                 className="w-full rounded-lg border border-white/10 bg-transparent p-3 text-[15px] text-white focus:border-white/25 focus:outline-none transition-colors"
               />
@@ -408,7 +408,7 @@ export default function CreatePage() {
                 {generating && (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-[12px]">
-                      <span className="text-white/40">Generating your design...</span>
+                      <span className="text-white/70">Generating your design...</span>
                       <span className="text-[#E9A13F] mono">{Math.round(generateProgress)}%</span>
                     </div>
                     <div className="h-1 rounded-full bg-white/10 overflow-hidden">
@@ -472,7 +472,7 @@ export default function CreatePage() {
                 ) : (
                   <div className="aspect-square rounded-lg bg-white/5 flex items-center justify-center">
                     <div className="text-center">
-                      <Sparkles className="w-10 h-10 text-white/40 mx-auto mb-3" />
+                      <Sparkles className="w-10 h-10 text-white/70 mx-auto mb-3" />
                       <p className="text-[13px] text-white/35">No design generated</p>
                     </div>
                   </div>
@@ -487,33 +487,33 @@ export default function CreatePage() {
                 {mode === "ai" ? (
                   <>
                     <div className="rounded-lg border border-white/10 p-4">
-                      <div className="text-[11px] text-white/45 mb-1">Prompt</div>
+                      <div className="text-[11px] text-white/70 mb-1">Prompt</div>
                       <div className="text-[14px] text-white">{prompt}</div>
                     </div>
                     {style && (
                       <div className="rounded-lg border border-white/10 p-4">
-                        <div className="text-[11px] text-white/45 mb-1">Style</div>
+                        <div className="text-[11px] text-white/70 mb-1">Style</div>
                         <div className="text-[14px] text-white">{style}</div>
                       </div>
                     )}
                   </>
                 ) : (
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/45 mb-1">Design</div>
+                    <div className="text-[11px] text-white/70 mb-1">Design</div>
                     <div className="text-[14px] text-white">{designTitle || uploadedFile?.name || "Custom upload"}</div>
                   </div>
                 )}
                 <div className="rounded-lg border border-white/10 p-4">
-                  <div className="text-[11px] text-white/45 mb-1">Product</div>
+                  <div className="text-[11px] text-white/70 mb-1">Product</div>
                   <div className="text-[14px] text-white">{PRODUCTS.find(p => p.id === product)?.emoji} {PRODUCTS.find(p => p.id === product)?.name}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/45 mb-1">Edition</div>
+                    <div className="text-[11px] text-white/70 mb-1">Edition</div>
                     <div className="text-[20px] font-light text-white">{edition}</div>
                   </div>
                   <div className="rounded-lg border border-white/10 p-4">
-                    <div className="text-[11px] text-white/45 mb-1">Mint Cost</div>
+                    <div className="text-[11px] text-white/70 mb-1">Mint Cost</div>
                     <div className="text-[20px] font-light text-amber">{priceFormatted} USDC</div>
                   </div>
                 </div>
@@ -525,7 +525,7 @@ export default function CreatePage() {
                       <div className="text-[13px] text-red-400">
                         ⚠️ Insufficient USDC on Arc. You need {priceFormatted} USDC to mint.
                       </div>
-                      <div className="text-[12px] text-white/45 mt-1">
+                      <div className="text-[12px] text-white/70 mt-1">
                         Arc balance: {usdcBalFormatted} USDC
                       </div>
                     </div>
@@ -539,7 +539,7 @@ export default function CreatePage() {
                             You have {totalUnified} USDC across chains
                           </span>
                         </div>
-                        <p className="text-[12px] text-white/40 mb-3">
+                        <p className="text-[12px] text-white/70 mb-3">
                           Bridge your USDC to Arc to mint this NFT.
                         </p>
                         <Link
@@ -595,7 +595,7 @@ export default function CreatePage() {
             <div className="rounded-xl border border-white/10 p-10 text-center">
               <div className="text-[48px] mb-6">🖼️</div>
               <h2 className="text-[28px] font-light text-white mb-2">Ready to mint</h2>
-              <p className="text-[14px] text-white/40 mb-10 max-w-[380px] mx-auto">
+              <p className="text-[14px] text-white/70 mb-10 max-w-[380px] mx-auto">
                 {isSuccess
                   ? "NFT minted successfully! View on explorer."
                   : mode === "upload"
@@ -660,11 +660,11 @@ export default function CreatePage() {
                 <>
                   <div className="mx-auto max-w-[320px] space-y-3 mb-10">
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">Mint Price</span>
+                      <span className="text-[13px] text-white/70">Mint Price</span>
                       <span className="mono text-[13px] text-white">{priceFormatted} USDC</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">Gas (est.)</span>
+                      <span className="text-[13px] text-white/70">Gas (est.)</span>
                       <span className="mono text-[13px] text-white">~0.05 USDC</span>
                     </div>
                     <div className="flex justify-between py-3">

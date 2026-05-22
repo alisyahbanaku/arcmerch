@@ -29,7 +29,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="text-white/35 hover:text-white/50 transition-colors"
+      className="text-white/35 hover:text-white/70 transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
     </button>
@@ -58,7 +58,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
           style={{ gridTemplateColumns: `repeat(${headers.length}, 1fr)` }}
         >
           {row.map((cell, j) => (
-            <div key={j} className={`text-[13px] ${i === 0 ? "text-white/40 font-medium" : "text-white/60"}`}>
+            <div key={j} className={`text-[13px] ${i === 0 ? "text-white/70 font-medium" : "text-white/60"}`}>
               {cell}
             </div>
           ))}
@@ -71,7 +71,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
 function CodeBlock({ children }: { children: string }) {
   return (
     <div className="relative my-6 rounded-lg border border-white/[0.06] bg-white/[0.04] p-5 overflow-x-auto">
-      <pre className="text-[12px] font-mono leading-[1.6] text-white/50 whitespace-pre">{children}</pre>
+      <pre className="text-[12px] font-mono leading-[1.6] text-white/70 whitespace-pre">{children}</pre>
     </div>
   );
 }
@@ -92,10 +92,10 @@ export default function MerchpaperPage() {
           <h1 className="text-[48px] md:text-[64px] font-light tracking-[-0.03em] text-white leading-[1.05] mb-6">
             ArcMerch
           </h1>
-          <p className="text-[18px] text-white/40 max-w-[560px] leading-[1.6] mb-8">
+          <p className="text-[18px] text-white/70 max-w-[560px] leading-[1.6] mb-8">
             The Economic Operating System for AI-Powered Merchandise on Arc Blockchain
           </p>
-          <div className="flex flex-wrap gap-4 text-[12px] font-mono text-white/45">
+          <div className="flex flex-wrap gap-4 text-[12px] font-mono text-white/70">
             <span className="px-3 py-1.5 rounded border border-white/10">v1.0 · May 2026</span>
             <span className="px-3 py-1.5 rounded border border-white/10">Arc Testnet · 5042002</span>
           </div>
@@ -111,9 +111,9 @@ export default function MerchpaperPage() {
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="flex items-center gap-3 py-2 text-[14px] text-white/40 hover:text-white transition-colors group"
+                className="flex items-center gap-3 py-2 text-[14px] text-white/70 hover:text-white transition-colors group"
               >
-                <span className="font-mono text-[11px] text-white/45 group-hover:text-[#E9A13F]/60 w-6">{item.n}</span>
+                <span className="font-mono text-[11px] text-white/70 group-hover:text-[#E9A13F]/60 w-6">{item.n}</span>
                 {item.label}
               </a>
             ))}
@@ -130,7 +130,7 @@ export default function MerchpaperPage() {
           </p>
           <div className="mt-6 rounded-lg border border-[#E9A13F]/10 bg-[#E9A13F]/[0.03] p-5">
             <div className="text-[13px] font-medium text-[#E9A13F] mb-2">Core Innovation</div>
-            <p className="text-[14px] text-white/50 leading-[1.7]">
+            <p className="text-[14px] text-white/70 leading-[1.7]">
               Every NFT has a lifecycle endpoint. Holders choose: <strong className="text-white/70">trade it</strong> (speculative value), <strong className="text-white/70">burn it for an HD file</strong> (utility), or <strong className="text-white/70">burn it for a physical print</strong> (real-world delivery). Every burn reduces supply, making remaining NFTs rarer — creating deflationary game theory.
             </p>
           </div>
@@ -191,7 +191,7 @@ export default function MerchpaperPage() {
 AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
 
           <h3 className="text-[20px] font-light text-white mt-8 mb-4">For Creators</h3>
-          <ol className="list-decimal list-inside space-y-2 text-white/50">
+          <ol className="list-decimal list-inside space-y-2 text-white/70">
             <li>Connect wallet on Arc testnet</li>
             <li>Connect X (Twitter) for verification</li>
             <li>Write a design prompt or upload custom artwork</li>
@@ -203,7 +203,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
           </ol>
 
           <h3 className="text-[20px] font-light text-white mt-8 mb-4">For Buyers</h3>
-          <ol className="list-decimal list-inside space-y-2 text-white/50">
+          <ol className="list-decimal list-inside space-y-2 text-white/70">
             <li>Browse marketplace gallery</li>
             <li>Purchase NFT with USDC</li>
             <li>Choose destiny:</li>
@@ -217,7 +217,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               <div key={path.label} className="rounded-lg border border-white/[0.06] p-5 text-center">
                 <div className="text-[28px] mb-3">{path.icon}</div>
                 <div className="text-[14px] font-medium text-white mb-2">{path.label}</div>
-                <div className="text-[12px] text-white/45 leading-[1.5]">{path.desc}</div>
+                <div className="text-[12px] text-white/70 leading-[1.5]">{path.desc}</div>
               </div>
             ))}
           </div>
@@ -237,7 +237,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
             ].map((item) => (
               <div key={item.title} className="rounded-lg border border-white/[0.06] p-5">
                 <div className="text-[15px] font-medium text-white mb-2">{item.title}</div>
-                <div className="text-[14px] text-white/40 leading-[1.6]">{item.desc}</div>
+                <div className="text-[14px] text-white/70 leading-[1.6]">{item.desc}</div>
               </div>
             ))}
           </div>
@@ -348,7 +348,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "80 burns", supply: "20", scarcity: "+400%" },
             ].map((s) => (
               <div key={s.label} className="rounded-lg border border-white/[0.06] p-4 text-center">
-                <div className="text-[12px] text-white/45 mb-2">{s.label}</div>
+                <div className="text-[12px] text-white/70 mb-2">{s.label}</div>
                 <div className="text-[24px] font-light text-white">{s.supply}</div>
                 <div className="text-[12px] text-[#E9A13F] mt-1">{s.scarcity}</div>
               </div>
@@ -376,7 +376,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
           />
           <div className="mt-6 rounded-lg border border-[#1DA1F2]/10 bg-[#1DA1F2]/[0.03] p-5">
             <div className="text-[14px] font-medium text-[#1DA1F2] mb-2">X OAuth Flow</div>
-            <ol className="list-decimal list-inside space-y-1 text-[14px] text-white/40">
+            <ol className="list-decimal list-inside space-y-1 text-[14px] text-white/70">
               <li>User clicks &quot;Sign in with X&quot;</li>
               <li>Redirect to X OAuth 2.0 authorization</li>
               <li>ArcMerch receives @handle, verified status, avatar</li>
@@ -449,7 +449,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "Bleed", value: '0.25" safe zone' },
             ].map((spec) => (
               <div key={spec.label} className="rounded-lg border border-white/[0.06] p-4 text-center">
-                <div className="text-[11px] text-white/45 mb-1">{spec.label}</div>
+                <div className="text-[11px] text-white/70 mb-1">{spec.label}</div>
                 <div className="text-[14px] font-medium text-white">{spec.value}</div>
               </div>
             ))}
@@ -482,7 +482,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               <div key={loc.region} className="rounded-lg border border-white/[0.06] p-4 text-center">
                 <div className="text-[24px] mb-2">{loc.flag}</div>
                 <div className="text-[14px] font-medium text-white">{loc.region}</div>
-                <div className="text-[11px] text-white/45 mt-1">{loc.detail}</div>
+                <div className="text-[11px] text-white/70 mt-1">{loc.detail}</div>
               </div>
             ))}
           </div>
@@ -500,7 +500,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               { label: "Treasury", value: "$1.25", pct: "2.5%" },
             ].map((r) => (
               <div key={r.label} className="rounded-lg border border-white/[0.06] p-5 text-center">
-                <div className="text-[11px] text-white/45 mb-2">{r.label}</div>
+                <div className="text-[11px] text-white/70 mb-2">{r.label}</div>
                 <div className="text-[22px] font-light text-white">{r.value}</div>
                 <div className="text-[12px] text-[#E9A13F] mt-1">{r.pct}</div>
               </div>
@@ -535,7 +535,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                 <div className="text-[14px] font-medium text-[#E9A13F] mb-3">{cat.title}</div>
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
-                    <li key={item} className="text-[13px] text-white/40 flex items-center gap-2">
+                    <li key={item} className="text-[13px] text-white/70 flex items-center gap-2">
                       <span className="w-1 h-1 rounded-full bg-white/15" />
                       {item}
                     </li>
@@ -560,7 +560,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                 <div className="text-[14px] font-medium text-white mb-3">{cat.title}</div>
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
-                    <li key={item} className="text-[13px] text-white/40 flex items-start gap-2">
+                    <li key={item} className="text-[13px] text-white/70 flex items-start gap-2">
                       <span className="text-green-400 mt-0.5">✓</span>
                       {item}
                     </li>
@@ -575,7 +575,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
 
         {/* 15 — Roadmap */}
         <Section id="roadmap" n="15" title="Roadmap">
-          <p className="text-[14px] text-white/40 leading-[1.8] mt-6 mb-10 max-w-[640px]">
+          <p className="text-[14px] text-white/70 leading-[1.8] mt-6 mb-10 max-w-[640px]">
             ArcMerch roadmap aligns with Arc testnet → mainnet transition and the Commerce Stack Challenge (Apr–Jul 2026). 
             Each phase builds on the previous, with clear milestones for grant evaluation.
           </p>
@@ -623,7 +623,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                 </div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {p.items.map((item) => (
-                    <li key={item} className="text-[13px] text-white/40 flex items-start gap-2">
+                    <li key={item} className="text-[13px] text-white/70 flex items-start gap-2">
                       <span className="w-1 h-1 rounded-full bg-white/15 mt-2 flex-shrink-0" />
                       {item}
                     </li>
@@ -645,7 +645,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                 <div key={item.title}>
                   <div className="text-[14px] font-medium text-white mb-1">{item.title}</div>
                   <div className="text-[11px] font-mono text-[#E9A13F]/40 mb-2">{item.time}</div>
-                  <p className="text-[13px] text-white/40 leading-relaxed">{item.desc}</p>
+                  <p className="text-[13px] text-white/70 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -669,7 +669,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
                   <span className="text-green-400">✓</span>
                   <span className="text-[15px] font-medium text-white">{item.title}</span>
                 </div>
-                <p className="text-[14px] text-white/40 leading-[1.6]">{item.desc}</p>
+                <p className="text-[14px] text-white/70 leading-[1.6]">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -681,7 +681,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
         <Section id="team" n="17" title="Team">
           <div className="rounded-lg border border-white/[0.06] p-6 mt-6">
             <div className="text-[20px] font-light text-white mb-2">Muhammad Iqbal</div>
-            <div className="text-[14px] text-white/40 mb-4">Founder & Sole Developer</div>
+            <div className="text-[14px] text-white/70 mb-4">Founder & Sole Developer</div>
             <a
               href="https://x.com/arconomist"
               target="_blank"
@@ -696,7 +696,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
         {/* Footer CTA */}
         <div className="mt-20 mb-10 rounded-xl border border-[#E9A13F]/10 bg-[#E9A13F]/[0.03] p-10 text-center">
           <div className="text-[28px] font-light text-white mb-3">Ready to build on Arc</div>
-          <p className="text-[15px] text-white/40 mb-6 max-w-[400px] mx-auto">
+          <p className="text-[15px] text-white/70 mb-6 max-w-[400px] mx-auto">
             ArcMerch bridges AI creativity, NFT ownership, and real-world commerce — all on Arc&apos;s stablecoin-native infrastructure.
           </p>
           <div className="flex gap-3 justify-center">

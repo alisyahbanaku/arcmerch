@@ -28,7 +28,7 @@ export default function ProfilePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(233,161,63,0.04)_0%,transparent_50%)] pointer-events-none" />
         <div className="relative mx-auto max-w-[600px] px-4 py-20 text-center">
           <h1 className="text-[32px] font-light text-white mb-4">Your Profile</h1>
-          <p className="text-[15px] text-white/40 mb-8">Sign in to view your wallet, designs, and creator status.</p>
+          <p className="text-[15px] text-white/70 mb-8">Sign in to view your wallet, designs, and creator status.</p>
           <button onClick={login} className="arc-btn text-[15px] px-8 py-3">
             Sign In
           </button>
@@ -82,10 +82,10 @@ export default function ProfilePage() {
                 {isVerified ? (
                   <span className="text-[11px] bg-[#E9A13F]/10 text-[#E9A13F] border border-[#E9A13F]/20 px-2 py-0.5 rounded font-medium">✓ VERIFIED CREATOR</span>
                 ) : (
-                  <span className="text-[11px] text-white/30 bg-white/5 px-2 py-0.5 rounded">Unverified</span>
+                  <span className="text-[11px] text-white/50 bg-white/5 px-2 py-0.5 rounded">Unverified</span>
                 )}
               </h1>
-              <p className="text-[13px] text-white/40 mt-1">
+              <p className="text-[13px] text-white/70 mt-1">
                 Joined via {twitterAccount ? "X (Twitter)" : googleAccount ? "Google" : "Email"}
               </p>
             </div>
@@ -93,13 +93,13 @@ export default function ProfilePage() {
 
           {/* Linked Accounts */}
           <div className="border-t border-white/[0.06] pt-4">
-            <p className="text-[11px] text-white/25 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <p className="text-[11px] text-white/50 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Link2 className="w-3 h-3" /> Linked Accounts
             </p>
             <div className="space-y-2">
               {user?.linkedAccounts?.map((account: any, i: number) => (
                 <div key={i} className="flex items-center gap-3 text-[13px]">
-                  <span className="w-5 text-center text-white/40">
+                  <span className="w-5 text-center text-white/70">
                     {account.type.includes("twitter") ? "𝕏" : account.type.includes("google") ? "G" : account.type.includes("email") ? "✉" : "⟠"}
                   </span>
                   <span className="text-white/60">
@@ -130,11 +130,11 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] text-[#E9A13F] bg-[#E9A13F]/10 border border-[#E9A13F]/20 px-2 py-0.5 rounded font-medium">PRIMARY</span>
-                  <span className="text-[11px] text-white/30">Embedded Wallet</span>
+                  <span className="text-[11px] text-white/50">Embedded Wallet</span>
                 </div>
                 <button
                   onClick={() => copyAddress(embeddedWallet.address)}
-                  className="text-white/40 hover:text-white transition-colors"
+                  className="text-white/70 hover:text-white transition-colors"
                 >
                   {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -145,7 +145,7 @@ export default function ProfilePage() {
                   href={`https://testnet.arcscan.app/address/${embeddedWallet.address}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[12px] text-white/40 hover:text-white flex items-center gap-1 transition-colors"
+                  className="text-[12px] text-white/70 hover:text-white flex items-center gap-1 transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" /> Explorer
                 </a>
@@ -162,18 +162,18 @@ export default function ProfilePage() {
           {/* External Wallets */}
           {externalWallets.length > 0 && (
             <div className="space-y-3">
-              <p className="text-[11px] text-white/25 uppercase tracking-wider">External Wallets</p>
+              <p className="text-[11px] text-white/50 uppercase tracking-wider">External Wallets</p>
               {externalWallets.map((w, i) => (
                 <div key={i} className="rounded-lg border border-white/10 p-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-white/30 bg-white/5 px-1.5 py-0.5 rounded">{w.walletClientType}</span>
+                    <span className="text-[11px] text-white/50 bg-white/5 px-1.5 py-0.5 rounded">{w.walletClientType}</span>
                     <span className="font-mono text-[13px] text-white/60">{shortAddr(w.address)}</span>
                   </div>
                   <a
                     href={`https://testnet.arcscan.app/address/${w.address}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/30 hover:text-white transition-colors"
+                    className="text-white/50 hover:text-white transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -184,7 +184,7 @@ export default function ProfilePage() {
 
           {!embeddedWallet && wallets.length === 0 && (
             <div className="text-center py-6">
-              <p className="text-[14px] text-white/40">Wallet is being created...</p>
+              <p className="text-[14px] text-white/70">Wallet is being created...</p>
               <div className="w-6 h-6 border-2 border-[#E9A13F] border-t-transparent rounded-full animate-spin mx-auto mt-3" />
             </div>
           )}
@@ -196,7 +196,7 @@ export default function ProfilePage() {
             <Shield className="w-5 h-5 text-[#E9A13F]" />
             <h2 className="text-[18px] font-light text-white">Security</h2>
           </div>
-          <div className="space-y-3 text-[13px] text-white/45">
+          <div className="space-y-3 text-[13px] text-white/70">
             <p>• Your embedded wallet is secured by Privy — keys are split across multiple parties</p>
             <p>• Export your seed phrase anytime from this page</p>
             <p>• X verification proves your creator identity on the marketplace</p>

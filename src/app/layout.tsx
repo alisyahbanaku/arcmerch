@@ -42,7 +42,7 @@ function Footer() {
               <Image src="/logo.jpg" alt="ArcMerch" width={22} height={22} className="rounded" />
               <span className="text-[15px] font-medium text-white">ArcMerch</span>
             </div>
-            <p className="text-sm sm:text-[14px] text-white/40 leading-relaxed max-w-[400px]">
+            <p className="text-sm sm:text-[14px] text-white/70 leading-relaxed max-w-[400px]">
               AI-powered merchandise marketplace on Arc blockchain. 
               Create designs with AI, mint as NFTs, and redeem physical products — all settled in USDC.
             </p>
@@ -61,7 +61,7 @@ function Footer() {
                 { href: "/profile", label: "My Profile" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm sm:text-[14px] text-white/40 hover:text-white transition-colors duration-150">
+                  <Link href={link.href} className="text-sm sm:text-[14px] text-white/70 hover:text-white transition-colors duration-150">
                     {link.label}
                   </Link>
                 </li>
@@ -78,7 +78,7 @@ function Footer() {
                 { href: "https://testnet.arcscan.app", label: "Explorer" },
               ].map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-[14px] text-white/40 hover:text-white transition-colors duration-150">
+                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-[14px] text-white/70 hover:text-white transition-colors duration-150">
                     {link.label}
                   </a>
                 </li>
@@ -88,8 +88,8 @@ function Footer() {
         </div>
 
         <div className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-          <span className="text-xs sm:text-[13px] text-white/40">© 2026 ArcMerch</span>
-          <span className="text-xs sm:text-[13px] text-white/40 text-center sm:text-right">Built on Arc — Circle&apos;s L1 where USDC is native gas</span>
+          <span className="text-xs sm:text-[13px] text-white/70">© 2026 ArcMerch</span>
+          <span className="text-xs sm:text-[13px] text-white/70 text-center sm:text-right">Built on Arc — Circle&apos;s L1 where USDC is native gas</span>
         </div>
       </div>
     </footer>

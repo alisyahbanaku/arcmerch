@@ -40,7 +40,7 @@ export default function BridgePage() {
         <h1 className="text-[28px] sm:text-[36px] md:text-[56px] font-light tracking-[-0.02em] text-white mb-3">
           Bridge USDC
         </h1>
-        <p className="text-[16px] text-white/40 mb-12">
+        <p className="text-[16px] text-white/70 mb-12">
           Transfer USDC from any chain to Arc Testnet. Your embedded wallet receives the funds.
         </p>
 
@@ -51,7 +51,7 @@ export default function BridgePage() {
               <Globe className="w-5 h-5 text-[#E9A13F]" />
               <span className="text-[15px] font-medium text-white">Sign in to bridge</span>
             </div>
-            <p className="text-[13px] text-white/40 mb-4">
+            <p className="text-[13px] text-white/70 mb-4">
               Sign in to get your embedded wallet and bridge USDC to Arc Testnet.
             </p>
             <button onClick={login} className="arc-btn text-sm px-6 py-2.5">
@@ -79,7 +79,7 @@ export default function BridgePage() {
                   href={`https://testnet.arcscan.app/address/${address}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[12px] text-white/40 hover:text-white flex items-center gap-1"
+                  className="text-[12px] text-white/70 hover:text-white flex items-center gap-1"
                 >
                   <ExternalLink className="w-3 h-3" /> Explorer
                 </a>
@@ -112,7 +112,7 @@ export default function BridgePage() {
                   </div>
 
                   <div>
-                    <label className="text-[13px] text-white/40 mb-3 block">Amount (USDC)</label>
+                    <label className="text-[13px] text-white/70 mb-3 block">Amount (USDC)</label>
                     <input
                       type="number"
                       value={amount}
@@ -144,7 +144,7 @@ export default function BridgePage() {
                     Continue <ArrowRight className="h-4 w-4" />
                   </button>
 
-                  <p className="text-[11px] text-white/30 text-center">
+                  <p className="text-[11px] text-white/50 text-center">
                     Bridge powered by Circle CCTP • Funds arrive in ~30 seconds
                   </p>
                 </div>
@@ -155,23 +155,23 @@ export default function BridgePage() {
                   <h3 className="text-[18px] font-light text-white">Confirm bridge</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">From</span>
+                      <span className="text-[13px] text-white/70">From</span>
                       <span className="text-[13px] text-white">{selectedChain?.icon} {selectedChain?.name}</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">To</span>
+                      <span className="text-[13px] text-white/70">To</span>
                       <span className="text-[13px] text-white">🔵 Arc Testnet</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">Amount</span>
+                      <span className="text-[13px] text-white/70">Amount</span>
                       <span className="mono text-[13px] text-white">{amount} USDC</span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-white/[0.06]">
-                      <span className="text-[13px] text-white/40">Receive at</span>
+                      <span className="text-[13px] text-white/70">Receive at</span>
                       <span className="mono text-[12px] text-white/60">{address ? `${address.slice(0,10)}...${address.slice(-4)}` : ""}</span>
                     </div>
                     <div className="flex justify-between py-3">
-                      <span className="text-[13px] text-white/40">Est. time</span>
+                      <span className="text-[13px] text-white/70">Est. time</span>
                       <span className="text-[13px] text-white">~30 seconds</span>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export default function BridgePage() {
                 <div className="text-center py-10">
                   <Loader2 className="w-12 h-12 text-[#E9A13F] animate-spin mx-auto mb-6" />
                   <h3 className="text-[20px] font-light text-white mb-2">Bridging...</h3>
-                  <p className="text-[14px] text-white/40">
+                  <p className="text-[14px] text-white/70">
                     Transferring {amount} USDC from {selectedChain?.name} to Arc Testnet
                   </p>
                 </div>
@@ -206,7 +206,7 @@ export default function BridgePage() {
                     <Check className="w-8 h-8 text-green-400" />
                   </div>
                   <h3 className="text-[20px] font-light text-white mb-2">Bridge Complete!</h3>
-                  <p className="text-[14px] text-white/40 mb-6">{amount} USDC bridged to Arc Testnet</p>
+                  <p className="text-[14px] text-white/70 mb-6">{amount} USDC bridged to Arc Testnet</p>
                   <div className="flex gap-3 max-w-[320px] mx-auto">
                     <button onClick={() => { setStep("select"); setAmount(""); }} className="flex-1 btn-outline justify-center">
                       Bridge More
@@ -226,17 +226,17 @@ export default function BridgePage() {
           <div className="rounded-xl border border-white/10 p-5">
             <Zap className="w-5 h-5 text-[#E9A13F] mb-3" />
             <div className="text-[14px] font-medium text-white mb-1">Instant</div>
-            <p className="text-[12px] text-white/40">Circle CCTP enables near-instant cross-chain transfers</p>
+            <p className="text-[12px] text-white/70">Circle CCTP enables near-instant cross-chain transfers</p>
           </div>
           <div className="rounded-xl border border-white/10 p-5">
             <Shield className="w-5 h-5 text-[#E9A13F] mb-3" />
             <div className="text-[14px] font-medium text-white mb-1">Secure</div>
-            <p className="text-[12px] text-white/40">Native USDC — no wrapped tokens, no bridge risk</p>
+            <p className="text-[12px] text-white/70">Native USDC — no wrapped tokens, no bridge risk</p>
           </div>
           <div className="rounded-xl border border-white/10 p-5">
             <Globe className="w-5 h-5 text-[#E9A13F] mb-3" />
             <div className="text-[14px] font-medium text-white mb-1">Multi-Chain</div>
-            <p className="text-[12px] text-white/40">Bridge from Ethereum, Base, Arbitrum, Optimism</p>
+            <p className="text-[12px] text-white/70">Bridge from Ethereum, Base, Arbitrum, Optimism</p>
           </div>
         </div>
       </div>
