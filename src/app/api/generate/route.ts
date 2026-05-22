@@ -73,25 +73,57 @@ export async function GET(request: NextRequest) {
   const enhancedPrompt = enhancePrompt(prompt, style, product);
   const encodedPrompt = encodeURIComponent(enhancedPrompt);
 
-  const pollinationsUrl = `${POLLINATIONS_BASE}/${encodedPrompt}?width=${width}&height=${height}&model=flux&nologo=true&seed=${seed}`;
-
   try {
-    const response = await fetch(pollinationsUrl, {
-      headers: {
-        "User-Agent": "ArcMerch/1.0",
-      },
-      // Cache for 1 hour to avoid re-generating same prompt
-      next: { revalidate: 3600 },
-    });
+    // Try up to 3 times with different seeds if image is too small (error page)
+    let imageBuffer: ArrayBuffer | null = null;
+    let attempts = 0;
+    const maxAttempts = 3;
+    let currentSeed = parseInt(seed);
 
-    if (!response.ok) {
+    while (attempts < maxAttempts) {
+      attempts++;
+      const pollinationsUrl = `${POLLINATIONS_BASE}/${encodedPrompt}?width=${width}&height=${height}&model=flux&nologo=true&seed=${currentSeed}`;
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout
+
+      try {
+        const response = await fetch(pollinationsUrl, {
+          headers: { "User-Agent": "ArcMerch/1.0" },
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+
+        if (!response.ok) {
+          currentSeed = Math.floor(Math.random() * 100000);
+          continue;
+        }
+
+        const buffer = await response.arrayBuffer();
+
+        // Check if response is a real image (>5KB) not an error page
+        if (buffer.byteLength > 5000) {
+          imageBuffer = buffer;
+          break;
+        }
+
+        // Too small = likely error, retry with different seed
+        currentSeed = Math.floor(Math.random() * 100000);
+      } catch (fetchErr: any) {
+        clearTimeout(timeout);
+        if (fetchErr.name === "AbortError") {
+          console.error(`Pollinations timeout (attempt ${attempts})`);
+        }
+        currentSeed = Math.floor(Math.random() * 100000);
+      }
+    }
+
+    if (!imageBuffer) {
       return NextResponse.json(
-        { error: "Image generation failed. Try again." },
+        { error: "Image generation failed after multiple attempts. Try a different prompt or style." },
         { status: 502 }
       );
     }
-
-    const imageBuffer = await response.arrayBuffer();
 
     return new NextResponse(imageBuffer, {
       headers: {

@@ -106,7 +106,6 @@ export default function CreatePage() {
       
       setGeneratedImageUrl(imageUrl);
       setGenerateProgress(100);
-      setMetadataUri(`ipfs://QmArcMerch/${Date.now()}`);
       setStep(2);
     } catch (err: any) {
       setGenerateError(err.message || "Generation failed. Try again.");
@@ -147,19 +146,43 @@ export default function CreatePage() {
     approve(priceRaw);
   };
 
-  const handleMint = () => {
+  const handleMint = async () => {
     if (!address || !priceRaw) return;
 
-    // In production, this would upload to IPFS first
-    const uri = metadataUri || `ipfs://QmArcMerch/${Date.now()}`;
+    try {
+      // Upload image + metadata to IPFS (or fallback)
+      const formData = new FormData();
+      formData.append("name", designTitle || prompt.slice(0, 50) || "ArcMerch Design");
+      formData.append("description", prompt || "AI-generated merchandise on ArcMerch");
+      formData.append("productType", product);
+      formData.append("style", style);
+      formData.append("edition", edition);
+      formData.append("creator", address);
 
-    mint({
-      uri,
-      productType: product,
-      designTitle: designTitle || prompt.slice(0, 50),
-      maxEditions: parseInt(edition) || 10,
-      to: address,
-    });
+      if (uploadedFile) {
+        formData.append("image", uploadedFile);
+      } else if (generatedImageUrl) {
+        formData.append("imageUrl", generatedImageUrl);
+      }
+
+      const uploadRes = await fetch("/api/upload", { method: "POST", body: formData });
+      const uploadData = await uploadRes.json();
+
+      if (!uploadRes.ok) throw new Error(uploadData.error || "Upload failed");
+
+      const uri = uploadData.metadataUri;
+      setMetadataUri(uri);
+
+      mint({
+        uri,
+        productType: product,
+        designTitle: designTitle || prompt.slice(0, 50),
+        maxEditions: parseInt(edition) || 10,
+        to: address,
+      });
+    } catch (err: any) {
+      console.error("Mint flow error:", err);
+    }
   };
 
   const canProceed = mode === "ai" ? prompt.trim() : uploadedFile;

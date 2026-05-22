@@ -37,12 +37,51 @@ export default function MarketplacePage() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("Recent");
   const [burningId, setBurningId] = useState<number | null>(null);
+  const [onChainNFTs, setOnChainNFTs] = useState<any[]>([]);
+  const [loadingNFTs, setLoadingNFTs] = useState(true);
+
+  // Fetch on-chain NFTs
+  useEffect(() => {
+    async function fetchNFTs() {
+      try {
+        const res = await fetch("/api/nfts");
+        if (res.ok) {
+          const data = await res.json();
+          setOnChainNFTs(data.nfts || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch on-chain NFTs:", err);
+      } finally {
+        setLoadingNFTs(false);
+      }
+    }
+    fetchNFTs();
+  }, []);
 
   useEffect(() => {
     if (address) fetchBalances(address);
   }, [address, fetchBalances]);
 
-  const filtered = ALL_DESIGNS.filter((d) => {
+  // Merge featured designs + on-chain NFTs
+  const allDesigns = [
+    ...ALL_DESIGNS,
+    ...onChainNFTs.map((nft: any) => ({
+      id: nft.tokenId,
+      title: nft.name || nft.designTitle || `ArcMerch #${nft.tokenId}`,
+      creator: nft.creator ? `${nft.creator.slice(0, 6)}...${nft.creator.slice(-4)}` : "@unknown",
+      price: "5",
+      edition: `${nft.mintedEditions}/${nft.maxEditions}`,
+      product: nft.productType || "T-Shirt",
+      burned: 0,
+      image: nft.image || null,
+      bgColor: "#1A1A1A",
+      badge: "ON-CHAIN",
+      verified: true,
+      description: nft.description || "",
+    })),
+  ];
+
+  const filtered = allDesigns.filter((d) => {
     const matchSearch = d.title.toLowerCase().includes(search.toLowerCase()) || d.creator.toLowerCase().includes(search.toLowerCase());
     const matchProduct = activeFilter === "All" || d.product === activeFilter;
     return matchSearch && matchProduct;
