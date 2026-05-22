@@ -67,9 +67,8 @@ providers.push(
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: providers as any,
-  pages: {
-    signIn: "/",
-  },
+  // Don't set custom pages — let NextAuth handle OAuth redirects internally
+  // pages: { signIn: "/" },  // ← CAUSES BUG with providerId in v5 beta
   callbacks: {
     async jwt({ token, user, account }: { token: any; user?: any; account?: any }) {
       if (user) {
