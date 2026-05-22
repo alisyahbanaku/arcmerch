@@ -526,7 +526,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
         <Section id="stack" n="13" title="Technical Stack">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {[
-              { title: "Frontend", items: ["Next.js 14 (App Router)", "Arc App Kit", "wagmi 2.x + viem 2.x", "TailwindCSS 3.x"] },
+              { title: "Frontend", items: ["Next.js 14 (App Router)", "Arc App Kit", "viem 2.x", "TailwindCSS 3.x"] },
               { title: "Backend", items: ["Node.js 20 LTS", "PostgreSQL 16", "Redis 7.x + Bull", "IPFS (Kubo 0.28)"] },
               { title: "Blockchain", items: ["Solidity 0.8.20", "Foundry + Hardhat", "OpenZeppelin 5.x", "USDC (native gas)"] },
               { title: "External Services", items: ["DALL-E 3 / SDXL", "Printful API", "X API v2 (OAuth)", "Pinata (IPFS pinning)"] },
@@ -587,7 +587,7 @@ AI Gen    ERC-721  Market   Buy/Sell  Redeem   Ship`}</CodeBlock>
               },
               { 
                 phase: "Phase 2", title: "Smart Contracts", time: "Juni 2026", status: "NEXT",
-                items: ["ERC-721 contract di Arc Testnet", "Mint NFT dari frontend (wagmi + viem)", "Metadata onchain (IPFS/Arweave)", "USDC sebagai payment token", "Verify contract di arcscan.app"] 
+                items: ["ERC-721 contract di Arc Testnet", "Mint NFT dari frontend (viem)", "Metadata onchain (IPFS/Arweave)", "USDC sebagai payment token", "Verify contract di arcscan.app"] 
               },
               { 
                 phase: "Phase 3", title: "Burn-to-Redeem", time: "Juli 2026", status: "",
