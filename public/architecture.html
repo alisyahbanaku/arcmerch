@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 40px; background: #000; font-family: 'DM Sans', sans-serif; }
+  svg { width: 100%; max-width: 1200px; margin: 0 auto; display: block; }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0A0A0A"/>
+  
+  <!-- Title -->
+  <text x="600" y="45" text-anchor="middle" fill="#E9A13F" font-size="24" font-weight="300" font-family="DM Sans, sans-serif">{ ARCMERCH ARCHITECTURE }</text>
+  <text x="600" y="70" text-anchor="middle" fill="#ffffff99" font-size="12" font-family="DM Sans, sans-serif">AI-Powered NFT Merchandise on Arc Blockchain — Agentic Commerce Flow</text>
+
+  <!-- ═══ LAYER 1: Users ═══ -->
+  <text x="60" y="115" fill="#E9A13F" font-size="11" font-family="monospace">USERS</text>
+  
+  <!-- Buyer -->
+  <rect x="60" y="125" width="160" height="70" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="140" y="150" text-anchor="middle" fill="#fff" font-size="13" font-family="DM Sans">👤 Buyer</text>
+  <text x="140" y="168" text-anchor="middle" fill="#ffffff99" font-size="10" font-family="DM Sans">Browse / Buy / Burn</text>
+  <text x="140" y="183" text-anchor="middle" fill="#E9A13F" font-size="9" font-family="monospace">Privy Wallet</text>
+
+  <!-- Creator -->
+  <rect x="260" y="125" width="160" height="70" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="340" y="150" text-anchor="middle" fill="#fff" font-size="13" font-family="DM Sans">🎨 Creator</text>
+  <text x="340" y="168" text-anchor="middle" fill="#ffffff99" font-size="10" font-family="DM Sans">Design / Mint / Earn</text>
+  <text x="340" y="183" text-anchor="middle" fill="#E9A13F" font-size="9" font-family="monospace">Privy Wallet</text>
+
+  <!-- Printer -->
+  <rect x="460" y="125" width="160" height="70" rx="8" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="540" y="150" text-anchor="middle" fill="#fff" font-size="13" font-family="DM Sans">🖨️ Printer</text>
+  <text x="540" y="168" text-anchor="middle" fill="#ffffff99" font-size="10" font-family="DM Sans">Fulfill / Ship / Earn</text>
+  <text x="540" y="183" text-anchor="middle" fill="#E9A13F" font-size="9" font-family="monospace">ERC-8183 Agent</text>
+
+  <!-- AI Agent -->
+  <rect x="660" y="125" width="160" height="70" rx="8" fill="#1A1A1A" stroke="#E9A13F" stroke-width="1.5"/>
+  <text x="740" y="150" text-anchor="middle" fill="#fff" font-size="13" font-family="DM Sans">🤖 AI Design Agent</text>
+  <text x="740" y="168" text-anchor="middle" fill="#ffffff99" font-size="10" font-family="DM Sans">Generate / Iterate</text>
+  <text x="740" y="183" text-anchor="middle" fill="#E9A13F" font-size="9" font-family="monospace">ERC-8004 Identity</text>
+
+  <!-- ═══ LAYER 2: Frontend ═══ -->
+  <text x="60" y="235" fill="#E9A13F" font-size="11" font-family="monospace">FRONTEND</text>
+  
+  <rect x="60" y="245" width="760" height="65" rx="8" fill="#111" stroke="#E9A13F33" stroke-width="1"/>
+  <text x="80" y="268" fill="#fff" font-size="13" font-family="DM Sans">Next.js 16 + TypeScript + Tailwind</text>
+  <text x="80" y="288" fill="#ffffff99" font-size="10" font-family="DM Sans">Marketplace • Create • Ecosystem • Bridge • Profile • Merchpaper</text>
+  <text x="80" y="300" fill="#ffffff66" font-size="9" font-family="monospace">Privy Auth (Twitter, Google, Email, Wallet) → Embedded Wallet → viem</text>
+
+  <!-- ═══ LAYER 3: API Routes ═══ -->
+  <text x="60" y="350" fill="#E9A13F" font-size="11" font-family="monospace">API LAYER</text>
+
+  <rect x="60" y="360" width="145" height="55" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="132" y="383" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans">/api/generate</text>
+  <text x="132" y="400" text-anchor="middle" fill="#ffffff99" font-size="9" font-family="DM Sans">AI Image Gen</text>
+
+  <rect x="220" y="360" width="145" height="55" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="292" y="383" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans">/api/upload</text>
+  <text x="292" y="400" text-anchor="middle" fill="#ffffff99" font-size="9" font-family="DM Sans">IPFS Metadata</text>
+
+  <rect x="380" y="360" width="145" height="55" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="452" y="383" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans">/api/nfts</text>
+  <text x="452" y="400" text-anchor="middle" fill="#ffffff99" font-size="9" font-family="DM Sans">On-chain Query</text>
+
+  <rect x="540" y="360" width="145" height="55" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="612" y="383" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans">/api/nanopay</text>
+  <text x="612" y="400" text-anchor="middle" fill="#E9A13F" font-size="9" font-family="DM Sans">Micro Payments</text>
+
+  <rect x="700" y="360" width="120" height="55" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+  <text x="760" y="383" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans">/api/debug</text>
+  <text x="760" y="400" text-anchor="middle" fill="#ffffff99" font-size="9" font-family="DM Sans">Health Check</text>
+
+  <!-- ═══ LAYER 4: Arc Blockchain ═══ -->
+  <text x="60" y="460" fill="#E9A13F" font-size="11" font-family="monospace">ARC BLOCKCHAIN (Testnet · Chain ID 5042002)</text>
+
+  <!-- ArcMerch NFT -->
+  <rect x="60" y="470" width="180" height="80" rx="8" fill="#1A1A1A" stroke="#E9A13F" stroke-width="1.5"/>
+  <text x="150" y="495" text-anchor="middle" fill="#E9A13F" font-size="12" font-family="DM Sans" font-weight="500">ArcMerchNFT</text>
+  <text x="150" y="512" text-anchor="middle" fill="#fff" font-size="9" font-family="monospace">ERC-721 + Burn</text>
+  <text x="150" y="528" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="monospace">0x2788...4162</text>
+  <text x="150" y="542" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">mint · burn · royalties</text>
+
+  <!-- USDC -->
+  <rect x="260" y="470" width="180" height="80" rx="8" fill="#1A1A1A" stroke="#2775CA" stroke-width="1.5"/>
+  <text x="350" y="495" text-anchor="middle" fill="#2775CA" font-size="12" font-family="DM Sans" font-weight="500">USDC</text>
+  <text x="350" y="512" text-anchor="middle" fill="#fff" font-size="9" font-family="monospace">ERC-20 (6 decimals)</text>
+  <text x="350" y="528" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="monospace">0x3600...0000</text>
+  <text x="350" y="542" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">approve · transfer · permit2</text>
+
+  <!-- Identity Registry -->
+  <rect x="460" y="470" width="180" height="80" rx="8" fill="#1A1A1A" stroke="#9F72FF" stroke-width="1.5"/>
+  <text x="550" y="495" text-anchor="middle" fill="#9F72FF" font-size="12" font-family="DM Sans" font-weight="500">IdentityRegistry</text>
+  <text x="550" y="512" text-anchor="middle" fill="#fff" font-size="9" font-family="monospace">ERC-8004</text>
+  <text x="550" y="528" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="monospace">0x8004...BD9e</text>
+  <text x="550" y="542" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">register · verify · reputation</text>
+
+  <!-- Agentic Commerce -->
+  <rect x="660" y="470" width="180" height="80" rx="8" fill="#1A1A1A" stroke="#00D4AA" stroke-width="1.5"/>
+  <text x="750" y="495" text-anchor="middle" fill="#00D4AA" font-size="12" font-family="DM Sans" font-weight="500">AgenticCommerce</text>
+  <text x="750" y="512" text-anchor="middle" fill="#fff" font-size="9" font-family="monospace">ERC-8183</text>
+  <text x="750" y="528" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="monospace">0x0747...4583</text>
+  <text x="750" y="542" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">createJob · fund · complete</text>
+
+  <!-- ═══ LAYER 5: Flow ═══ -->
+  <text x="60" y="595" fill="#E9A13F" font-size="11" font-family="monospace">AGENTIC COMMERCE FLOW</text>
+
+  <!-- Flow boxes -->
+  <rect x="60" y="605" width="130" height="50" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="125" y="625" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans" font-weight="500">1. AI Generate</text>
+  <text x="125" y="642" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="DM Sans">Pollinations + Agent</text>
+
+  <text x="200" y="632" fill="#E9A13F" font-size="14">→</text>
+
+  <rect x="215" y="605" width="130" height="50" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="280" y="625" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans" font-weight="500">2. Mint NFT</text>
+  <text x="280" y="642" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="DM Sans">USDC payment + ERC-721</text>
+
+  <text x="355" y="632" fill="#E9A13F" font-size="14">→</text>
+
+  <rect x="370" y="605" width="130" height="50" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="435" y="625" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans" font-weight="500">3. Burn NFT</text>
+  <text x="435" y="642" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="DM Sans">Redeem for physical</text>
+
+  <text x="510" y="632" fill="#E9A13F" font-size="14">→</text>
+
+  <rect x="525" y="605" width="130" height="50" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="590" y="625" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans" font-weight="500">4. Escrow Job</text>
+  <text x="590" y="642" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="DM Sans">ERC-8183 USDC lock</text>
+
+  <text x="665" y="632" fill="#E9A13F" font-size="14">→</text>
+
+  <rect x="680" y="605" width="130" height="50" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="745" y="625" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans" font-weight="500">5. Fulfill + Ship</text>
+  <text x="745" y="642" text-anchor="middle" fill="#ffffff99" font-size="8" font-family="DM Sans">Printer delivers</text>
+
+  <!-- ═══ LAYER 6: External Services ═══ -->
+  <text x="60" y="700" fill="#E9A13F" font-size="11" font-family="monospace">EXTERNAL SERVICES</text>
+
+  <rect x="60" y="710" width="120" height="45" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="120" y="733" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">Pollinations.ai</text>
+  <text x="120" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">AI Image Gen (free)</text>
+
+  <rect x="200" y="710" width="120" height="45" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="260" y="733" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">Pinata IPFS</text>
+  <text x="260" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">Metadata Storage</text>
+
+  <rect x="340" y="710" width="120" height="45" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="400" y="733" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">Privy</text>
+  <text x="400" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">Auth + Wallets</text>
+
+  <rect x="480" y="710" width="120" height="45" rx="6" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="540" y="733" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">Vercel</text>
+  <text x="540" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">Hosting + Edge</text>
+
+  <rect x="620" y="710" width="120" height="45" rx="6" fill="#111" stroke="#2775CA" stroke-width="1"/>
+  <text x="680" y="733" text-anchor="middle" fill="#2775CA" font-size="10" font-family="DM Sans">Circle CCTP</text>
+  <text x="680" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">Cross-chain Bridge</text>
+
+  <rect x="760" y="710" width="120" height="45" rx="6" fill="#111" stroke="#E9A13F" stroke-width="1"/>
+  <text x="820" y="733" text-anchor="middle" fill="#E9A13F" font-size="10" font-family="DM Sans">Nanopayments</text>
+  <text x="820" y="747" text-anchor="middle" fill="#ffffff66" font-size="8" font-family="DM Sans">Micro AI fees</text>
+
+  <!-- Connection lines -->
+  <!-- Users to Frontend -->
+  <line x1="140" y1="195" x2="140" y2="245" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="340" y1="195" x2="340" y2="245" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="540" y1="195" x2="540" y2="245" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="740" y1="195" x2="740" y2="245" stroke="#E9A13F44" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Frontend to API -->
+  <line x1="440" y1="310" x2="440" y2="360" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- API to Blockchain -->
+  <line x1="132" y1="415" x2="150" y2="470" stroke="#E9A13F44" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="292" y1="415" x2="350" y2="470" stroke="#2775CA44" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="452" y1="415" x2="550" y2="470" stroke="#9F72FF44" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="612" y1="415" x2="750" y2="470" stroke="#00D4AA44" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Legend -->
+  <rect x="880" y="125" width="280" height="200" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="900" y="148" fill="#E9A13F" font-size="11" font-family="monospace">CIRCLE PRODUCTS USED</text>
+  
+  <circle cx="910" cy="170" r="4" fill="#2775CA"/>
+  <text x="920" y="174" fill="#fff" font-size="10" font-family="DM Sans">USDC — Settlement rail</text>
+  
+  <circle cx="910" cy="195" r="4" fill="#9F72FF"/>
+  <text x="920" y="199" fill="#fff" font-size="10" font-family="DM Sans">ERC-8004 — Agent Identity</text>
+  
+  <circle cx="910" cy="220" r="4" fill="#00D4AA"/>
+  <text x="920" y="224" fill="#fff" font-size="10" font-family="DM Sans">ERC-8183 — Job Settlement</text>
+  
+  <circle cx="910" cy="245" r="4" fill="#E9A13F"/>
+  <text x="920" y="249" fill="#fff" font-size="10" font-family="DM Sans">Nanopayments — AI micro fees</text>
+  
+  <circle cx="910" cy="270" r="4" fill="#fff"/>
+  <text x="920" y="274" fill="#fff" font-size="10" font-family="DM Sans">CCTP + Bridge Kit — Cross-chain</text>
+
+  <circle cx="910" cy="295" r="4" fill="#4A90D9"/>
+  <text x="920" y="299" fill="#fff" font-size="10" font-family="DM Sans">Circle Wallets (via Privy)</text>
+
+  <!-- Track badge -->
+  <rect x="880" y="340" width="280" height="40" rx="6" fill="#E9A13F22" stroke="#E9A13F" stroke-width="1"/>
+  <text x="1020" y="365" text-anchor="middle" fill="#E9A13F" font-size="11" font-family="DM Sans" font-weight="500">Track 4: Best Agentic Economy on Arc</text>
+
+</svg>
+</body>
+</html>
