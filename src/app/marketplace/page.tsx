@@ -12,21 +12,10 @@ import { useUnifiedBalance } from "@/hooks/useAppKit";
 // Featured collection: Arc ecosystem logo merch (with product mockups)
 const FEATURED_DESIGNS = [
   { id: 101, title: "Arc Logo Tee", creator: "@arcmerch", price: "25", edition: "1/100", product: "T-Shirt", burned: 0, image: "/mockups/arc-tee-mockup.jpg", bgColor: "#0A0A0A", badge: "OFFICIAL", verified: true, description: "The Arc blockchain logo on premium black tee. Minimalist arch mark." },
-  { id: 102, title: "Circle × Arc Hoodie", creator: "@arcmerch", price: "45", edition: "1/50", product: "Hoodie", burned: 0, image: "/mockups/circle-hoodie-mockup.jpg", bgColor: "#1A1030", badge: "COLLAB", verified: true, description: "Circle logo on deep purple hoodie. Stablecoin-native drip." },
-  { id: 103, title: "ArcMerch OG Cap", creator: "@arconomist", price: "20", edition: "1/25", product: "Cap", burned: 0, image: "/mockups/arcmerch-cap-mockup.jpg", bgColor: "#1A1A1A", badge: "GENESIS", verified: true, description: "The original ArcMerch logo. First-ever merch NFT on Arc." },
-  { id: 104, title: "Arc Icon Sticker Pack", creator: "@arcmerch", price: "5", edition: "1/500", product: "Sticker", burned: 0, image: "/mockups/arc-sticker-mockup.jpg", bgColor: "#111111", badge: "NEW", verified: true, description: "Minimal arch icon sticker. Laptop, phone, everywhere." },
-  { id: 105, title: "Circle Payments Poster", creator: "@arcmerch", price: "35", edition: "1/20", product: "Poster", burned: 0, image: "/mockups/circle-poster-mockup.jpg", bgColor: "#0D0A15", badge: "LIMITED", verified: true, description: "Circle full-stack platform poster. A3 matte print." },
-  { id: 106, title: "Arc Builder Hoodie", creator: "@arconomist", price: "50", edition: "1/10", product: "Hoodie", burned: 0, image: "/mockups/arc-builder-hoodie-mockup.jpg", bgColor: "#0A0A0A", badge: "RARE", verified: true, description: "For builders on Arc. Back print: {BUILD ON ARC}." },
 ];
 
 const ALL_DESIGNS = [
   ...FEATURED_DESIGNS,
-  { id: 1, title: "Neon Samurai", creator: "@arconomist", price: "25", edition: "1/10", product: "T-Shirt", burned: 3, image: null, bgColor: "#9F72FF", emoji: "⚔️", badge: null, verified: true, description: "AI-generated samurai in neon style." },
-  { id: 2, title: "Arc Galaxy", creator: "@builder0x", price: "30", edition: "1/50", product: "Hoodie", burned: 12, image: null, bgColor: "#2F578C", emoji: "🌌", badge: null, verified: true, description: "Galaxy pattern inspired by Arc ecosystem." },
-  { id: 3, title: "USDC Waves", creator: "@stabledev", price: "15", edition: "1/100", product: "Cap", burned: 45, image: null, bgColor: "#2A9D8F", emoji: "🌊", badge: null, verified: false, description: "Ocean waves in stablecoin blue." },
-  { id: 4, title: "Cyber Punk Cat", creator: "@nekoartist", price: "20", edition: "1/25", product: "T-Shirt", burned: 8, image: null, bgColor: "#E9A13F", emoji: "🐱", badge: null, verified: true, description: "Cyberpunk cat with amber glow." },
-  { id: 5, title: "Blockchain City", creator: "@web3painter", price: "50", edition: "1/10", product: "Poster", burned: 2, image: null, bgColor: "#E76F51", emoji: "🏙️", badge: null, verified: false, description: "Futuristic city powered by blockchain." },
-  { id: 6, title: "DeFi Dreams", creator: "@cryptomind", price: "35", edition: "1/20", product: "Hoodie", burned: 7, image: null, bgColor: "#7B68EE", emoji: "💭", badge: null, verified: true, description: "Abstract DeFi visualization." },
 ];
 
 const FILTERS = ["All", "T-Shirt", "Hoodie", "Cap", "Sticker", "Poster"];
