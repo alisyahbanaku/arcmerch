@@ -12,6 +12,7 @@ import { useUnifiedBalance } from "@/hooks/useAppKit";
 // Featured collection: Arc ecosystem logo merch (with product mockups)
 const FEATURED_DESIGNS = [
   { id: 101, title: "Arc Logo Tee", creator: "@arcmerch", price: "25", edition: "1/100", product: "T-Shirt", burned: 0, image: "/mockups/arc-tee-mockup.jpg", bgColor: "#0A0A0A", badge: "OFFICIAL", verified: true, description: "The Arc blockchain logo on premium black tee. Minimalist arch mark." },
+  { id: 102, title: "Arc Cap", creator: "@arcmerch", price: "20", edition: "1/50", product: "Cap", burned: 0, image: "/mockups/arc-cap-mockup.jpg", bgColor: "#0A0A0A", badge: "OFFICIAL", verified: true, description: "Arc blockchain logo on premium black cap. Clean minimal design." },
 ];
 
 const ALL_DESIGNS = [
