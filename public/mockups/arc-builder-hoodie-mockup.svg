@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#0A0A0A"/>
+  <!-- Hoodie shape -->
+  <path d="M280 130 Q400 100 520 130 Q540 140 540 160 L540 170 L600 180 L620 200 L640 380 L600 390 L580 220 L580 500 L220 500 L220 220 L200 390 L160 380 L180 200 L200 180 L260 170 L260 160 Q260 140 280 130Z" fill="#151515" stroke="#2A2A2A" stroke-width="1.5"/>
+  <!-- Hood -->
+  <path d="M280 130 Q400 100 520 130 Q530 110 500 90 Q400 60 300 90 Q270 110 280 130Z" fill="#111" stroke="#2A2A2A" stroke-width="1"/>
+  <!-- Pocket -->
+  <rect x="310" y="380" width="180" height="60" rx="8" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
+  <!-- Strings -->
+  <line x1="370" y1="160" x2="370" y2="240" stroke="#555" stroke-width="1.5"/>
+  <line x1="430" y1="160" x2="430" y2="240" stroke="#555" stroke-width="1.5"/>
+  <!-- Arc logo on chest -->
+  <path d="M400 240 C365 240 340 265 340 300 L355 300 C355 273 375 255 400 255 C425 255 445 273 445 300 L460 300 C460 265 435 240 400 240Z" fill="white"/>
+  <!-- Back text hint -->
+  <text x="400" y="460" text-anchor="middle" fill="#333" font-family="monospace" font-size="10">← BACK: {BUILD ON ARC} →</text>
+  <!-- Label -->
+  <text x="400" y="560" text-anchor="middle" fill="#E9A13F" font-family="monospace" font-size="12" opacity="0.6">ARC BUILDER HOODIE — RARE</text>
+</svg>

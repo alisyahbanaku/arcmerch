@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#0A0A0A"/>
+  <!-- T-shirt shape -->
+  <path d="M250 180 L200 200 L150 250 L180 260 L220 220 L220 480 L580 480 L580 220 L620 260 L650 250 L600 200 L550 180 L500 200 Q400 230 300 200 Z" fill="#1A1A1A" stroke="#333" stroke-width="1.5"/>
+  <!-- Collar -->
+  <path d="M300 180 Q400 210 500 180 Q450 195 400 200 Q350 195 300 180" fill="#0A0A0A" stroke="#333" stroke-width="1"/>
+  <!-- Arc logo on chest -->
+  <g transform="translate(340, 270) scale(0.8)">
+    <path d="M75 0 C33.6 0 0 33.6 0 75 L20 75 C20 44.6 44.6 20 75 20 C105.4 20 130 44.6 130 75 L150 75 C150 33.6 116.4 0 75 0Z" fill="white"/>
+  </g>
+  <!-- Product label -->
+  <text x="400" y="540" text-anchor="middle" fill="#E9A13F" font-family="monospace" font-size="12" opacity="0.6">ARC LOGO TEE — LIMITED EDITION</text>
+</svg>

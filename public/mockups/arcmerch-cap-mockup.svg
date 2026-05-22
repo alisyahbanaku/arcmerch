@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#1A1A1A"/>
+  <!-- Cap brim -->
+  <ellipse cx="420" cy="380" rx="180" ry="30" fill="#111"/>
+  <path d="M240 380 Q420 350 600 380 Q580 395 420 400 Q260 395 240 380Z" fill="#222" stroke="#333" stroke-width="1"/>
+  <!-- Cap dome -->
+  <path d="M270 380 Q270 200 400 180 Q530 200 530 380" fill="#1A1A1A" stroke="#333" stroke-width="1.5"/>
+  <!-- Panel lines -->
+  <path d="M400 180 L400 380" stroke="#333" stroke-width="0.5"/>
+  <path d="M335 190 L310 380" stroke="#333" stroke-width="0.5"/>
+  <path d="M465 190 L490 380" stroke="#333" stroke-width="0.5"/>
+  <!-- ArcMerch logo (gold circle with A) -->
+  <circle cx="400" cy="290" r="35" fill="none" stroke="#E9A13F" stroke-width="2.5"/>
+  <text x="400" y="302" text-anchor="middle" fill="#E9A13F" font-family="sans-serif" font-size="28" font-weight="bold">A</text>
+  <!-- Label -->
+  <text x="400" y="540" text-anchor="middle" fill="#E9A13F" font-family="monospace" font-size="12" opacity="0.6">ARCMERCH OG CAP — GENESIS</text>
+</svg>

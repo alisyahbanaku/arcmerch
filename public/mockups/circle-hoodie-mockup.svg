@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#1A1030"/>
+  <!-- Hoodie shape -->
+  <path d="M280 130 Q400 100 520 130 Q540 140 540 160 L540 170 L600 180 L620 200 L640 380 L600 390 L580 220 L580 500 L220 500 L220 220 L200 390 L160 380 L180 200 L200 180 L260 170 L260 160 Q260 140 280 130Z" fill="#29233B" stroke="#3D3055" stroke-width="1.5"/>
+  <!-- Hood -->
+  <path d="M280 130 Q400 100 520 130 Q530 110 500 90 Q400 60 300 90 Q270 110 280 130Z" fill="#231D33" stroke="#3D3055" stroke-width="1"/>
+  <!-- Pocket -->
+  <rect x="310" y="380" width="180" height="60" rx="8" fill="none" stroke="#3D3055" stroke-width="1.5"/>
+  <!-- Strings -->
+  <line x1="370" y1="160" x2="370" y2="240" stroke="#AAA" stroke-width="1.5"/>
+  <line x1="430" y1="160" x2="430" y2="240" stroke="#AAA" stroke-width="1.5"/>
+  <!-- Circle logo -->
+  <circle cx="400" cy="290" r="40" fill="none" stroke="white" stroke-width="6"/>
+  <circle cx="400" cy="290" r="28" fill="none" stroke="white" stroke-width="3"/>
+  <!-- Label -->
+  <text x="400" y="560" text-anchor="middle" fill="#E9A13F" font-family="monospace" font-size="12" opacity="0.6">CIRCLE × ARC HOODIE — COLLAB</text>
+</svg>
