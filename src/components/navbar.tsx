@@ -9,6 +9,7 @@ import { AuthButton } from "@/components/auth-button";
 const NAV_LINKS = [
   { href: "/marketplace", label: "Marketplace" },
   { href: "/create", label: "Create" },
+  { href: "/ecosystem", label: "Ecosystem" },
   { href: "/bridge", label: "Bridge" },
   { href: "/profile", label: "Profile" },
 ];
