@@ -36,7 +36,7 @@ export default function CreatePage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
-  const [mode, setMode] = useState<DesignMode>("ai");
+  const [mode, setMode] = useState<DesignMode>("upload");
   const [prompt, setPrompt] = useState("");
   const [product, setProduct] = useState("tshirt");
   const [style, setStyle] = useState("");
@@ -309,6 +309,9 @@ export default function CreatePage() {
             {/* AI Mode */}
             {mode === "ai" && (
               <div>
+                <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
+                  <p className="text-[13px] text-amber-400">⚠️ AI generation uses a free service (Pollinations.ai) which may be slow or unavailable. For reliable results, use "Upload Design" mode instead.</p>
+                </div>
                 <label className="text-[13px] text-white/70 mb-3 block">Design prompt</label>
                 <textarea
                   value={prompt}

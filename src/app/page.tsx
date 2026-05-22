@@ -78,10 +78,10 @@ export default function Home() {
         <div className="mx-auto max-w-[1280px] px-6 lg:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {[
-              { label: "Designs created", value: "1,247" },
-              { label: "NFTs minted", value: "3,891" },
-              { label: "Physical orders", value: "892" },
-              { label: "Active creators", value: "156" },
+              { label: "NFTs minted", value: "1" },
+              { label: "Max supply", value: "10,000" },
+              { label: "Mint price", value: "5 USDC" },
+              { label: "Chain", value: "Arc Testnet" },
             ].map((stat, i) => (
               <div key={stat.label} className={`py-12 px-6 ${i > 0 ? 'border-l border-white/[0.06]' : ''}`}>
                 <div className="section-label mb-3">{`{ ${stat.label.toUpperCase()} }`}</div>
