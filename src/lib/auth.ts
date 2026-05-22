@@ -11,21 +11,11 @@ import Google from "next-auth/providers/google";
 import { generateWallet } from "../lib/wallet";
 import { storeWallet, getWallet, hasWallet } from "../lib/wallet-store";
 
-// ── Env Validation ─────────────────────────────────────────────
-
-function getAuthSecret(): string {
-  const secret = process.env.NEXTAUTH_SECRET;
-  if (!secret || secret.length < 16) {
-    throw new Error("NEXTAUTH_SECRET env var required (min 16 chars)");
-  }
-  return secret;
-}
-
 // ── Providers ───────────────────────────────────────────────────
 
 const providers = [];
 
-// Twitter OAuth (production) — verified creator
+// Twitter OAuth 2.0 (production) — verified creator
 if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) {
   providers.push(
     Twitter({
@@ -67,7 +57,7 @@ providers.push(
         name: handle,
         image: null,
         twitterHandle: `@${handle}`,
-        verified: false, // Demo = not verified
+        verified: false,
       } as any;
     },
   })
